@@ -1,5 +1,5 @@
 const state = {
-  urlRoot: process.enc.NODE_ENV === 'developent' ? 'http://localhost:27312' : 'https://pen.key.cat/api',
+  urlRoot: process.env.NODE_ENV === 'developent' ? 'http://localhost:27312' : 'https://pen.key.cat/api',
   sessionToken: ''
 }
 
