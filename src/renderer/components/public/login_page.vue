@@ -18,7 +18,7 @@
         <el-input v-model="form.password2"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="onSubmit">{{$t('register.send')}}</el-button>
+        <el-button type="primary" @click="onSubmit" :loading="working" :disabled="working">{{$t('register.send')}}</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -28,7 +28,6 @@
   export default {
     name: 'login-page',
     data () {
-      console.log('def', this)
       var checkField = (rule, value, callback) => {
         if (!value || value.length < 3 || value.length > 20) {
           callback(new Error(this.$i18n.t(`register.error.${rule.field}`)))
@@ -40,7 +39,14 @@
         }
       }
       return {
-        form: {},
+        form: {
+          username: '',
+          fullname: '',
+          email: '',
+          password: '',
+          urlRoot: process.env.NODE_ENV === 'development' ? 'http://localhost:27312' : 'https://pen.key.cat/api'
+        },
+        working: false,
         rules: {
           username: [
             { validator: checkField, trigger: 'blur' }
@@ -61,13 +67,9 @@
       }
     },
     methods: {
-      onSubmit: (e, v) => {
-        console.log(e, v)
-      }
-    },
-    computed: {
-      pass2: () => {
-        return this.form.password
+      onSubmit (e, v) {
+        this.working = true
+        this.$store.dispatch('sessionLogin', this.form)
       }
     }
   }

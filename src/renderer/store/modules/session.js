@@ -1,10 +1,10 @@
 const state = {
-  urlRoot: process.env.NODE_ENV === 'developent' ? 'http://localhost:27312' : 'https://pen.key.cat/api',
+  urlRoot: '',
   sessionToken: ''
 }
 
 const mutations = {
-  SET_URL_ROOT (state, urlRoot) {
+  SESSION_URL_ROOT (state, urlRoot) {
     state.urlRoot = urlRoot
   },
   SET_SESSION_TOKEN (state, payload) {
@@ -16,8 +16,10 @@ const mutations = {
 }
 
 const actions = {
-  requestLogin (context, payload) {
-    this.http.post(this.state.urlRoot + '/login', payload).then((data) => {
+  sessionLogin (context, payload) {
+    context.commit( 'SESSION_URL_ROOT', payload.urlRoot )
+    console.log('Requested login with', payload.username, context.state.urlRoot )
+    this.$http.post(context.state.urlRoot + '/login', payload).then((data) => {
       console.log('hello', data)
     })
   }
