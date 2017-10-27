@@ -119,11 +119,11 @@ let rendererConfig = {
         removeComments: true
       },
       nodeModules: process.env.NODE_ENV !== 'production'
-        ? path.resolve(__dirname, '../node_modules')
-        : false
+      ? path.resolve(__dirname, '../node_modules')
+      : false
     }),
     new webpack.HotModuleReplacementPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
+    new webpack.NoEmitOnErrorsPlugin(),
   ],
   output: {
     filename: '[name].js',
@@ -170,7 +170,15 @@ if (process.env.NODE_ENV === 'production') {
       'process.env.NODE_ENV': '"production"'
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: true
+      minimize: true,
+      options: {
+        worker: {
+          output: {
+            filename: "hash.worker.js",
+            chunkFilename: "[id].hash.worker.js"
+          }
+        }
+      }
     })
   )
 }

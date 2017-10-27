@@ -131,7 +131,16 @@ if (process.env.NODE_ENV === 'production') {
       'process.env.NODE_ENV': '"production"'
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: true
+      minimize: true,
+      options: {
+        worker: {
+          output: {
+            filename: "hash.worker.js",
+            chunkFilename: "[id].hash.worker.js"
+          }
+        }
+      }
+
     })
   )
 }

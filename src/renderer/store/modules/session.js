@@ -1,3 +1,5 @@
+import workerMgr from '@/worker/manager'
+
 const state = {
   urlRoot: '',
   sessionToken: ''
@@ -17,10 +19,13 @@ const mutations = {
 
 const actions = {
   sessionLogin (context, payload) {
-    context.commit( 'SESSION_URL_ROOT', payload.urlRoot )
-    console.log('Requested login with', payload.username, context.state.urlRoot )
-    this.$http.post(context.state.urlRoot + '/login', payload).then((data) => {
-      console.log('hello', data)
+    context.commit('SESSION_URL_ROOT', payload.urlRoot)
+    console.log('Requested login with', payload.username, context.state.urlRoot)
+    workerMgr.generateUserKey(payload.username, payload.password).then((data) => {
+      console.log('Got user key', data)
+      this.$http.post(context.state.urlRoot + '/login', payload).then((data) => {
+        console.log('hello', data)
+      })
     })
   }
 }
