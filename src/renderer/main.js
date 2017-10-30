@@ -8,9 +8,14 @@ import messages from './messages'
 import App from './App'
 import store from './store'
 
+import rootSvc from './services/root'
+
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
+
+rootSvc.setHTTP(Vue.http)
+rootSvc.setUrlRoot('http://pen.key.cat/api')
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({

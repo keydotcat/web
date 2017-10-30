@@ -44,7 +44,7 @@
           fullname: '',
           email: '',
           password: '',
-          urlRoot: process.env.NODE_ENV === 'development' ? 'http://localhost:27312' : 'https://pen.key.cat/api'
+          urlRoot: process.env.NODE_ENV === 'development' ? 'http://localhost:23764' : 'https://pen.key.cat/api'
         },
         working: false,
         rules: {
@@ -69,7 +69,7 @@
     methods: {
       onSubmit (e, v) {
         this.working = true
-        this.$store.dispatch('sessionLogin', this.form)
+        this.$store.dispatch('authRegister', this.form)
       }
     }
   }

@@ -11,7 +11,8 @@ function merge (a, b) {
 
 function keyPassword (keys, password) {
   var bPass = util.decodeUTF8(password)
-  return nacl.hash(merge(keys.sign.publicKey, bPass)).substring(0, nacl.secretbox.keyLength)
+  var hHash = nacl.hash(merge(keys.sign.publicKey, bPass))
+  return hHash.subarray(0, nacl.secretbox.keyLength)
 }
 
 function loginPassword (username, password) {
@@ -21,10 +22,10 @@ function loginPassword (username, password) {
 }
 
 // signPub + sign( cipherPub ) + sign( nonce + secretbox( signPriv + cipherPriv ) )
-function closeKeysAndPack (keys, bKey) {
-  var nonce = nacl.getRandomBytes(nacl.secretbox.nonceLength)
+function closeUserKeysAndPack (keys, bKey) {
+  var nonce = nacl.randomBytes(nacl.secretbox.nonceLength)
   var closedPrivate = merge(nonce, nacl.secretbox(merge(keys.sign.secretKey, keys.cipher.secretKey), nonce, bKey))
-  var signedClosedPrivate = nacl.sin(closedPrivate, keys.sign.secretKey)
+  var signedClosedPrivate = nacl.sign(closedPrivate, keys.sign.secretKey)
   var stub = merge(nacl.sign(keys.cipher.publicKey, keys.sign.secretKey), signedClosedPrivate)
   return util.encodeBase64(stub)
 }
@@ -108,7 +109,7 @@ class CryptoWorker {
     var bKey = keyPassword(this.keys, password)
     return {
       data: {
-        keys: closeKeysAndPack(this.keys, bKey),
+        keys: closeUserKeysAndPack(this.keys, bKey),
         password: loginPassword(username, password)
       }
     }
@@ -122,7 +123,7 @@ class CryptoWorker {
       return { error: 'cannot_open_keys' }
     }
     var bToken = util.decodeUTF8(storeToken).slice(0, nacl.secretbox.keyLength)
-    return { data: closeKeysAndPack(this.keys, bToken) }
+    return { data: closeUserKeysAndPack(this.keys, bToken) }
   }
   setKeysFromStore (storedKeys, storeToken) {
     var bKeys = util.decodeBase64(storedKeys)
@@ -150,7 +151,7 @@ class CryptoWorker {
     }
     for (var uname in admins) {
       var pubKeys = unpackPublicKeys(admins[uname])
-      var nonce = nacl.getRandomBytes(nacl.box.nonceLength)
+      var nonce = nacl.randomBytes(nacl.box.nonceLength)
       var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.publicKey)
       data.keys[uname] = util.encodeBase64(nacl.sign(merge(nonce, closed)))
     }
@@ -162,7 +163,7 @@ class CryptoWorker {
     for (var vid in vaultClosedKeys) {
       var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys[vid], this.keys)
       var secretStub = merge(vaultKeys.sign.secretKey, vaultKeys.cipher.secretKey)
-      var nonce = nacl.getRandomBytes(nacl.box.nonceLength)
+      var nonce = nacl.randomBytes(nacl.box.nonceLength)
       var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.publicKey)
       data[vid] = util.encodeBase64(nacl.sign(merge(nonce, closed)))
     }
@@ -170,7 +171,7 @@ class CryptoWorker {
   }
   passwordChange (password) {
     var bKey = keyPassword(this.keys, password)
-    return { data: closeKeysAndPack(this.keys, bKey) }
+    return { data: closeUserKeysAndPack(this.keys, bKey) }
   }
 }
 var runner = new CryptoWorker()
