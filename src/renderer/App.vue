@@ -1,19 +1,15 @@
 <template>
   <div class="expandHeight">
-    <public-dispatcher></public-dispatcher>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
   import 'element-ui/lib/theme-chalk/index.css'
   import * as mt from '@/store/mutation-types'
-  import PublicDispatcher from '@/components/public_dispatcher'
 
   export default {
     name: 'keycat',
-    components: {
-      PublicDispatcher
-    },
     beforeCreate () {
       this.$store.commit(mt.SESSION_LOAD_STATE_FROM_STORAGE)
     },

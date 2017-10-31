@@ -1,9 +1,11 @@
 import Vue from 'vue'
 import axios from 'axios'
 import VueI18n from 'vue-i18n'
+import VueRouter from 'vue-router'
 
 import Element from 'element-ui'
 import messages from './messages'
+import router from './router'
 
 import App from './App'
 import store from './store'
@@ -28,10 +30,13 @@ Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
 
+Vue.use(VueRouter)
+
 /* eslint-disable no-new */
 new Vue({
   components: { App },
   store,
   i18n,
+  router,
   template: '<App/>'
 }).$mount('#app')

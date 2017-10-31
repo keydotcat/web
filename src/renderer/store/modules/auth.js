@@ -1,5 +1,7 @@
 import workerMgr from '@/worker/manager'
 import authSvc from '@/services/auth'
+
+import router from '@/router'
 import * as mt from '@/store/mutation-types'
 
 const state = {
@@ -61,7 +63,7 @@ const actions = {
           .then((response) => {
             context.commit(mt.AUTH_REGISTERED, response)
             context.commit(mt.MSG_INFO, 'register.done')
-            context.commit(mt.PUBLIC_NAV_SET, 'register')
+            router.push('/login')
           })
           .catch((err) => context.commit(mt.AUTH_REGISTER_FAILURE, err.response))
       })
