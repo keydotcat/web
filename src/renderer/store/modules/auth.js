@@ -4,8 +4,9 @@ import * as mt from '@/store/mutation-types'
 
 const state = {
   working: false,
+  registered: false,
   error: '',
-  error_fields: {
+  errorFields: {
     user_email: '',
     user_username: '',
     user_fullname: ''
@@ -15,27 +16,28 @@ const state = {
 const mutations = {
   [mt.AUTH_REGISTERED] (state, payload) {
     state.working = false
-    console.log('Registered!', payload)
+    state.registered = true
   },
   [mt.AUTH_REGISTER_FAILURE] (state, payload) {
     state.working = false
     if(payload.data.error){
       console.log( 'erros is', payload.data.error )
-      state.error = payload.error
+      state.error = payload.data.error
     }
-    if(payload.data.error_fields){
-      for( var k in payload.data.error_fields ) {
-        state.error_fields[k] = payload.data.error_fields[k]
+    if(payload.data.errorFields){
+      for( var k in payload.data.errorFields ) {
+        state.errorFields[k] = payload.data.errorFields[k]
       }
     }
     console.log('reg fail', state)
   },
   [mt.AUTH_START_WORK] (state) {
     state.working = true
+    state.registered = false
     state.error = ''
-    state.error_fields.user_email = ''
-    state.error_fields.user_fullname = ''
-    state.error_fields.user_username = ''
+    state.errorFields.user_email = ''
+    state.errorFields.user_fullname = ''
+    state.errorFields.user_username = ''
   }
 }
 

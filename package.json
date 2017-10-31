@@ -57,7 +57,7 @@
   },
   "dependencies": {
     "axios": "^0.16.1",
-    "element-ui": "next",
+    "element-ui": "^2.0",
     "tweetnacl": "^1.0.0",
     "tweetnacl-util": "^0.15.0",
     "vue": "^2.3.3",

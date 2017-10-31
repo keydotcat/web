@@ -70,22 +70,22 @@
         return this.$store.state.auth.working
       },
       emailSrvError () {
-        if (this.$store.state.auth.error_fields.user_email) {
+        if (this.$store.state.auth.errorFields.user_email) {
           return this.$t('register.error.email')
         }
         return ''
       },
       usernameSrvError () {
-        if (this.$store.state.auth.error_fields.user_username) {
+        var authState = this.$store.state.auth
+        if (authState.errorFields.user_username) {
           return this.$t('register.error.username')
-        } else if(this.$store.state.auth.error ) {
-          console.log('error is error', this.$store.state.auth.error)
-          return this.$t('register.error.' + this.$store.state.auth.error.toLowerCase())
+        } else if(authState.error ) {
+          return this.$t('register.error.' + authState.error.toLowerCase().replace(' ', '_'))
         }
         return ''
       },
       fullnameSrvError () {
-        if (this.$store.state.auth.error_fields.user_fullname) {
+        if (this.$store.state.auth.errorFields.user_fullname) {
           return this.$t('register.error.fullname')
         }
         return ''

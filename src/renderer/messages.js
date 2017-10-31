@@ -17,7 +17,7 @@ const messages = {
         email: 'Email invalid',
         password: 'Password too short',
         password2: 'Passwords don\'t match',
-        'already exists': 'Username or email already exist'
+        'already_exists': 'Username or email already exist'
       }
     },
     ...enLocale
