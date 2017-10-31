@@ -4,40 +4,39 @@ import * as mt from '@/store/mutation-types'
 
 const state = {
   working: false,
-  registered: false,
   error: '',
   errorFields: {
-    user_email: '',
-    user_username: '',
-    user_fullname: ''
+    id: '',
+    email: '',
+    fullname: ''
   }
 }
 
 const mutations = {
-  [mt.AUTH_REGISTERED] (state, payload) {
+  [mt.AUTH_REGISTERED] (state, payload, asd) {
     state.working = false
-    state.registered = true
   },
   [mt.AUTH_REGISTER_FAILURE] (state, payload) {
     state.working = false
     if(payload.data.error){
-      console.log( 'erros is', payload.data.error )
       state.error = payload.data.error
     }
-    if(payload.data.errorFields){
-      for( var k in payload.data.errorFields ) {
-        state.errorFields[k] = payload.data.errorFields[k]
+    if(payload.data.error_fields){
+      for( var k in payload.data.error_fields ) {
+        state.errorFields[k.substr(5)] = payload.data.error_fields[k]
       }
     }
-    console.log('reg fail', state)
   },
   [mt.AUTH_START_WORK] (state) {
     state.working = true
     state.registered = false
     state.error = ''
-    state.errorFields.user_email = ''
-    state.errorFields.user_fullname = ''
-    state.errorFields.user_username = ''
+    state.errorFields.id = ''
+    state.errorFields.email = ''
+    state.errorFields.fullname = ''
+  },
+  [mt.AUTH_LOGIN_FAILURE] (state, payload) {
+    state.working = false
   }
 }
 
@@ -50,7 +49,7 @@ const actions = {
       adminKeys[payload.username] = userData.publicKeys
       workerMgr.generateVaultKeys(adminKeys).then((vaultData) => {
         var registerPayload = {
-          username: payload.username,
+          id: payload.username,
           password: userData.password,
           user_keys: userData.keys,
           email: payload.email,
@@ -59,9 +58,27 @@ const actions = {
           vault_keys: vaultData.keys[payload.username]
         }
         authSvc.register(registerPayload)
-          .then((response) => context.commit(mt.AUTH_REGISTERED, response))
+          .then((response) => {
+            context.commit(mt.AUTH_REGISTERED, response)
+            context.commit(mt.MSG_INFO, 'register.done')
+            context.commit(mt.PUBLIC_NAV_SET, 'register')
+          })
           .catch((err) => context.commit(mt.AUTH_REGISTER_FAILURE, err.response))
       })
+    })
+  },
+  authLogin (context, payload) {
+    context.commit(mt.AUTH_START_WORK)
+    workerMgr.hashPassword(payload.username, payload.password).then((hPass) => {
+      authSvc.login({ id: payload.username, password: hPass })
+        .then((response) => {
+          console.log( 'Logged in', response)
+        })
+        .catch((err) => {
+          var msg = err.response.data.error
+          context.commit(mt.AUTH_LOGIN_FAILURE, err.response)
+          context.commit(mt.MSG_ERROR, 'login.error.' + msg.toLowerCase().replace(new RegExp(' ', 'g'), '_'))
+        })
     })
   }
 }

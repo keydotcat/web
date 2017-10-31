@@ -3,8 +3,12 @@ import caLocale from 'element-ui/lib/locale/lang/ca'
 
 const messages = {
   en: {
+    errors: {
+      'already_exists': 'Already exists'
+    },
     register: {
       welcome: 'Welcome to key.cat. Please register',
+      done: 'Congratulations! You have properly registered',
       username: 'Username',
       fullname: 'Full name',
       email: 'Email',
@@ -17,7 +21,16 @@ const messages = {
         email: 'Email invalid',
         password: 'Password too short',
         password2: 'Passwords don\'t match',
-        'already_exists': 'Username or email already exist'
+        duplicate: 'Alredy taken'
+      }
+    },
+    login: {
+      welcome: 'Please login',
+      username: 'Username',
+      password: 'Password',
+      send: 'Login',
+      error: {
+        you_cannot_do_that: 'Either the username is invalid or the password is'
       }
     },
     ...enLocale

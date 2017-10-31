@@ -7,25 +7,30 @@
       </el-menu>
     </el-header>
     <el-main class="expandHeight">
+      <msg-display></msg-display>
       <login-page v-if="activePage == 'login'"></login-page>
+      <register-page v-if="activePage == 'register'"></register-page>
     </el-main>
   </div>
 </template>
 
 <script>
   import LoginPage from '@/components/public/login_page'
+  import RegisterPage from '@/components/public/register_page'
+  import MsgDisplay from '@/components/msg_display'
+  import * as mt from '@/store/mutation-types'
 
   export default {
     name: 'public-dispatcher',
-    components: { LoginPage },
-    data: () => {
-      return {
-        activePage: 'login'
-      }
-    },
+    components: { LoginPage, RegisterPage, MsgDisplay },
     methods: {
       handleSelect (key, keyPath) {
-        this.activePage = key
+        this.$store.commit( mt.PUBLIC_NAV_SET, key )
+      }
+    },
+    computed: {
+      activePage () {
+        return this.$store.state.public_nav.page
       }
     }
   }

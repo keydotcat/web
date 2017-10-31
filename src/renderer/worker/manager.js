@@ -42,6 +42,9 @@ class Manager {
   generateVaultKeys (adminKeys) {
     return this.newTask(cmds.GEN_VAULT_KEY, { admins: adminKeys })
   }
+  hashPassword (username, password) {
+    return this.newTask(cmds.HASH_PASS, { username: username, password: password })
+  }
 }
 
 export default new Manager()
