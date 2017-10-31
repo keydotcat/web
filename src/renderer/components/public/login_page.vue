@@ -2,20 +2,20 @@
   <div class="expandHeight centerFlex">
     <el-form ref="form" :rules="rules" :model="form" label-width="200px">
       <p>{{$t('register.welcome')}}</p>
-      <el-form-item :label="$t('register.username')" prop="username">
+      <el-form-item :label="$t('register.username')" :error='usernameSrvError' prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.fullname')" prop="fullname">
+      <el-form-item :label="$t('register.fullname')" :error='fullnameSrvError' prop="fullname">
         <el-input v-model="form.fullname"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.email')" prop="email">
+      <el-form-item :label="$t('register.email')" :error='emailSrvError' prop="email">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
       <el-form-item :label="$t('register.password')" prop="password">
-        <el-input v-model="form.password"></el-input>
+        <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item :label="$t('register.repeatPassword')" prop="password2">
-        <el-input v-model="form.password2"></el-input>
+        <el-input type="password" v-model="form.password2"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" :loading="working" :disabled="working">{{$t('register.send')}}</el-button>
@@ -40,13 +40,12 @@
       }
       return {
         form: {
-          username: '',
-          fullname: '',
-          email: '',
-          password: '',
+          username: 'asd',
+          fullname: 'asd',
+          email: 'asd@asd.com',
+          password: 'asd',
           urlRoot: process.env.NODE_ENV === 'development' ? 'http://localhost:23764' : 'https://pen.key.cat/api'
         },
-        working: false,
         rules: {
           username: [
             { validator: checkField, trigger: 'blur' }
@@ -66,9 +65,34 @@
         }
       }
     },
+    computed: {
+      working () {
+        return this.$store.state.auth.working
+      },
+      emailSrvError () {
+        if (this.$store.state.auth.error_fields.user_email) {
+          return this.$t('register.error.email')
+        }
+        return ''
+      },
+      usernameSrvError () {
+        if (this.$store.state.auth.error_fields.user_username) {
+          return this.$t('register.error.username')
+        } else if(this.$store.state.auth.error ) {
+          console.log('error is error', this.$store.state.auth.error)
+          return this.$t('register.error.' + this.$store.state.auth.error.toLowerCase())
+        }
+        return ''
+      },
+      fullnameSrvError () {
+        if (this.$store.state.auth.error_fields.user_fullname) {
+          return this.$t('register.error.fullname')
+        }
+        return ''
+      }
+    },
     methods: {
       onSubmit (e, v) {
-        this.working = true
         this.$store.dispatch('authRegister', this.form)
       }
     }

@@ -16,7 +16,8 @@ const messages = {
         fullname: 'Full name missing',
         email: 'Email invalid',
         password: 'Password too short',
-        password2: 'Passwords don\'t match'
+        password2: 'Passwords don\'t match',
+        'already exists': 'Username or email already exist'
       }
     },
     ...enLocale
