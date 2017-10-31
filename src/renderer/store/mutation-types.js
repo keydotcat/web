@@ -11,5 +11,3 @@ export const SESSION_LOAD_STATE_FROM_STORAGE = 'SESSION_LOAD_STATE_FROM_STORAGE'
 export const MSG_INFO = 'MSG_INFO'
 export const MSG_ERROR = 'MSG_ERROR'
 export const MSG_CLEAR = 'MSG_CLEAR'
-
-export const PUBLIC_NAV_SET = 'PUBLIC_NAV_SET'
