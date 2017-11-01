@@ -1,3 +1,5 @@
+import Vue from 'vue'
+import VueI18n from 'vue-i18n'
 import enLocale from 'element-ui/lib/locale/lang/en'
 import caLocale from 'element-ui/lib/locale/lang/ca'
 
@@ -24,6 +26,10 @@ const messages = {
         duplicate: 'Alredy taken'
       }
     },
+    confirm_email: {
+      title: 'Confirm your email',
+      token: 'Confirmation token'
+    },
     login: {
       welcome: 'Please login',
       username: 'Username',
@@ -33,6 +39,7 @@ const messages = {
         you_cannot_do_that: 'Either the username is invalid or the password is'
       }
     },
+    send: 'Send',
     ...enLocale
   },
   ca: {
@@ -43,4 +50,9 @@ const messages = {
   }
 }
 
-export default messages
+Vue.use(VueI18n)
+export default new VueI18n({
+  locale: 'en', // set locale
+  fallbackLocale: 'en',
+  messages // set locale messages
+})

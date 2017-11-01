@@ -1,10 +1,8 @@
 import Vue from 'vue'
 import axios from 'axios'
-import VueI18n from 'vue-i18n'
-import VueRouter from 'vue-router'
 
 import Element from 'element-ui'
-import messages from './messages'
+import i18n from './i18n'
 import router from './router'
 
 import App from './App'
@@ -19,18 +17,9 @@ Vue.config.productionTip = false
 rootSvc.setHTTP(Vue.http)
 rootSvc.setUrlRoot('http://pen.key.cat/api')
 
-Vue.use(VueI18n)
-const i18n = new VueI18n({
-  locale: 'en', // set locale
-  fallbackLocale: 'en',
-  messages // set locale messages
-})
-
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
-
-Vue.use(VueRouter)
 
 /* eslint-disable no-new */
 new Vue({
