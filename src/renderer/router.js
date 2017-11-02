@@ -7,6 +7,7 @@ import RegisterPage from '@/components/public/register_page'
 import ConfirmEmailPage from '@/components/public/confirm_email_page'
 
 import HomeDispatcher from '@/components/home_dispatcher'
+import HomeLoader from '@/components/home_loader'
 
 import rootSvc from '@/services/root'
 
@@ -16,7 +17,12 @@ var router = new VueRouter({
   routes: [
     { path: '/home',
       name: 'home',
-      component: HomeDispatcher
+      component: HomeLoader,
+      children: [
+        { path: ':tid',
+          component: HomeDispatcher
+        }
+      ]
     },
     { path: '/',
       component: PublicDispatcher,
