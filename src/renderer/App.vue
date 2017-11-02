@@ -12,11 +12,7 @@
     name: 'keycat',
     beforeCreate () {
       this.$store.commit(mt.SESSION_LOAD_STATE_FROM_STORAGE)
-    },
-    computed: {
-      loggedIn: () => {
-        return this.$store.session.sessionToken.length > 0
-      }
+      this.$store.dispatch('sessionLoadFromLocalStorage')
     }
   }
 </script>

@@ -6,10 +6,18 @@ import LoginPage from '@/components/public/login_page'
 import RegisterPage from '@/components/public/register_page'
 import ConfirmEmailPage from '@/components/public/confirm_email_page'
 
+import HomeDispatcher from '@/components/home_dispatcher'
+
+import rootSvc from '@/services/root'
+
 Vue.use(VueRouter)
 
-export default new VueRouter({
+var router = new VueRouter({
   routes: [
+    { path: '/home',
+      name: 'home',
+      component: HomeDispatcher
+    },
     { path: '/',
       component: PublicDispatcher,
       children: [
@@ -32,3 +40,21 @@ export default new VueRouter({
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  var isLogged = rootSvc.isLoggedIn()
+  if (to.path.indexOf('/home') === 0) {
+    if (!isLogged) {
+      next('/')
+      return
+    }
+  } else {
+    if (isLogged) {
+      next('/home')
+      return
+    }
+  }
+  next()
+})
+
+export default router

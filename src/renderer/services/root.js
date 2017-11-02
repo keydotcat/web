@@ -7,6 +7,9 @@ class RootSvc {
     this.sessionToken = ''
     this.csrf = ''
   }
+  isLoggedIn () {
+    return this.sessionToken.length > 0
+  }
   setHTTP (http) {
     this.http = http
   }
@@ -31,7 +34,7 @@ class RootSvc {
       return 'errors.network'
     }
     var data = httpError.response.data
-    if( data === null ) {
+    if( data === null || !data.error ) {
       switch( httpError.code ) {
         case '401':
           return 'errors.unauthorized'

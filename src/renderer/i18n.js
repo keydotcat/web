@@ -9,7 +9,7 @@ const messages = {
       'already_exists': 'Already exists',
       'network': 'It seems the server is offline. Try again later',
       'bad_request': 'Seems the request is not properly formed.',
-      'unknow': 'Wow. Something went wrong :P'
+      'unknown': 'Wow. Something went wrong :P'
     },
     fields: {
       username: 'Username',

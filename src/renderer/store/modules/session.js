@@ -43,20 +43,20 @@ const actions = {
       var sData = { keys: storedKeys, uid: payload.sessionData.user_id, token: payload.sessionData.session_token }
       localStorage.setItem(LS_KEYCAT_SESSION_DATA, JSON.stringify(sData))
       context.commit(mt.SESSION_LOGIN, {token: payload.sessionData.session_token})
-      router.push('/house')
+      router.push('/home')
     })
   },
   sessionLoadFromLocalStorage (context) {
-    var stub = localStorage.setItem(LS_KEYCAT_SESSION_DATA)
+    context.commit(mt.SESSION_LOAD_STATE_FROM_STORAGE)
+    var stub = localStorage.getItem(LS_KEYCAT_SESSION_DATA)
     if( !stub || stub.length === 0 ) {
       return
     }
     var data = JSON.parse( stub )
     context.commit(mt.SESSION_LOGIN, data)
     sessionSvc.getSessionData(data).then((sessionData) => {
-      console.log('session data', sessionData)
-      workerMgr.setKeysFromStore( sesionData.store_token, storedKeys ).then((ok) => {
-        console.log('ok')
+      workerMgr.setKeysFromStore( sessionData.store_token, data.keys ).then((ok) => {
+        router.push('/home')
       })
     })
   }
