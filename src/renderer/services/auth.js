@@ -11,5 +11,10 @@ export default{
     return axios.post(rootSvc.urlRoot + '/auth/login', request, rootSvc.getHeaders())
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
+  },
+  confirmEmail (request) {
+    return axios.get(rootSvc.urlRoot + '/auth/confirm_email/' + request.token, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   }
 }

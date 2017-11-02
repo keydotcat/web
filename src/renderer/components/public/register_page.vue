@@ -1,20 +1,20 @@
 <template>
   <div class="expandHeight centerFlex">
     <el-form ref="form" :rules="rules" :model="form" label-width="200px">
-      <p>{{$t('register.welcome')}}</p>
-      <el-form-item :label="$t('register.username')" :error='usernameSrvError' prop="username">
+      <p style='text-align:center'>{{$t('register.welcome')}}</p>
+      <el-form-item :label="$t('fields.username')" :error='usernameSrvError' prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.fullname')" :error='fullnameSrvError' prop="fullname">
+      <el-form-item :label="$t('fields.fullname')" :error='fullnameSrvError' prop="fullname">
         <el-input v-model="form.fullname"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.email')" :error='emailSrvError' prop="email">
+      <el-form-item :label="$t('fields.email')" :error='emailSrvError' prop="email">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.password')" prop="password">
+      <el-form-item :label="$t('fields.password')" prop="password">
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.repeatPassword')" prop="password2">
+      <el-form-item :label="$t('fields.repeatPassword')" prop="password2">
         <el-input type="password" v-model="form.password2"></el-input>
       </el-form-item>
       <el-form-item>

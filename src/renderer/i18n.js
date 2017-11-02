@@ -6,16 +6,21 @@ import caLocale from 'element-ui/lib/locale/lang/ca'
 const messages = {
   en: {
     errors: {
-      'already_exists': 'Already exists'
+      'already_exists': 'Already exists',
+      'network': 'It seems the server is offline. Try again later',
+      'bad_request': 'Seems the request is not properly formed.',
+      'unknow': 'Wow. Something went wrong :P'
     },
-    register: {
-      welcome: 'Welcome to key.cat. Please register',
-      done: 'Congratulations! You have properly registered',
+    fields: {
       username: 'Username',
       fullname: 'Full name',
       email: 'Email',
       password: 'Password',
-      repeatPassword: 'Your password again',
+      repeatPassword: 'Your password again'
+    },
+    register: {
+      welcome: 'Welcome to key.cat. Please register',
+      done: 'Congratulations! You have properly registered',
       send: 'Register',
       error: {
         username: 'Username invalid. Probably too short',
@@ -28,12 +33,11 @@ const messages = {
     },
     confirm_email: {
       title: 'Confirm your email',
-      token: 'Confirmation token'
+      token: 'Confirmation token',
+      done: 'You have confirmed your email'
     },
     login: {
       welcome: 'Please login',
-      username: 'Username',
-      password: 'Password',
       send: 'Login',
       error: {
         you_cannot_do_that: 'Either the username is invalid or the password is'

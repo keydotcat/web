@@ -1,11 +1,11 @@
 <template>
   <div class="expandHeight centerFlex">
     <el-form ref="form" :rules="rules" :model="form" label-width="200px">
-      <p>{{$t('login.welcome')}}</p>
-      <el-form-item :label="$t('register.username')" prop="username">
+      <p style='text-align:center'>{{$t('login.welcome')}}</p>
+      <el-form-item :label="$t('fields.username')" prop="username">
         <el-input v-model="form.username"></el-input>
       </el-form-item>
-      <el-form-item :label="$t('register.password')" prop="password">
+      <el-form-item :label="$t('fields.password')" prop="password">
         <el-input type="password" v-model="form.password"></el-input>
       </el-form-item>
       <el-form-item>

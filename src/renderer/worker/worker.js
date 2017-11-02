@@ -26,8 +26,10 @@ function closeUserKeysAndPack (keys, bKey) {
   var nonce = nacl.randomBytes(nacl.secretbox.nonceLength)
   var closedPrivate = merge(nonce, nacl.secretbox(merge(keys.sign.secretKey, keys.cipher.secretKey), nonce, bKey))
   var signedClosedPrivate = nacl.sign(closedPrivate, keys.sign.secretKey)
-  var stub = merge(keys.sign.publicKey, merge(nacl.sign(keys.cipher.publicKey, keys.sign.secretKey), signedClosedPrivate))
-  return util.encodeBase64(stub)
+  return {
+    keys: util.encodeBase64(merge(keys.sign.publicKey, merge(nacl.sign(keys.cipher.publicKey, keys.sign.secretKey), signedClosedPrivate))),
+    secretKeys: util.encodeBase64(signedClosedPrivate)
+  }
 }
 
 function packPublicKeys (keys) {
@@ -37,17 +39,18 @@ function packPublicKeys (keys) {
 // publickKeys is signPub + sign( cipherPub )
 // secretKeys is sign( nonce + secretbox( signPriv + cipherPriv ) )
 function unpackAndOpenKeys (srvKeys, password) {
+  var pubKeys = util.decodeBase64(srvKeys.publicKeys)
   var keys = {
     sign: {
-      publicKey: srvKeys.publicKeys.slice(0, nacl.sign.publicKeyLength)
+      publicKey: pubKeys.slice(0, nacl.sign.publicKeyLength)
     },
     cipher: {}
   }
-  keys.cipher.publicKey = nacl.sign.open(srvKeys.publicKeys.slice(nacl.sign.publicKeyLength), keys.sign.publicKey)
+  keys.cipher.publicKey = nacl.sign.open(pubKeys.slice(nacl.sign.publicKeyLength), keys.sign.publicKey)
   if (keys.cipher.publicKey === null) {
     return null
   }
-  var verified = nacl.sign.open(srvKeys.secretKeys, keys.sign.publicKey)
+  var verified = nacl.sign.open(util.decodeBase64(srvKeys.secretKeys), keys.sign.publicKey)
   if (verified === null) {
     return null
   }
@@ -112,34 +115,32 @@ class CryptoWorker {
     this.keys.sign = nacl.sign.keyPair()
     this.keys.cipher = nacl.box.keyPair()
     var bKey = keyPassword(this.keys, password)
-    return {
-      data: {
-        keys: closeUserKeysAndPack(this.keys, bKey),
-        publicKeys: packPublicKeys(this.keys),
-        password: loginPassword(username, password)
-      }
-    }
+    var ret = closeUserKeysAndPack(this.keys, bKey)
+    ret.publicKeys = packPublicKeys(this.keys)
+    ret.password = loginPassword(username, password)
+    return { data: ret }
   }
   hashLoginPassword (username, password) {
     return { data: loginPassword(username, password) }
   }
   setKeysFromServer (password, storeToken, srvKeys) {
+    this.keys = { sign: {}, cipher: {} }
     this.keys = unpackAndOpenKeys(srvKeys, password)
     if (this.keys == null) {
       return { error: 'cannot_open_keys' }
     }
-    var bToken = util.decodeUTF8(storeToken).slice(0, nacl.secretbox.keyLength)
-    return { data: closeUserKeysAndPack(this.keys, bToken) }
+    var bToken = keyPassword(this.keys, storeToken)
+    return { data: closeUserKeysAndPack(this.keys, bToken).keys }
   }
   setKeysFromStore (storedKeys, storeToken) {
+    this.keys = { sign: {}, cipher: {} }
     var bKeys = util.decodeBase64(storedKeys)
     var sep = nacl.sign.publicKeyLength + nacl.sign.signatureLength + nacl.box.publicKeyLength
     var keys = {
-      publicKeys: bKeys.slice(0, sep),
-      secretKeys: bKeys.slice(sep)
+      publicKeys: util.encodeBase64(bKeys.slice(0, sep)),
+      secretKeys: util.encodeBase64(bKeys.slice(sep))
     }
-    var bToken = util.decodeUTF8(storeToken).slice(0, nacl.secretbox.keyLength)
-    this.keys = unpackAndOpenKeys(keys, bToken)
+    this.keys = unpackAndOpenKeys(keys, storeToken)
     if (this.keys == null) {
       return { error: 'cannot_open_keys' }
     }
@@ -177,7 +178,7 @@ class CryptoWorker {
   }
   passwordChange (password) {
     var bKey = keyPassword(this.keys, password)
-    return { data: closeUserKeysAndPack(this.keys, bKey) }
+    return { data: closeUserKeysAndPack(this.keys, bKey).secretKeys }
   }
 }
 var runner = new CryptoWorker()

@@ -45,6 +45,12 @@ class Manager {
   hashPassword (username, password) {
     return this.newTask(cmds.HASH_PASS, { username: username, password: password })
   }
+  setKeysFromServer(password, storeToken, srvKeys) {
+    return this.newTask(cmds.LOAD_KEY_FROM_SERVER, { password: password, storeToken: storeToken, srvKeys: srvKeys })
+  }
+  setKeysFromStore(storeToken, storedKeys) {
+    return this.newTask(cmds.LOAD_KEY_FROM_STORE, { storeToken: storeToken, storedKeys: storedKeys })
+  }
 }
 
 export default new Manager()

@@ -1,5 +1,6 @@
 import workerMgr from '@/worker/manager'
 import authSvc from '@/services/auth'
+import rootSvc from '@/services/root'
 
 import router from '@/router'
 import * as mt from '@/store/mutation-types'
@@ -15,7 +16,7 @@ const state = {
 }
 
 const mutations = {
-  [mt.AUTH_REGISTERED] (state, payload, asd) {
+  [mt.AUTH_STOP_WORK] (state, payload, asd) {
     state.working = false
   },
   [mt.AUTH_REGISTER_FAILURE] (state, payload) {
@@ -36,9 +37,6 @@ const mutations = {
     state.errorFields.id = ''
     state.errorFields.email = ''
     state.errorFields.fullname = ''
-  },
-  [mt.AUTH_LOGIN_FAILURE] (state, payload) {
-    state.working = false
   }
 }
 
@@ -61,7 +59,7 @@ const actions = {
         }
         authSvc.register(registerPayload)
           .then((response) => {
-            context.commit(mt.AUTH_REGISTERED, response)
+            context.commit(mt.AUTH_STOP_WORK)
             context.commit(mt.MSG_INFO, 'register.done')
             router.push('/login')
           })
@@ -72,16 +70,27 @@ const actions = {
   authLogin (context, payload) {
     context.commit(mt.AUTH_START_WORK)
     workerMgr.hashPassword(payload.username, payload.password).then((hPass) => {
-      authSvc.login({ id: payload.username, password: hPass })
+      authSvc.login({ id: payload.username, password: hPass, want_csrf: true })
         .then((response) => {
-          console.log( 'Logged in', response)
-        })
-        .catch((err) => {
-          var msg = err.response.data.error
-          context.commit(mt.AUTH_LOGIN_FAILURE, err.response)
-          context.commit(mt.MSG_ERROR, 'login.error.' + msg.toLowerCase().replace(new RegExp(' ', 'g'), '_'))
+          context.commit(mt.AUTH_STOP_WORK)
+          context.dispatch('sessionStoreServerSession', { sessionData: response, password: payload.password })
+        }).catch((err) => {
+          context.commit(mt.AUTH_STOP_WORK)
+          context.commit(mt.MSG_ERROR, rootSvc.processError(err, 'login.error.'))
         })
     })
+  },
+  authConfirmEmail(context, payload) {
+    context.commit(mt.AUTH_START_WORK)
+    authSvc.confirmEmail({token: payload.token})
+      .then((response) => {
+        context.commit(mt.AUTH_STOP_WORK)
+        context.commit(mt.MSG_INFO, 'confirm_email.done')
+        router.push('/login')
+      }).catch((err) => {
+        context.commit(mt.AUTH_STOP_WORK)
+        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
+      })
   }
 }
 

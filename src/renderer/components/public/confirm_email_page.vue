@@ -1,9 +1,9 @@
 <template>
   <div class="expandHeight centerFlex">
-    <el-form ref="form" :rules="rules" :model="form" label-width="200px">
-      <p>{{$t('confirm_email.title')}}</p>
+    <el-form ref="form" :model="form" label-width="200px">
+      <p style='text-align:center'>{{$t('confirm_email.title')}}</p>
       <el-form-item :label="$t('confirm_email.token')" prop="token">
-        <el-input v-model="form.token"></el-input>
+        <el-input v-model="form.token" style="width:350px"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit" :loading="working" :disabled="working">{{$t('send')}}</el-button>
@@ -21,6 +21,14 @@
           token: ''
         }
       }
+    },
+    mounted () {
+      let token = this.$route.params.token
+      if(token === null || token.length === 0) {
+        return
+      }
+      this.form.token = token
+      this.$store.dispatch('authConfirmEmail', this.form)
     },
     computed: {
       working () {
