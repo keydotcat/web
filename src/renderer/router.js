@@ -9,6 +9,9 @@ import ConfirmEmailPage from '@/components/public/confirm_email_page'
 import HomeDispatcher from '@/components/home_dispatcher'
 import HomeLoader from '@/components/home_loader'
 
+import ManagePage from '@/components/home/manage_page'
+import ContentsPage from '@/components/home/contents_page'
+
 import rootSvc from '@/services/root'
 
 Vue.use(VueRouter)
@@ -20,7 +23,18 @@ var router = new VueRouter({
       component: HomeLoader,
       children: [
         { path: ':tid',
-          component: HomeDispatcher
+          component: HomeDispatcher,
+          redirect: '/home/:tid/contents',
+          children: [
+            {
+              path: 'contents',
+              component: ContentsPage
+            },
+            {
+              path: 'manage',
+              component: ManagePage
+            }
+          ]
         }
       ]
     },

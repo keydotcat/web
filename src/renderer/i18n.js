@@ -48,6 +48,8 @@ const messages = {
     team: 'Team',
     logout: 'Log out',
     create_new_team: 'Create new team',
+    configure: 'Configure',
+    select_team: 'Change team',
     ...enLocale
   },
   ca: {

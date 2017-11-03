@@ -29,6 +29,14 @@ const mutations = {
     if (state.activeTeamIdx === -1){
       state.activeTeamIdx = 0
     }
+  },
+  [mt.USER_SET_ACTIVE_TEAM] (state, tid) {
+    for(var i = 0; i < state.teams.length; i++) {
+      if( state.teams[i].id === tid ) {
+        state.activeTeamIdx = i
+        break
+      }
+    }
   }
 }
 
@@ -52,11 +60,16 @@ const actions = {
     })
   },
   userCreateTeam(context, payload) {
-    console.log('create team name', payload)
     var req = {}
     req[context.state.id] = context.state.publicKeys
     workerMgr.generateVaultKeys(req).then((vaultKeys) => {
-      userSvc.createTeam({name: payload, vault_keys: vaultKeys}).then((teamInfo) => {
+      userSvc.createTeam({
+        name: payload,
+        vault_keys: {
+          public_key: vaultKeys.publicKey,
+          keys: vaultKeys.keys
+        }
+      }).then((teamInfo) => {
         context.dispatch('userLoadInfo')
       }).catch((err) => {
         context.commit(mt.MSG_ERROR, rootSvc.processError(err))
