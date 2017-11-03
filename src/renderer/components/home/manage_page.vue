@@ -1,54 +1,26 @@
 <template>
-  <div class="expandHeight centerFlex">
-    <el-form ref="form" :rules="rules" :model="form" label-width="200px">
-      <p style='text-align:center'>{{$t('login.welcome')}}</p>
-      <el-form-item :label="$t('fields.username')" prop="username">
-        <el-input v-model="form.username"></el-input>
-      </el-form-item>
-      <el-form-item :label="$t('fields.password')" prop="password">
-        <el-input type="password" v-model="form.password"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" :loading="working" :disabled="working">{{$t('login.send')}}</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="expandHeight">
+    <el-row class="expandHeight">
+      <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1" class="expandHeight">
+        <el-menu :router="true" mode="vertical" class="expandHeight">
+          <el-menu-item :index="'/home/'+$store.state.team.id+'/manage/users'">
+            <i class="el-icon-view"></i><span>{{$t('users')}}</span>
+          </el-menu-item>
+          <el-menu-item :index="'/home/'+$store.state.team.id+'/manage/vaults'">
+            <i class="el-icon-menu"></i><span>{{$t('vaults')}}</span>
+          </el-menu-item>
+        </el-menu>
+      </el-col>
+      <el-col :xs="16" :sm="18" :md="20" :lg="21" :xl="23" class="expandHeight">
+        <router-view></router-view>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script>
   export default {
-    name: 'manage-page',
-    data () {
-      var checkField = (rule, value, callback) => {
-        if (!value || value.length < 3 || value.length > 20) {
-          callback(new Error(this.$i18n.t(`register.error.${rule.field}`)))
-        }
-      }
-      return {
-        form: {
-          username: '',
-          password: ''
-        },
-        rules: {
-          username: [
-            { validator: checkField, trigger: 'blur' }
-          ],
-          password: [
-            { validator: checkField, trigger: 'blur' }
-          ]
-        }
-      }
-    },
-    computed: {
-      working () {
-        return this.$store.state.auth.working
-      }
-    },
-    methods: {
-      onSubmit (e, v) {
-        this.$store.dispatch('authLogin', this.form)
-      }
-    }
+    name: 'manage-page'
   }
 </script>
 

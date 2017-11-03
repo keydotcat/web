@@ -50,6 +50,8 @@ const messages = {
     create_new_team: 'Create new team',
     configure: 'Configure',
     select_team: 'Change team',
+    users: 'Users',
+    vaults: 'Vaults',
     ...enLocale
   },
   ca: {

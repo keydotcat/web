@@ -32,7 +32,18 @@ var router = new VueRouter({
             },
             {
               path: 'manage',
-              component: ManagePage
+              component: ManagePage,
+              redirect: '/home/:tid/manage/users',
+              children: [
+                {
+                  path: 'users',
+                  component: ContentsPage
+                },
+                {
+                  path: 'vaults',
+                  component: ManagePage
+                }
+              ]
             }
           ]
         }

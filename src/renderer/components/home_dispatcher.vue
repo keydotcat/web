@@ -20,7 +20,6 @@
       <msg-display></msg-display>
       <new-team-dialog :visible='newTeamDialogVisible' v-on:hide='newTeamDialogVisible=false'></new-team-dialog>
       <router-view></router-view>
-      hello
     </el-main>
   </div>
 </template>
@@ -38,10 +37,17 @@
         newTeamDialogVisible: false
       }
     },
+    beforeMount () {
+      var tid = this.$route.params.tid
+      if (this.$store.state.team.id !== tid) {
+        this.$store.dispatch('teamLoadInfo', this.$route.params.tid)
+      }
+    },
     watch: {
       '$route' (to, from) {
         if( this.$store.getters.activeTeam.id !== this.$route.params.tid ) {
           this.$store.commit(mt.USER_SET_ACTIVE_TEAM, this.$route.params.tid)
+          this.$store.dispatch('teamLoadInfo', this.$route.params.tid)
         }
       }
     },
