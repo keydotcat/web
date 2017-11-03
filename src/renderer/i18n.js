@@ -9,7 +9,8 @@ const messages = {
       'already_exists': 'Already exists',
       'network': 'It seems the server is offline. Try again later',
       'bad_request': 'Seems the request is not properly formed.',
-      'unknown': 'Wow. Something went wrong :P'
+      'unknown': 'Wow. Something went wrong :P',
+      'invalid_signature': 'Could not properly sign request.'
     },
     fields: {
       username: 'Username',
@@ -44,6 +45,9 @@ const messages = {
       }
     },
     send: 'Send',
+    team: 'Team',
+    logout: 'Log out',
+    create_new_team: 'Create new team',
     ...enLocale
   },
   ca: {

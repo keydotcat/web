@@ -29,6 +29,7 @@ const mutations = {
   [mt.SESSION_LOGOUT] (state) {
     state.sessionToken = ''
     rootSvc.setToken(state.sessionToken)
+    localStorage.removeItem(LS_KEYCAT_SESSION_DATA)
   },
   [mt.SESSION_LOGIN] (state, payload) {
     state.sessionToken = payload.token
@@ -58,6 +59,16 @@ const actions = {
       workerMgr.setKeysFromStore( sessionData.store_token, data.keys ).then((ok) => {
         router.push('/home')
       })
+    }).catch(() => {
+      context.commit(mt.SESSION_LOGOUT)
+    })
+  },
+  sessionLogout (context) {
+    sessionSvc.deleteSession({token: context.state.sessionToken}).then(() => {
+      context.commit(mt.SESSION_LOGOUT)
+      router.push('/')
+    }).catch((err) => {
+      context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   }
 }

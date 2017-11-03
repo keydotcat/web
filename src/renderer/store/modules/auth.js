@@ -74,6 +74,7 @@ const actions = {
         .then((response) => {
           context.commit(mt.AUTH_STOP_WORK)
           context.dispatch('sessionStoreServerSession', { sessionData: response, password: payload.password })
+          router.push('/home')
         }).catch((err) => {
           context.commit(mt.AUTH_STOP_WORK)
           context.commit(mt.MSG_ERROR, rootSvc.processError(err, 'login.error.'))

@@ -114,10 +114,12 @@ class CryptoWorker {
   generateUserKeys (username, password) {
     this.keys.sign = nacl.sign.keyPair()
     this.keys.cipher = nacl.box.keyPair()
+    console.log(this.keys)
     var bKey = keyPassword(this.keys, password)
     var ret = closeUserKeysAndPack(this.keys, bKey)
     ret.publicKeys = packPublicKeys(this.keys)
     ret.password = loginPassword(username, password)
+    console.log('after register', this.keys.sign.secretKey )
     return { data: ret }
   }
   hashLoginPassword (username, password) {
@@ -126,9 +128,11 @@ class CryptoWorker {
   setKeysFromServer (password, storeToken, srvKeys) {
     this.keys = { sign: {}, cipher: {} }
     this.keys = unpackAndOpenKeys(srvKeys, password)
+    console.log('after server', this.keys.sign.secretKey )
     if (this.keys == null) {
       return { error: 'cannot_open_keys' }
     }
+    console.log(this.keys)
     var bToken = keyPassword(this.keys, storeToken)
     return { data: closeUserKeysAndPack(this.keys, bToken).keys }
   }
@@ -141,6 +145,7 @@ class CryptoWorker {
       secretKeys: util.encodeBase64(bKeys.slice(sep))
     }
     this.keys = unpackAndOpenKeys(keys, storeToken)
+    console.log('after store', this.keys.sign.secretKey )
     if (this.keys == null) {
       return { error: 'cannot_open_keys' }
     }
@@ -152,6 +157,7 @@ class CryptoWorker {
     vaultKeys.cipher = nacl.box.keyPair()
     var secretStub = merge(vaultKeys.sign.secretKey, vaultKeys.cipher.secretKey)
     var signedCipherPubKey = nacl.sign(vaultKeys.cipher.publicKey, vaultKeys.sign.secretKey)
+    console.log('signing vault with', this.keys.sign.secretKey)
     var data = {
       publicKey: util.encodeBase64(nacl.sign(merge(vaultKeys.sign.publicKey, signedCipherPubKey), this.keys.sign.secretKey)),
       keys: {}
