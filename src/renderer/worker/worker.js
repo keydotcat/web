@@ -173,7 +173,7 @@ class CryptoWorker {
       var secretStub = merge(vaultKeys.sign.secretKey, vaultKeys.cipher.secretKey)
       var nonce = nacl.randomBytes(nacl.box.nonceLength)
       var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.secretKey)
-      data[vid] = util.encodeBase64(nacl.sign(merge(nonce, closed),vaultKeys.sign.secretKey))
+      data[vid] = util.encodeBase64(nacl.sign(merge(nonce, closed), vaultKeys.sign.secretKey))
     }
     return {data: data}
   }

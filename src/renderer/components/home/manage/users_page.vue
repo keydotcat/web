@@ -1,34 +1,36 @@
 <template>
-  <el-container  class='user-content'>
+  <div class="manageUserContent">
     <check-invite-dialog :visible='checkInviteVisible' v-on:hide='checkInviteVisible=false' :invite='invite'></check-invite-dialog>
-    <el-header>
-      <span>Users in team</span>
-    </el-header>
-    <el-main>
-      <el-row>
-        <el-col :span="12" class='flex-center'>
-          <el-transfer filterable :titles="['Administrators', 'Users']"  :button-texts="['Promote', 'Demote']" @change='handleChange'
-            :data="userData" v-model='userState'>
-            <el-button class="transfer-footer" slot="left-footer" size="small">Remove from team</el-button>
-            <el-button class="transfer-footer" slot="right-footer" size="small">Remove from team</el-button>
-          </el-transfer>
-        </el-col>
-        <el-col :span="12" class='flex-center'>
-          <el-card>
-            <div slot="header" class="clearfix">
-              <span>Invite users to this team</span>
-              <el-input size='small' placeholder="email" v-model='invite' class='inviteInput' style='float:right; padding: 3px, 0'>
-                <el-button slot="append" icon="el-icon-search" @click='doInvite'></el-button>
-              </el-input>
-            </div>
-            <div v-for="i in invites" :key="i.email" class="text item">
-              {{i.email}}
-            </div>
-          </el-card>
-        </el-col>
-      </el-row>
-    </el-main>
-  </el-container>
+    <el-row>
+      <el-col :span="12" class='flex-center'>
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>Administrators and users</span>
+          </div>
+          <div>
+            <el-transfer filterable :titles="['Administrators', 'Users']"  :button-texts="['Promote', 'Demote']" @change='handleChange'
+              :data="userData" v-model='userState'>
+              <el-button class="transfer-footer" slot="left-footer" size="small">Remove from team</el-button>
+              <el-button class="transfer-footer" slot="right-footer" size="small">Remove from team</el-button>
+            </el-transfer>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12" class='flex-center'>
+        <el-card>
+          <div slot="header" class="clearfix">
+            <span>Invite users to this team</span>
+            <el-input size='small' placeholder="email" v-model='invite' class='inviteInput' style='float:right; padding: 3px, 0'>
+              <el-button slot="append" icon="el-icon-search" @click='doInvite'></el-button>
+            </el-input>
+          </div>
+          <div v-for="i in invites" :key="i.email" class="text item">
+            {{i.email}}
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
+  </div>
 </template>
 
 <script>
@@ -94,14 +96,8 @@
 </script>
 
 <style>
-  .el-container {
-    margin: 20px;
-  }
-  .user-content > .el-header {
-    display:flex;
-    justify-content: flex-end;
-    align-items: center;
-    border: 1px gray;
+  .manageUserContent {
+    margin-top: 50px;
   }
   .inviteInput {
     margin-left: 50px;
