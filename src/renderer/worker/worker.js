@@ -82,15 +82,16 @@ function unpackPublicKeys (publicStub) {
 }
 
 function unpackAndOpenVaultKeys (vCKeys, userKeys) {
+  var pubKeys = util.decodeBase64(vCKeys.publicKeys)
   var vKeys = {
-    sign: { publicKey: vCKeys.publicKeys.slice(0, nacl.sign.publicKeyLength) },
+    sign: { publicKey: pubKeys.slice(0, nacl.sign.publicKeyLength) },
     cipher: {}
   }
-  vKeys.cipher.publicKey = nacl.sign.open(vCKeys.publicKeys.slice(nacl.sign.publicKeyLength), vKeys.sign.publicKey)
+  vKeys.cipher.publicKey = nacl.sign.open(pubKeys.slice(nacl.sign.publicKeyLength), vKeys.sign.publicKey)
   if (vKeys.cipher.publicKey === null) {
     return null
   }
-  var verified = nacl.sign.open(vCKeys.secretKeys, vKeys.sign.publicKey)
+  var verified = nacl.sign.open(util.decodeBase64(vCKeys.secretKeys), vKeys.sign.publicKey)
   if (verified === null) {
     return null
   }
@@ -159,7 +160,7 @@ class CryptoWorker {
     for (var uname in admins) {
       var pubKeys = unpackPublicKeys(admins[uname])
       var nonce = nacl.randomBytes(nacl.box.nonceLength)
-      var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.publicKey)
+      var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.secretKey)
       data.keys[uname] = util.encodeBase64(nacl.sign(merge(nonce, closed), vaultKeys.sign.secretKey))
     }
     return { data: data }
@@ -171,8 +172,8 @@ class CryptoWorker {
       var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys[vid], this.keys)
       var secretStub = merge(vaultKeys.sign.secretKey, vaultKeys.cipher.secretKey)
       var nonce = nacl.randomBytes(nacl.box.nonceLength)
-      var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.publicKey)
-      data[vid] = util.encodeBase64(nacl.sign(merge(nonce, closed)))
+      var closed = nacl.box(secretStub, nonce, pubKeys.cipher, vaultKeys.cipher.secretKey)
+      data[vid] = util.encodeBase64(nacl.sign(merge(nonce, closed),vaultKeys.sign.secretKey))
     }
     return {data: data}
   }

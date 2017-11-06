@@ -10,7 +10,8 @@ const messages = {
       'network': 'It seems the server is offline. Try again later',
       'bad_request': 'Seems the request is not properly formed.',
       'unknown': 'Wow. Something went wrong :P',
-      'invalid_signature': 'Could not properly sign request.'
+      'invalid_signature': 'Could not properly sign request',
+      'invalid_email': 'Invalid email'
     },
     fields: {
       username: 'Username',
@@ -52,6 +53,8 @@ const messages = {
     select_team: 'Change team',
     users: 'Users',
     vaults: 'Vaults',
+    check_invite: 'Check invite',
+    check_invite_contents: 'Please verify that the spelling is correct for',
     ...enLocale
   },
   ca: {

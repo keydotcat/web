@@ -10,6 +10,7 @@ import HomeDispatcher from '@/components/home_dispatcher'
 import HomeLoader from '@/components/home_loader'
 
 import ManagePage from '@/components/home/manage_page'
+import ManageUsersPage from '@/components/home/manage/users_page'
 import ContentsPage from '@/components/home/contents_page'
 
 import rootSvc from '@/services/root'
@@ -24,7 +25,7 @@ var router = new VueRouter({
       children: [
         { path: ':tid',
           component: HomeDispatcher,
-          redirect: '/home/:tid/contents',
+          redirect: '/home/:tid/manage',
           children: [
             {
               path: 'contents',
@@ -37,11 +38,11 @@ var router = new VueRouter({
               children: [
                 {
                   path: 'users',
-                  component: ContentsPage
+                  component: ManageUsersPage
                 },
                 {
                   path: 'vaults',
-                  component: ManagePage
+                  component: ManageUsersPage
                 }
               ]
             }

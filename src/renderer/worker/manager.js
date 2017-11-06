@@ -51,6 +51,9 @@ class Manager {
   setKeysFromStore(storeToken, storedKeys) {
     return this.newTask(cmds.LOAD_KEY_FROM_STORE, { storeToken: storeToken, storedKeys: storedKeys })
   }
+  cipherVaultKeysForUser(vaultKeys, pubKey) {
+    return this.newTask(cmds.CIPHER_KEYS_FOR_USER, { vaultKeys: vaultKeys, userPublicKeys: pubKey })
+  }
 }
 
 export default new Manager()
