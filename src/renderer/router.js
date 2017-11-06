@@ -11,6 +11,7 @@ import HomeLoader from '@/components/home_loader'
 
 import ManagePage from '@/components/home/manage_page'
 import ManageUsersPage from '@/components/home/manage/users_page'
+import ManageVaultsPage from '@/components/home/manage/vaults_page'
 import ContentsPage from '@/components/home/contents_page'
 
 import rootSvc from '@/services/root'
@@ -42,7 +43,7 @@ var router = new VueRouter({
                 },
                 {
                   path: 'vaults',
-                  component: ManageUsersPage
+                  component: ManageVaultsPage
                 }
               ]
             }

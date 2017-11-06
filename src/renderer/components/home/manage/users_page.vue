@@ -1,8 +1,6 @@
 <template>
   <div class="manageUserContent">
     <check-invite-dialog :visible='checkInviteVisible' v-on:hide='checkInviteVisible=false' :invite='invite'></check-invite-dialog>
-    <el-row>
-      <el-col :span="12" class='flex-center'>
         <el-card>
           <div slot="header" class="clearfix">
             <span>Administrators and users</span>
@@ -15,8 +13,6 @@
             </el-transfer>
           </div>
         </el-card>
-      </el-col>
-      <el-col :span="12" class='flex-center'>
         <el-card>
           <div slot="header" class="clearfix">
             <span>Invite users to this team</span>
@@ -28,8 +24,6 @@
             {{i.email}}
           </div>
         </el-card>
-      </el-col>
-    </el-row>
   </div>
 </template>
 
@@ -98,12 +92,15 @@
 <style>
   .manageUserContent {
     margin-top: 50px;
+    display:flex;
+    flex-wrap: wrap;
+    justify-content:center;
   }
   .inviteInput {
     margin-left: 50px;
     width: 300px;
   }
-  .flex-center, .el-transfer-panel__footer{
+  .el-transfer-panel__footer{
     display: flex;
     justify-content: center;
   }
@@ -113,6 +110,9 @@
   }
   .item {
     margin-bottom: 18px;
+  }
+  .el-card {
+    margin: 10px;
   }
 </style>
 
