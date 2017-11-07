@@ -43,15 +43,7 @@
         return this.$store.state.team.invites
       },
       userData () {
-        var owner = this.$store.state.team.owner
-        var me = this.$store.state.user.id
-        return this.$store.state.team.users.map( (u) => {
-          return {
-            key: u.id,
-            label: `${u.fullname} (${u.id})`,
-            disabled: u.id === owner || u.id === me
-          }
-        })
+        return this.$store.getters.allUsersForTransfer
       },
       userState: {
         get () {

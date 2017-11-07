@@ -4,12 +4,12 @@
     <el-card>
       <div slot="header" class="manageVaultHeader">
         <span>Vaults</span>
-        <el-button style="float: right" type="primary" @click='createVault'>Operation button</el-button>
+        <el-button style="float: right" type="primary" @click='createVault'>Create vault</el-button>
       </div>
       <div>
         <el-collapse>
           <el-collapse-item v-for="vault in vaults" key="id" :title="vault.id" :name="vault.id">
-            <vault-access :vauit="vault"></vault-access>
+            <vault-access :vault="vault"></vault-access>
           </el-collapse-item>
         </el-collapse>
       </div>
@@ -55,6 +55,9 @@
   }
   .el-card {
     margin: 10px;
+  }
+  .el-collapse {
+    min-width: 300px;
   }
 </style>
 

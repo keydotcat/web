@@ -11,7 +11,8 @@ const messages = {
       'bad_request': 'Seems the request is not properly formed.',
       'unknown': 'Wow. Something went wrong :P',
       'invalid_signature': 'Could not properly sign request',
-      'invalid_email': 'Invalid email'
+      'invalid_email': 'Invalid email',
+      'not_fount': 'This resource does not seem to exist'
     },
     fields: {
       username: 'Username',

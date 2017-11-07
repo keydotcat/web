@@ -28,5 +28,20 @@ export default{
     return axios.patch(`${rootSvc.urlRoot}/team/${tid}/user/${uid}`, payload, rootSvc.getHeaders())
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
+  },
+  addUserToVault(tid, vid, userKeys) {
+    return axios.post(`${rootSvc.urlRoot}/team/${tid}/vault/${vid}/user`, userKeys, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  removeUserFromVault(tid, vid, uid) {
+    return axios.delete(`${rootSvc.urlRoot}/team/${tid}/vault/${vid}/user/${uid}`, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  createVault(tid, vid, vaultKeys) {
+    return axios.post(`${rootSvc.urlRoot}/team/${tid}/vault`, {name: vid, vault_keys: vaultKeys}, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   }
 }

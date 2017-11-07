@@ -166,6 +166,7 @@ class CryptoWorker {
     return { data: data }
   }
   cipherKeysForUser (vaultClosedKeys, userPubKeys) {
+    console.log('vk', vaultClosedKeys, 'uk', userPubKeys)
     var pubKeys = unpackPublicKeys(userPubKeys)
     var data = {}
     for (var vid in vaultClosedKeys) {
