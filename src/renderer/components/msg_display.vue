@@ -1,6 +1,9 @@
 <template>
   <div>
-    <el-alert :title='$t($store.state.msg.contents)' v-if='hasContents' :type="type" center show-icon :close='hide'></el-alert>
+    <md-snackbar md-position="center" :md-duration="Infinity" :md-active="hasContents" md-persistent>
+      <span>{{$t($store.state.msg.contents)}}</span>
+      <md-button class="md-primary" @click="hide">Hide</md-button>
+    </md-snackbar>
   </div>
 </template>
 
@@ -28,9 +31,3 @@
     }
   }
 </script>
-
-<style>
-  .el-menu > .goright {
-    float: right !important;
-  }
-</style>

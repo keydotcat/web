@@ -2,6 +2,9 @@ import Vue from 'vue'
 import axios from 'axios'
 
 import Element from 'element-ui'
+import VueMaterial from 'vue-material'
+import 'vue-material/dist/vue-material.min.css'
+
 import i18n from './i18n'
 import router from './router'
 
@@ -20,6 +23,8 @@ rootSvc.setUrlRoot('http://pen.key.cat/api')
 Vue.use(Element, {
   i18n: (key, value) => i18n.t(key, value)
 })
+
+Vue.use(VueMaterial)
 
 /* eslint-disable no-new */
 new Vue({

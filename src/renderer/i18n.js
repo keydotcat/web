@@ -12,6 +12,10 @@ const messages = {
       'unknown': 'Wow. Something went wrong :P',
       'invalid_signature': 'Could not properly sign request',
       'invalid_email': 'Invalid email',
+      'invalid_username': 'Invalid username',
+      'invalid_fullname': 'Full name missing',
+      'invalid_password': 'Invalid password',
+      'invalid_password_repeat': 'Both passwords don\'t match',
       'not_fount': 'This resource does not seem to exist'
     },
     fields: {
@@ -19,7 +23,7 @@ const messages = {
       fullname: 'Full name',
       email: 'Email',
       password: 'Password',
-      repeatPassword: 'Your password again'
+      password_repeat: 'Your password again'
     },
     register: {
       welcome: 'Welcome to key.cat. Please register',
@@ -27,10 +31,7 @@ const messages = {
       send: 'Register',
       error: {
         username: 'Username invalid. Probably too short',
-        fullname: 'Full name missing',
         email: 'Email invalid',
-        password: 'Password too short',
-        password2: 'Passwords don\'t match',
         duplicate: 'Alredy taken'
       }
     },

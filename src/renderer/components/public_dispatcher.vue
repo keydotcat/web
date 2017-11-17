@@ -1,15 +1,13 @@
 <template>
   <div class="expandHeight">
-    <el-header>
-      <el-menu :router="true" :default-active='activePage' mode="horizontal">
-        <el-menu-item class="goright" index="/register">Register</el-menu-item>
-        <el-menu-item class="goright" index="/login">Login</el-menu-item>
-      </el-menu>
-    </el-header>
-    <el-main class="expandHeight">
+    <md-tabs class="md-accent" md-alignment="right" md-sync-route>
+      <md-tab id="tab-login" to="/login" :md-label="$t('login.send')"></md-tab>
+      <md-tab id="tab-register" to="/register" :md-label="$t('register.send')"></md-tab>
+    </md-tabs>
+    <div class="expandHeight">
       <msg-display></msg-display>
       <router-view></router-view>
-    </el-main>
+    </div>
   </div>
 </template>
 
