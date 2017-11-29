@@ -1,7 +1,5 @@
 <template>
-  <div class="expandHeight">
-    <router-view></router-view>
-  </div>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -18,6 +16,7 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css?family=Open+Sans');
+  @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 
   html, body {
     font-family: 'Open Sans',serif;

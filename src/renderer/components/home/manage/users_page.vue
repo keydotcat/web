@@ -1,5 +1,5 @@
 <template>
-  <div class="manageUserContent">
+  <!--div class="manageUserContent">
     <check-invite-dialog :visible='checkInviteVisible' v-on:hide='checkInviteVisible=false' :invite='invite'></check-invite-dialog>
         <el-card>
           <div slot="header" class="clearfix">
@@ -24,7 +24,7 @@
             {{i.email}}
           </div>
         </el-card>
-  </div>
+  </div-->
 </template>
 
 <script>

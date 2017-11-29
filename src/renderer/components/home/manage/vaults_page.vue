@@ -1,5 +1,5 @@
 <template>
-  <div class="manageVaultContent">
+  <!--div class="manageVaultContent">
     <create-vault-dialog :visible='createVaultVisible' v-on:hide='createVaultVisible=false'></create-vault-dialog>
     <el-card>
       <div slot="header" class="manageVaultHeader">
@@ -14,7 +14,7 @@
         </el-collapse>
       </div>
     </el-card>
-  </div>
+  </div-->
 </template>
 
 <script>

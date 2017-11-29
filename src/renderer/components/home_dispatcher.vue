@@ -1,5 +1,5 @@
 <template>
-  <div class="expandHeight">
+  <div>
     <md-toolbar class="md-accent" md-elevation="1">
       <h3 class="md-title" style="flex: 1">Key.cat</h3>
       <md-button class="md-accent" v-bind:class="{ 'md-raised': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>
@@ -14,6 +14,7 @@
             <md-button type="primary" @click='newTeamDialogVisible=true'>{{$t('create_new_team')}}</md-button>
           </md-menu-item>
         </md-menu-content>
+      <md-button @click='logout'>{{$t('logout')}}</md-button>
       </md-menu>
     </md-toolbar>
     <!--el-header>
@@ -32,11 +33,11 @@
       <el-menu-item class="goright" :index="'/home/'+$store.getters.activeTeam.id+'/contents'">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</el-menu-item>
     </el-menu>
     </el-header-->
-    <div class="expandHeight">
+    <!--div class="expandHeight"-->
+      <router-view></router-view>
       <msg-display></msg-display>
       <new-team-dialog :visible='newTeamDialogVisible' v-on:hide='newTeamDialogVisible=false'></new-team-dialog>
-      <router-view></router-view>
-    </div>
+    <!--/div-->
   </div>
 </template>
 

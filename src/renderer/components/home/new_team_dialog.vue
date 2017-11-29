@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="$t('create_new_team')" :visible.sync="visible">
+  <!--el-dialog :title="$t('create_new_team')" :visible.sync="visible">
     <el-form>
       <el-form-item label="Team name">
         <el-input v-model="team_name"></el-input>
@@ -9,7 +9,7 @@
       <el-button @click="hideDialog">Cancel</el-button>
       <el-button type="primary" @click="submit">Confirm</el-button>
     </span>
-  </el-dialog>
+  </el-dialog-->
 </template>
 
 <script>
