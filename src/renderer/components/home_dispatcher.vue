@@ -2,15 +2,17 @@
   <div class="expandHeight">
     <md-toolbar class="md-accent" md-elevation="1">
       <h3 class="md-title" style="flex: 1">Key.cat</h3>
-      <md-button class="md-raised md-accent" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>
-      <md-button class="md-raised md-accent" @click="goto('manage')">{{$t('configure')}}</md-button>
+      <md-button class="md-accent" v-bind:class="{ 'md-raised': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>
+      <md-button class="md-accent" v-bind:class="{ 'md-raised': activePage == 'manage' }" @click="goto('manage')">{{$t('configure')}}</md-button>
       <md-menu md-size="auto" md-align-trigger>
         <md-button md-menu-trigger>{{$t('select_team')}}</md-button>
 
         <md-menu-content>
-          <md-menu-item>My Item 1</md-menu-item>
-          <md-menu-item>This content is long enough</md-menu-item>
-          <md-menu-item>My Item 3</md-menu-item>
+          <md-menu-item v-for="team in $store.getters.nonActiveTeams" :key='team.id' :index="'/home/'+team.id">{{team.name}}</md-menu-item>
+          <hr v-if="$store.getters.nonActiveTeams.length > 0"/>
+          <md-menu-item index='create_new_team' class='centerer'>
+            <md-button type="primary" @click='newTeamDialogVisible=true'>{{$t('create_new_team')}}</md-button>
+          </md-menu-item>
         </md-menu-content>
       </md-menu>
     </md-toolbar>
@@ -29,12 +31,12 @@
       <el-menu-item class="goright" :index="'/home/'+$store.getters.activeTeam.id+'/manage'">{{$t('configure')}}</el-menu-item>
       <el-menu-item class="goright" :index="'/home/'+$store.getters.activeTeam.id+'/contents'">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</el-menu-item>
     </el-menu>
-  </el-header>
-  <el-main class="expandHeight">
-    <msg-display></msg-display>
-    <new-team-dialog :visible='newTeamDialogVisible' v-on:hide='newTeamDialogVisible=false'></new-team-dialog>
-    <router-view></router-view>
-    </el-main-->
+    </el-header-->
+    <div class="expandHeight">
+      <msg-display></msg-display>
+      <new-team-dialog :visible='newTeamDialogVisible' v-on:hide='newTeamDialogVisible=false'></new-team-dialog>
+      <router-view></router-view>
+    </div>
   </div>
 </template>
 
@@ -68,11 +70,15 @@
     methods: {
       logout() {
         this.$store.dispatch('sessionLogout')
+      },
+      goto( where ) {
+        this.$router.push( `/home/${this.$store.getters.activeTeam.id}/${where}` )
       }
     },
     computed: {
       activePage () {
-        return this.$route.path
+        var sp = this.$route.path.split('/').filter( x => x.length > 0 )
+        return sp.length > 2 ? sp[2] : ''
       }
     }
   }
