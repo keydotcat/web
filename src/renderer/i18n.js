@@ -1,7 +1,5 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
-import enLocale from 'element-ui/lib/locale/lang/en'
-import caLocale from 'element-ui/lib/locale/lang/ca'
 
 const messages = {
   en: {
@@ -56,13 +54,11 @@ const messages = {
     users: 'Users',
     vaults: 'Vaults',
     check_invite: 'Check invite',
-    check_invite_contents: 'Please verify that the spelling is correct for',
-    ...enLocale
+    check_invite_contents: 'Please verify that the spelling is correct for'
   },
   ca: {
     message: {
-      welcome: 'Benvingut',
-      ...caLocale
+      welcome: 'Benvingut'
     }
   }
 }

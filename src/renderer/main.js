@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-import Element from 'element-ui'
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
 
@@ -19,10 +18,6 @@ Vue.config.productionTip = false
 
 rootSvc.setHTTP(Vue.http)
 rootSvc.setUrlRoot('http://pen.key.cat/api')
-
-Vue.use(Element, {
-  i18n: (key, value) => i18n.t(key, value)
-})
 
 Vue.use(VueMaterial)
 

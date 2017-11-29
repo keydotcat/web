@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  import 'element-ui/lib/theme-chalk/index.css'
   import * as mt from '@/store/mutation-types'
 
   export default {
