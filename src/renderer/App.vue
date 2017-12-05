@@ -14,9 +14,17 @@
   }
 </script>
 
-<style>
+<style lang="scss">
   @import url('https://fonts.googleapis.com/css?family=Open+Sans');
   @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+  @import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+  @include md-register-theme("default", (
+    primary: md-get-palette-color(blue, A200), // The primary color of your application
+    accent: md-get-palette-color(red, A200) // The accent or secondary color
+  ));
+
+  @import "~vue-material/dist/theme/all"; // Apply the theme
 
   html, body {
     font-family: 'Open Sans',serif;

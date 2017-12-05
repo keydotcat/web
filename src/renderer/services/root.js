@@ -45,7 +45,7 @@ class RootSvc {
       }
       return 'errors.unknown'
     }
-    // switch(errResponse.status == 
+    // switch(errResponse.status ==
     return (prefix || 'errors.') + data.error.toLowerCase().replace(new RegExp(' ', 'g'), '_')
   }
 }

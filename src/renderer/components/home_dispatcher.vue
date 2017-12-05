@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="expandHeight">
     <md-toolbar class="md-accent" md-elevation="1">
       <h3 class="md-title" style="flex: 1">Key.cat</h3>
       <md-button class="md-accent" v-bind:class="{ 'md-raised': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>

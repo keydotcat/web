@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="md-layout">
     <md-drawer md-permanent="clipped">
       <md-list>
         <md-list-item :to="'/home/'+$store.getters.activeTeam.id+'/manage/users'">
@@ -12,7 +12,7 @@
         </md-list-item>
       </md-list>
     </md-drawer>
-    <md-content>
+    <md-content class="md-layout-item">
       Content here
     </md-content>
     <!--el-row class="expandHeight">
@@ -40,9 +40,12 @@
 </script>
 
 <style>
-  .centerFlex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .md-drawer {
+    width: 230px;
+    max-width: calc(100vw - 125px);
+  }
+
+  .md-content {
+    padding: 16px;
   }
 </style>

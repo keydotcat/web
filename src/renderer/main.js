@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
+// import 'vue-material/dist/theme/default.css'
 
 import i18n from './i18n'
 import router from './router'
