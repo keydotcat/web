@@ -1,26 +1,16 @@
 <template>
   <div class="expandHeight centerFlex">
-    <form novalidate class="md-layout-row md-gutter centerFlex" @submit="submit">
-      <md-card class="md-flex-50 md-flex-small-100">
-        <md-card-header>
-          <div class="md-title">{{$t('register.welcome')}}</div>
-        </md-card-header>
-        <md-card-content>
-          <template v-for="(val,field) in static_errors">
-            <md-field :class="getValidationClass(field)">
-              <label :for="field">{{$t('fields.' + field)}}</label>
-              <md-input :type="field.indexOf('password') == 0 ? 'password' : ''" v-model="form[field]" :disabled="working" @change="setDirty(field)"/>
-              <span class="md-error" :v-if="errs[field].length > 0">{{errs[field]}}</span>
-            </md-field>
-          </template>
-        </md-card-content>
-        <md-progress-bar md-mode="indeterminate" v-if="working" />
-        <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="working">{{$t('login.send')}}</md-button>
-        </md-card-actions>
-      </md-card>
+    <form class="form-login" @submit="submit">
+      <h1 class="h3 mb-3 font-weight-normal">{{$t('register.welcome')}}</h1>
+      <template v-for="(val,field) in static_errors">
+        <div class="form-group">
+          <label :for="field">{{$t('fields.' + field)}}</label>
+          <input :type="field.indexOf('password') == 0 ? 'password' : ''" v-model="form[field]" :disabled="working" @change="setDirty(field)" class="form-control" :class="{'is-invalid':(errs[field].length>0)}"/>
+          <div class="invalid-feedback">{{errs[field]}}</div>
+        </div>
+      </template>
+      <button class="btn btn-lg btn-primary btn-block" :disabled="working" type="submit">{{$t('register.send')}}</button>
     </form>
-
   </div>
 </template>
 
@@ -96,6 +86,7 @@
         this.dirty[fieldName] = true
       },
       submit (e, v) {
+        e.preventDefault()
         const form = this.form
         var errFound = false
         for( var k in this.form ) {

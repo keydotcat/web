@@ -1,9 +1,9 @@
 <template>
   <div class="expandHeight">
-    <md-toolbar class="md-accent" md-elevation="1">
+    <md-toolbar class="md-dense md-transparent" md-elevation="1">
       <h3 class="md-title" style="flex: 1">Key.cat</h3>
-      <md-button class="md-accent" v-bind:class="{ 'md-raised': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>
-      <md-button class="md-accent" v-bind:class="{ 'md-raised': activePage == 'manage' }" @click="goto('manage')">{{$t('configure')}}</md-button>
+      <md-button v-bind:class="{ 'md-primary': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>
+      <md-button v-bind:class="{ 'md-primary': activePage == 'manage' }" @click="goto('manage')">{{$t('configure')}}</md-button>
       <md-menu md-size="auto" md-align-trigger>
         <md-button md-menu-trigger>{{$t('select_team')}}</md-button>
 

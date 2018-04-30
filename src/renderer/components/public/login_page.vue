@@ -1,27 +1,25 @@
 <template>
-  <div class="expandHeight centerFlex">
-    <form novalidate class="md-layout-row md-gutter centerFlex" @submit="submit">
-      <md-card class="md-flex-50 md-flex-small-100">
-        <md-card-header>
-          <div class="md-title">{{$t('login.welcome')}}</div>
-        </md-card-header>
-        <md-card-content>
-          <md-field :class="getValidationClass('username')">
-            <label for="username">{{$t('fields.username')}}</label>
-            <md-input name="username" id="username" v-model="form.username" :disabled="working" @change="setDirty('username')"/>
-            <span class="md-error" :v-if="errors.username.length > 0">{{errors.username}}</span>
-          </md-field>
-          <md-field :class="getValidationClass('password')">
-            <label for="password">{{$t('fields.password')}}</label>
-            <md-input type="password" v-model="form.password" :disabled="working" @change="setDirty('password')"/>
-            <span class="md-error" :v-if="errors.password.length > 0">{{errors.password}}</span>
-          </md-field>
-        </md-card-content>
-        <md-progress-bar md-mode="indeterminate" v-if="working" />
-        <md-card-actions>
-          <md-button type="submit" class="md-primary" :disabled="working">{{$t('login.send')}}</md-button>
-        </md-card-actions>
-      </md-card>
+  <div class='expandHeight centerFlex'>
+    <form class="form-signin" novaiidate @submit="submit">
+      <h1 class="h3 mb-3 font-weight-normal">{{$t('login.welcome')}}</h1>
+      <div class="input-group">
+        <input class="form-control" v-model="form.username" :class="{'is-invalid':(errors.username.length>0)}" :disabled="working" :placeholder="$t('fields.username')" autofocus>
+        <div class="invalid-feedback">
+          {{errors.username}}
+        </div>
+      </div>
+      <div class="input-group">
+        <input type="password" v-model="form.password" class="form-control" :class="{'is-invalid':(errors.password.length>0)}" :disabled="working" :placeholder="$t('fields.password')">
+        <div class="invalid-feedback">
+          {{errors.password}}
+        </div>
+      </div>
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" v-model='form.remember'> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" :disabled="working" type="submit">{{$t('login.send')}}</button>
     </form>
   </div>
 </template>
@@ -33,7 +31,8 @@
       return {
         form: {
           username: '',
-          password: ''
+          password: '',
+          remember: false
         },
         errors: {
           username: '',
@@ -70,7 +69,7 @@
       getValidationClass (fn) {
         if (this.form[fn]) {
           return {
-            'md-invalid': this.dirty[fn] && this.errors[fn].length > 0
+            'is-invalid': this.dirty[fn] && this.errors[fn].length > 0
           }
         }
       }
@@ -84,4 +83,34 @@
     align-items: center;
     justify-content: center;
   }
+  .form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
 </style>

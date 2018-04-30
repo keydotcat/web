@@ -26,6 +26,7 @@ module.exports = {
     'space-before-function-paren': 0,
     'keyword-spacing': 0,
     'space-before-blocks': 0,
-    'space-in-parens': 0
+    'space-in-parens': 0,
+    'spaced-comment': 0
   }
 }

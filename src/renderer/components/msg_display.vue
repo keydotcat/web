@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <md-snackbar md-position="center" :md-duration="Infinity" :md-active="hasContents" md-persistent>
-      <span>{{$t($store.state.msg.contents)}}</span>
-      <md-button class="md-primary" @click="hide">Hide</md-button>
-    </md-snackbar>
+  <div :class="aClass" role="alert" :hidden="isEmpty">
+    {{$t($store.state.msg.contents)}}
+    <button type="button" class="close" aria-label="Close" @click="hide">
+      <span aria-hidden="true">&times;</span>
+    </button>
   </div>
 </template>
 
@@ -18,15 +18,17 @@
       }
     },
     computed: {
-      hasContents() {
-        return this.$store.state.msg.contents.length > 0
+      isEmpty() {
+        return this.$store.state.msg.contents.length === 0
       },
-      type () {
+      aClass () {
         switch(this.$store.state.msg.type) {
           case 'info':
-            return 'success'
+            return 'alert alert-success'
+          case 'error':
+            return 'alert alert-danger'
         }
-        return this.$store.state.msg.type
+        return 'alert alert-' + this.$store.state.msg.type
       }
     }
   }
