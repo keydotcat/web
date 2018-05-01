@@ -1,6 +1,28 @@
 <template>
   <div class="expandHeight">
-    <md-toolbar class="md-dense md-transparent" md-elevation="1">
+
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom">
+      <h5 class="my-0 mr-md-auto font-weight-normal">Key cat</h5>
+      <ul class="nav my-2 my-md-0 mr-md-3 nav-pills">
+        <li class="nav-item">
+          <a href="#" class="nav-link" v-bind:class="{ 'text-dark': activePage !== 'contents','active': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</a>
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" v-bind:class="{ 'text-dark': activePage !== 'manage', 'active': activePage == 'manage' }" @click="goto('manage')">{{$t('configure')}}</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link text-dark dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">{{$t('select_team')}}</a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item text-dark" href="#" v-for="team in $store.getters.nonActiveTeams" :key='team.id' :index="'/home/'+team.id">{{team.name}}</a>
+            <div class="dropdown-divider" v-if="$store.getters.nonActiveTeams.length > 0"></div>
+            <a class="dropdown-item" href="#" @click='newTeamDialogVisible=true'>{{$t('create_new_team')}}</a>
+          </div>
+        </li>
+      </ul>
+      <a class="btn btn-outline-primary" href="#">Sign up</a>
+    </div>
+
+    <!--md-toolbar class="md-dense md-transparent" md-elevation="1">
       <h3 class="md-title" style="flex: 1">Key.cat</h3>
       <md-button v-bind:class="{ 'md-primary': activePage == 'contents' }" @click="goto('contents')">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</md-button>
       <md-button v-bind:class="{ 'md-primary': activePage == 'manage' }" @click="goto('manage')">{{$t('configure')}}</md-button>
@@ -16,7 +38,7 @@
         </md-menu-content>
       <md-button @click='logout'>{{$t('logout')}}</md-button>
       </md-menu>
-    </md-toolbar>
+    </md-toolbar-->
     <!--el-header>
     <el-menu :router='true' :default-active='activePage' mode="horizontal">
       <el-menu-item class="goright" index="/logout" @click='logout'>{{$t('logout')}}</el-menu-item>
@@ -33,11 +55,13 @@
       <el-menu-item class="goright" :index="'/home/'+$store.getters.activeTeam.id+'/contents'">{{$t('team') + ' ' + $store.getters.activeTeam.name}}</el-menu-item>
     </el-menu>
     </el-header-->
-    <!--div class="expandHeight"-->
+    <!--div class="expandHeight">
       <router-view></router-view>
       <msg-display></msg-display>
       <new-team-dialog :visible='newTeamDialogVisible' v-on:hide='newTeamDialogVisible=false'></new-team-dialog>
-    <!--/div-->
+    </div-->
+      <msg-display></msg-display>
+      <new-team-dialog :visible='newTeamDialogVisible' v-on:hide='newTeamDialogVisible=false'></new-team-dialog>
   </div>
 </template>
 
