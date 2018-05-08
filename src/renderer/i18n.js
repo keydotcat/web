@@ -17,6 +17,7 @@ const messages = {
       'not_fount': 'This resource does not seem to exist'
     },
     fields: {
+      team_name: 'Team name',
       username: 'Username',
       fullname: 'Full name',
       email: 'Email',

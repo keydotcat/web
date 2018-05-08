@@ -54,7 +54,7 @@ const actions = {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
       var tid = context.state.teams[context.state.activeTeamIdx].id
-      router.push('/home/' + tid)
+      router.push('/home/team/' + tid)
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
