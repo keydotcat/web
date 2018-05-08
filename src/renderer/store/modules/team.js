@@ -46,7 +46,6 @@ const mutations = {
         vaults.push(cloneVault)
       }
     }
-    console.log(vaults)
     if (!added) {
       vaults.push(newVault)
     }

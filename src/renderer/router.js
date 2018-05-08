@@ -9,11 +9,11 @@ import ConfirmEmailPage from '@/components/public/confirm_email_page'
 import HomeDispatcher from '@/components/home_dispatcher'
 import HomeLoader from '@/components/home_loader'
 
-import ManagePage from '@/components/home/manage_page'
+//import ManagePage from '@/components/home/manage_page'
 import NewTeamPage from '@/components/home/new_team_page'
 import ManageUsersPage from '@/components/home/manage/users_page'
 import ManageVaultsPage from '@/components/home/manage/vaults_page'
-import ContentsPage from '@/components/home/contents_page'
+//import ContentsPage from '@/components/home/contents_page'
 
 import rootSvc from '@/services/root'
 
@@ -31,27 +31,11 @@ var router = new VueRouter({
         },
         { path: 'team/:tid',
           component: HomeDispatcher,
-          redirect: '/home/team/:tid/contents',
+          redirect: '/home/team/:tid/dashboard',
           children: [
-            {
-              path: 'contents',
-              component: ContentsPage
-            },
-            {
-              path: 'manage',
-              component: ManagePage,
-              redirect: '/home/team/:tid/manage/users',
-              children: [
-                {
-                  path: 'users',
-                  component: ManageUsersPage
-                },
-                {
-                  path: 'vaults',
-                  component: ManageVaultsPage
-                }
-              ]
-            }
+            { path: 'dashboard', component: ManageUsersPage },
+            { path: 'users', component: ManageUsersPage },
+            { path: 'vaults', component: ManageVaultsPage }
           ]
         }
       ]

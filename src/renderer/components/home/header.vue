@@ -7,10 +7,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" :class="{'active': activePage == 'contents' }">
-          <a href="#" class="nav-link" @click="goto('contents')">
+        <li class="nav-item" :class="{'active': activePage == 'team' }">
+          <a href="#" class="nav-link" @click="goto('dashboard')">
             {{$t('team') + ' ' + $store.getters.activeTeam.name}}
-            <span class="sr-only" v-if="activePage=='contents'">(current)</span>
+            <span class="sr-only" v-if="activePage=='team'">(current)</span>
           </a>
         </li>
         <li class="nav-item" :class="{'active': activePage == 'manage' }">
@@ -55,7 +55,7 @@
     computed: {
       activePage () {
         var sp = this.$route.path.split('/').filter( x => x.length > 0 )
-        return sp.length > 2 ? sp[2] : ''
+        return sp.length > 1 ? sp[1] : ''
       }
     }
   }

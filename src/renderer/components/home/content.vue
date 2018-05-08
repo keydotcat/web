@@ -7,19 +7,19 @@
               <span>Keys</span>
             </h6>
             <ul class="nav flex-column">
-              <li class="nav-item" :class="{'active': activePage == 'dashboard'}">
-                <a class="nav-link" href="#" @click="goto('dashboard')">Dashboard</a>
+              <li class="nav-item">
+                <a class="nav-link" :class="{'active': activePage == 'dashboard'}" href="#" @click="goto('dashboard')">Dashboard</a>
               </li>
             </ul>
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Manage</span>
             </h6>
             <ul class="nav flex-column mb-2">
-              <li class="nav-item" :class="{'active': activePage == 'users'}">
-                <a class="nav-link" href="#" @click="goto('users')">Users</a>
+              <li class="nav-item">
+                <a class="nav-link" :class="{'active': activePage == 'users'}" href="#" @click="goto('users')">Users</a>
               </li>
-              <li class="nav-item" :class="{'active': activePage == 'vaults'}">
-                <a class="nav-link" href="#" @click="goto('vaults')">Vaults</a>
+              <li class="nav-item">
+                <a class="nav-link" :class="{'active': activePage == 'vaults'}"href="#" @click="goto('vaults')">Vaults</a>
               </li>
             </ul>
           </div>
@@ -34,7 +34,7 @@
 
 <script>
   export default {
-    name: 'contents-page',
+    name: 'home-content',
     data () {
       return {}
     },
@@ -46,7 +46,6 @@
     },
     methods: {
       goto( where ) {
-        console.log('rasta')
         this.$router.push( `/home/team/${this.$store.getters.activeTeam.id}/${where}` )
       }
     }

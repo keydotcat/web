@@ -2,18 +2,19 @@
   <div class="expandHeight">
     <home-header></home-header>
     <msg-display></msg-display>
-    <router-view></router-view>
+    <home-content></home-content>
   </div>
 </template>
 
 <script>
   import MsgDisplay from '@/components/msg_display'
   import HomeHeader from '@/components/home/header'
+  import HomeContent from '@/components/home/content'
   import * as mt from '@/store/mutation-types'
 
   export default {
     name: 'home-dispatcher',
-    components: { MsgDisplay, HomeHeader },
+    components: { MsgDisplay, HomeHeader, HomeContent },
     beforeMount () {
       var tid = this.$route.params.tid
       if (this.$store.state.team.id !== tid) {
