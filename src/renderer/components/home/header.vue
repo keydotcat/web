@@ -27,6 +27,11 @@
             <a class="dropdown-item" href="#" @click="goto('new_team')">{{$t('create_new_team')}}</a>
           </div>
         </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link" @click="logout()">
+            {{$t('logout')}}
+          </a>
+        </li>
       </ul>
     </div>
   </nav>

@@ -5,20 +5,18 @@
     </div>
 
     <div class="container">
-      <div class="card-deck mb-3 text-center">
+      <div class="card-deck mb-3 text-left">
         <div class="card mb-4 box-shadow">
           <div class="card-header">
             <h4 class="my-0 font-weight-normal">Administrators</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>10 users included</li>
-              <li>2 GB of storage</li>
-              <li>Email support</li>
-              <li>Help center access</li>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" v-for="user in admins">{{user.label}}</li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-block btn-primary">Get started</button>
           </div>
         </div>
         <div class="card mb-4 box-shadow">
@@ -26,14 +24,12 @@
             <h4 class="my-0 font-weight-normal">Users</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>20 users included</li>
-              <li>10 GB of storage</li>
-              <li>Priority email support</li>
-              <li>Help center access</li>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" v-for="user in users" v-if="!user.admin">{{user.label}}</li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-primary">Get started</button>
+          </div>
+          <div class="card-footer">
+            <button type="button" class="btn btn-block btn-primary">Get started</button>
           </div>
         </div>
         <div class="card mb-4 box-shadow">
@@ -41,45 +37,32 @@
             <h4 class="my-0 font-weight-normal">Invites</h4>
           </div>
           <div class="card-body">
-            <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
-            <ul class="list-unstyled mt-3 mb-4">
-              <li>30 users included</li>
-              <li>15 GB of storage</li>
-              <li>Phone and email support</li>
-              <li>Help center access</li>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" v-for="invite in invites" :key="invite.email">
+                <button type="button" class="close" aria-label="close" @click="uninvite(invite.email)"><span aria-hidden="true">&times;</span></button>
+                {{invite.email}}
+              </li>
             </ul>
-            <button type="button" class="btn btn-lg btn-block btn-primary">Contact us</button>
+          </div>
+          <div class="card-footer" v-if="!showConfirmInvite">
+            <div class="input-group">
+              <input type="text" v-model="invite" class="form-control" placeholder="email" aria-label="email">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" @click="startInvite">Invite</button>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer" v-if="showConfirmInvite">
+            Invite {{invite}}?
+            <div class="btn-group float-right" role="group" aria-label="Basic example">
+              <button type="button" @click="cancelInvite" class="btn btn-secondary btn-danger">No</button>
+              <button type="button" @click="confirmInvite" class="btn btn-secondary btn-success">Yes</button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!--div class="manageUserContent">
-    <check-invite-dialog :visible='checkInviteVisible' v-on:hide='checkInviteVisible=false' :invite='invite'></check-invite-dialog>
-        <el-card>
-          <div slot="header" class="clearfix">
-            <span>Administrators and users</span>
-          </div>
-          <div>
-            <el-transfer filterable :titles="['Administrators', 'Users']"  :button-texts="['Promote', 'Demote']" @change='handleChange'
-              :data="userData" v-model='userState'>
-              <el-button class="transfer-footer" slot="left-footer" size="small">Remove from team</el-button>
-              <el-button class="transfer-footer" slot="right-footer" size="small">Remove from team</el-button>
-            </el-transfer>
-          </div>
-        </el-card>
-        <el-card>
-          <div slot="header" class="clearfix">
-            <span>Invite users to this team</span>
-            <el-input size='small' placeholder="email" v-model='invite' class='inviteInput' style='float:right; padding: 3px, 0'>
-              <el-button slot="append" icon="el-icon-search" @click='doInvite'></el-button>
-            </el-input>
-          </div>
-          <div v-for="i in invites" :key="i.email" class="text item">
-            {{i.email}}
-          </div>
-        </el-card>
-  </div-->
 </template>
 
 <script>
@@ -89,48 +72,38 @@
     components: { CheckInviteDialog },
     data () {
       return {
-        checkInviteVisible: false,
-        invite: ''
+        invite: '',
+        showConfirmInvite: false
       }
     },
     computed: {
       invites () {
         return this.$store.state.team.invites
       },
-      userData () {
-        return this.$store.getters.allUsersForTransfer
+      admins() {
+        return this.$store.getters.teamAdmins
       },
-      userState: {
-        get () {
-          return this.$store.state.team.users.filter( (u) => {
-            return !u.admin
-          }).map( (u) => {
-            return u.id
-          })
-        },
-        set (val) {
-          // do nothing. Just to prevent complaints from element-ui
-        }
+      users () {
+        return this.$store.getters.teamUsers
       }
     },
     methods: {
-      doInvite () {
-        this.checkInviteVisible = true
+      uninvite(email){
+        console.log(email, 'TODO')
       },
-      handleChange(value, direction, movedKeys) {
-        var teamUsers = this.$store.state.team.users
-        var users = movedKeys.map( (uid) => {
-          for (var i = 0; i < teamUsers.length; i++ ) {
-            if (teamUsers[i].id === uid) {
-              return teamUsers[i]
-            }
-          }
-        }).filter((u) => { return u })
-        if (direction === 'left' ) {
-          this.$store.dispatch( 'teamPromoteUsers', users )
-        } else {
-          this.$store.dispatch( 'teamDemoteUsers', users )
+      startInvite() {
+        if(this.invite.length > 0){
+          this.showConfirmInvite = true
         }
+      },
+      cancelInvite() {
+        this.invite = ''
+        this.showConfirmInvite = false
+      },
+      confirmInvite() {
+        this.$store.dispatch('teamInvite', this.invite)
+        this.invite = ''
+        this.showConfirmInvite = false
       }
     }
   }

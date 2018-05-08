@@ -54,23 +54,24 @@ const mutations = {
 }
 
 const getters = {
-  allUsersForTransfer (state, getters, rootState) {
+  teamAdmins (state, getters, rootState) {
     var me = rootState.user.id
-    return state.users.map( (u) => {
+    return state.users.filter( (u) => u.admin ).map( (u) => {
       return {
         key: u.id,
         label: `${u.fullname} (${u.id})`,
-        disabled: u.id === state.owner || u.id === me
+        canBeDemoted: u.id !== state.owner && u.id !== me
       }
     })
   },
-  usersForTransfer (state, getters, rootState) {
+  teamUsers (state, getters, rootState) {
     var me = rootState.user.id
     return state.users.map( (u) => {
       return {
         key: u.id,
         label: `${u.fullname} (${u.id})`,
-        disabled: u.admin || u.id === me
+        canBePromoted: !u.admin && u.id !== me,
+        admin: u.admin
       }
     })
   }
