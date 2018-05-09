@@ -60,7 +60,8 @@ const getters = {
       return {
         key: u.id,
         label: `${u.fullname} (${u.id})`,
-        canBeDemoted: u.id !== state.owner && u.id !== me
+        canBeDemoted: u.id !== state.owner && u.id !== me,
+        data: u
       }
     })
   },
@@ -71,7 +72,8 @@ const getters = {
         key: u.id,
         label: `${u.fullname} (${u.id})`,
         canBePromoted: !u.admin && u.id !== me,
-        admin: u.admin
+        admin: u.admin,
+        data: u
       }
     })
   }

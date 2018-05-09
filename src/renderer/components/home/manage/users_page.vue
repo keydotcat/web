@@ -12,11 +12,19 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" v-for="user in admins">{{user.label}}</li>
+              <li class="list-group-item" v-for="user in admins">
+                <i class="fas fa-angle-double-right" v-if="user.canBeDemoted" @click="startDemote(user)"></i>
+                <i class="fas fa-user" v-if="!user.canBeDemoted"></i>
+                {{user.label}}
+              </li>
             </ul>
           </div>
-          <div class="card-footer">
-            <button type="button" class="btn btn-block btn-primary">Get started</button>
+          <div class="card-footer" v-if="showConfirmDemote">
+            <div class='confirm'>
+              Demote {{userToDemote.label}}?
+            </div>
+            <button type="button" @click="cancelDemote" class="btn btn-secondary btn-danger">No</button>
+            <button type="button" @click="confirmDemote" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
         </div>
         <div class="card mb-4 box-shadow">
@@ -25,11 +33,19 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" v-for="user in users" v-if="!user.admin">{{user.label}}</li>
+              <li class="list-group-item" v-for="user in users" v-if="!user.admin">
+                <i class="fas fa-angle-double-left" v-if="user.canBePromoted" @click="startPromote(user)"></i>
+                <i class="fas fa-user" v-if="!user.canBePromoted"></i>
+                {{user.label}}
+              </li>
             </ul>
           </div>
-          <div class="card-footer">
-            <button type="button" class="btn btn-block btn-primary">Get started</button>
+          <div class="card-footer" v-if="showConfirmPromote">
+            <div class='confirm'>
+              Promote {{userToPromote.label}}?
+            </div>
+            <button type="button" @click="cancelPromote" class="btn btn-secondary btn-danger">No</button>
+            <button type="button" @click="confirmPromote" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
         </div>
         <div class="card mb-4 box-shadow">
@@ -39,8 +55,7 @@
           <div class="card-body">
             <ul class="list-group list-group-flush">
               <li class="list-group-item" v-for="invite in invites" :key="invite.email">
-                <button type="button" class="close" aria-label="close" @click="uninvite(invite.email)"><span aria-hidden="true">&times;</span></button>
-                {{invite.email}}
+                <i class="fas fa-times" @click="uninvite(invite.email)"></i> {{invite.email}}
               </li>
             </ul>
           </div>
@@ -53,11 +68,11 @@
             </div>
           </div>
           <div class="card-footer" v-if="showConfirmInvite">
-            Invite {{invite}}?
-            <div class="btn-group float-right" role="group" aria-label="Basic example">
-              <button type="button" @click="cancelInvite" class="btn btn-secondary btn-danger">No</button>
-              <button type="button" @click="confirmInvite" class="btn btn-secondary btn-success">Yes</button>
+            <div class='confirm'>
+              Invite {{invite}}?
             </div>
+            <button type="button" @click="cancelInvite" class="btn btn-secondary btn-danger">No</button>
+            <button type="button" @click="confirmInvite" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
         </div>
       </div>
@@ -73,7 +88,10 @@
     data () {
       return {
         invite: '',
-        showConfirmInvite: false
+        showConfirmInvite: false,
+        showConfirmDemote: false,
+        showConfirmPromote: false,
+        userToDemote: {}
       }
     },
     computed: {
@@ -88,6 +106,32 @@
       }
     },
     methods: {
+      startDemote(user){
+        this.showConfirmDemote = true
+        this.userToDemote = user
+      },
+      startPromote(user){
+        this.showConfirmPromote = true
+        this.userToPromote = user
+      },
+      cancelPromote(){
+        this.showConfirmPromote = false
+        this.userToPromote = {}
+      },
+      cancelDemote(){
+        this.showConfirmDemote = false
+        this.userToDemote = {}
+      },
+      confirmPromote(){
+        this.$store.dispatch('teamPromoteUsers', [this.userToPromote.data])
+        this.showConfirmPromote = false
+        this.userToPromote = {}
+      },
+      confirmDemote(){
+        this.$store.dispatch('teamDemoteUsers', [this.userToDemote.data])
+        this.showConfirmDemote = false
+        this.userToDemote = {}
+      },
       uninvite(email){
         console.log(email, 'TODO')
       },
@@ -110,29 +154,11 @@
 </script>
 
 <style>
-  .manageUserContent {
-    margin-top: 50px;
-    display:flex;
-    flex-wrap: wrap;
-    justify-content:center;
+  .confirm {
+    margin-bottom: 20px;
   }
-  .inviteInput {
-    margin-left: 50px;
-    width: 300px;
-  }
-  .el-transfer-panel__footer{
-    display: flex;
-    justify-content: center;
-  }
-  .transfer-footer {
-    display: flex;
-    align-self: center;
-  }
-  .item {
-    margin-bottom: 18px;
-  }
-  .el-card {
-    margin: 10px;
+  .fas {
+    margin-right: 10px;
   }
 </style>
 

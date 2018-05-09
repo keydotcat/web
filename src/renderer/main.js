@@ -1,11 +1,7 @@
 import Vue from 'vue'
 import axios from 'axios'
 
-//import VueMaterial from 'vue-material'
-//import 'vue-material/dist/vue-material.min.css'
-//import 'vue-material/dist/theme/default.css'
-
-//import 'bootstrap/dist/css/bootstrap.min.css'
+import 'font-awesome/css/font-awesome.css'
 import 'jquery/dist/jquery.min.js'
 import 'popper.js/dist/umd/popper.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
