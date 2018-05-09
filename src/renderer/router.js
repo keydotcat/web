@@ -33,7 +33,7 @@ var router = new VueRouter({
           component: HomeDispatcher,
           redirect: '/home/team/:tid/dashboard',
           children: [
-            { path: 'dashboard', component: ManageUsersPage },
+            { path: 'dashboard', component: ManageVaultsPage },
             { path: 'users', component: ManageUsersPage },
             { path: 'vaults', component: ManageVaultsPage }
           ]

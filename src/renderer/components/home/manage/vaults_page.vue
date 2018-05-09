@@ -1,20 +1,16 @@
 <template>
-  <!--div class="manageVaultContent">
-    <create-vault-dialog :visible='createVaultVisible' v-on:hide='createVaultVisible=false'></create-vault-dialog>
-    <el-card>
-      <div slot="header" class="manageVaultHeader">
-        <span>Vaults</span>
-        <el-button style="float: right" type="primary" @click='createVault'>Create vault</el-button>
+  <div>
+    <div class="header px-3 py-3 pt-md-5 pb-md-4 d-flex justify-content-between">
+      <h3 class="display-9">Vaults</h3>
+      <div class="input-group w-50">
+        <input type="text" v-model="vaultName" class="form-control" placeholder="vault name" aria-label="name">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" @click="createVault">Create vault</button>
+        </div>
       </div>
-      <div>
-        <el-collapse>
-          <el-collapse-item v-for="vault in vaults" key="id" :title="vault.id" :name="vault.id">
-            <vault-access :vault="vault"></vault-access>
-          </el-collapse-item>
-        </el-collapse>
-      </div>
-    </el-card>
-  </div-->
+    </div>
+    <vault-access v-for="vault in vaults" key="id" :vault="vault"></vault-access>
+  </div>
 </template>
 
 <script>
@@ -25,11 +21,12 @@
     components: { CreateVaultDialog, VaultAccess },
     data () {
       return {
-        createVaultVisible: false
+        vaultName: ''
       }
     },
     computed: {
       vaults () {
+        console.log(this.$store.state.team.vaults[0])
         return this.$store.state.team.vaults
       }
     },

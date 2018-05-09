@@ -1,6 +1,14 @@
 <template>
-  <el-transfer filterable :titles="['Allowed users', 'Unauthorized users']"  :button-texts="['Allow', 'Deny']" @change='handleChange' :data="userData" v-model='userState'>
-  </el-transfer>
+  <div class="card">
+    <div class="card-header">
+      Vault {{vault.id}}
+    </div>
+    <div class="card-body">
+      <h5 class="card-title">Special title treatment</h5>
+      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+      <a href="#" class="btn btn-primary">Go somewhere</a>
+    </div>
+  </div>
 </template>
 
 <script>
