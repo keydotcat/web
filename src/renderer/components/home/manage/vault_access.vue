@@ -2,11 +2,53 @@
   <div class="card">
     <div class="card-header">
       Vault {{vault.id}}
+      <i class="fas float-right" :class="{'fa-caret-down': !showVault, 'fa-caret-up': showVault}" @click="toggleVault"></i>
     </div>
-    <div class="card-body">
-      <h5 class="card-title">Special title treatment</h5>
-      <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-      <a href="#" class="btn btn-primary">Go somewhere</a>
+    <div class="card-body" v-if="showVault">
+      <h5 class="card-title">Access</h5>
+      <div class="card-deck mb-3 text-left">
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h6 class="font-weight-normal">Allowed</h6>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" v-for="user in allowedUsers" :key="user.id">
+                <i class="fas fa-angle-double-right" v-if="!user.admin" @click="startRevoke(user)"></i>
+                <i class="fas fa-user" v-if="user.admin"></i>
+                {{user.label}}
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer" v-if="showConfirmRevoke">
+            <div class='confirm'>
+              Revoke access to {{userToRevoke.label}}?
+            </div>
+            <button type="button" @click="cancelRevoke" class="btn btn-secondary btn-danger">No</button>
+            <button type="button" @click="confirmRevoke" class="btn btn-secondary btn-success float-right">Yes</button>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h6 class="font-weight-normal">Denied</h6>
+          </div>
+          <div class="card-body">
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item" v-for="user in deniedUsers" :key="user.id">
+                <i class="fas fa-angle-double-left" @click="startGrant(user)"></i>
+                {{user.label}}
+              </li>
+            </ul>
+          </div>
+          <div class="card-footer" v-if="showConfirmGrant">
+            <div class='confirm'>
+              Grant access to {{userToGrant.label}}?
+            </div>
+            <button type="button" @click="cancelGrant" class="btn btn-secondary btn-danger">No</button>
+            <button type="button" @click="confirmGrant" class="btn btn-secondary btn-success float-right">Yes</button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -17,42 +59,69 @@
     props: {
       vault: Object
     },
+    data () {
+      return {
+        showVault: true,
+        showConfirmGrant: false,
+        showConfirmRevoke: false,
+        userToGrant: {},
+        userToRevoke: {}
+      }
+    },
     computed: {
       userData () {
         return this.$store.getters.usersForTransfer
       },
-      userState: {
-        get () {
-          var vaultUsers = this.vault.users
-          return this.$store.state.team.users.filter((u) => {
-            for(var i = 0; i < vaultUsers.length; i++){
-              if (vaultUsers[i] === u.id) {
-                return false
-              }
+      allowedUsers() {
+        var vaultUsers = this.vault.users
+        return this.$store.getters.teamUsers.filter( (u) => {
+          for(var i = 0; i < vaultUsers.length; i++){
+            if (vaultUsers[i] === u.id) {
+              return true
             }
-            return true
-          }).map((u) => { return u.id })
-        },
-        set () {
-          // do nothing
-        }
+          }
+          return false
+        })
+      },
+      deniedUsers() {
+        var vaultUsers = this.vault.users
+        return this.$store.getters.teamUsers.filter( (u) => {
+          for(var i = 0; i < vaultUsers.length; i++){
+            if (vaultUsers[i] === u.id) {
+              return false
+            }
+          }
+          return true
+        })
       }
     },
     methods: {
-      handleChange(value, direction, movedKeys) {
-        var teamUsers = this.$store.state.team.users
-        var users = movedKeys.map( (uid) => {
-          for (var i = 0; i < teamUsers.length; i++ ) {
-            if (teamUsers[i].id === uid) {
-              return teamUsers[i]
-            }
-          }
-        }).filter((u) => { return u })
-        if (direction === 'left' ) {
-          this.$store.dispatch( 'teamAddUsersToVault', { vaultId: this.vault.id, users: users } )
-        } else {
-          this.$store.dispatch( 'teamRemoveUsersFromVault', { vaultId: this.vault.id, users: users } )
-        }
+      toggleVault(){
+        this.showVault = !this.showVault
+      },
+      startRevoke(user){
+        this.showConfirmRevoke = true
+        this.userToRevoke = user
+      },
+      startGrant(user){
+        this.showConfirmGrant = true
+        this.userToGrant = user
+      },
+      cancelRevoke(){
+        this.showConfirmRevoke = false
+        this.userToRevoke = {}
+      },
+      cancelGrant(){
+        this.showConfirmGrant = false
+        this.userToGrant = {}
+      },
+      confirmRevoke(){
+        this.$store.dispatch( 'teamRemoveUsersFromVault', { vaultId: this.vault.id, users: [this.userToRevoke.data] } )
+        this.cancelRevoke()
+      },
+      confirmGrant(){
+        this.$store.dispatch( 'teamAddUsersToVault', { vaultId: this.vault.id, users: [this.userToGrant.data] } )
+        this.cancelGrant()
       }
     }
   }

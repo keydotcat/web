@@ -12,7 +12,7 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" v-for="user in admins">
+              <li class="list-group-item" v-for="user in admins" :key="user.id">
                 <i class="fas fa-angle-double-right" v-if="user.canBeDemoted" @click="startDemote(user)"></i>
                 <i class="fas fa-user" v-if="!user.canBeDemoted"></i>
                 {{user.label}}
@@ -33,7 +33,7 @@
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
-              <li class="list-group-item" v-for="user in users" v-if="!user.admin">
+              <li class="list-group-item" v-for="user in users" :key='user.id' v-if="!user.admin">
                 <i class="fas fa-angle-double-left" v-if="user.canBePromoted" @click="startPromote(user)"></i>
                 <i class="fas fa-user" v-if="!user.canBePromoted"></i>
                 {{user.label}}
@@ -81,17 +81,15 @@
 </template>
 
 <script>
-  import CheckInviteDialog from '@/components/home/manage/check_invite_dialog'
-
   export default {
-    components: { CheckInviteDialog },
     data () {
       return {
         invite: '',
         showConfirmInvite: false,
         showConfirmDemote: false,
         showConfirmPromote: false,
-        userToDemote: {}
+        userToDemote: {},
+        userToPromote: {}
       }
     },
     computed: {

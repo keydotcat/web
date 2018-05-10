@@ -58,7 +58,7 @@ const getters = {
     var me = rootState.user.id
     return state.users.filter( (u) => u.admin ).map( (u) => {
       return {
-        key: u.id,
+        id: u.id,
         label: `${u.fullname} (${u.id})`,
         canBeDemoted: u.id !== state.owner && u.id !== me,
         data: u
@@ -69,7 +69,7 @@ const getters = {
     var me = rootState.user.id
     return state.users.map( (u) => {
       return {
-        key: u.id,
+        id: u.id,
         label: `${u.fullname} (${u.id})`,
         canBePromoted: !u.admin && u.id !== me,
         admin: u.admin,
