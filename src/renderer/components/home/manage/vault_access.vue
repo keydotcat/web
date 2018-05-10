@@ -6,10 +6,10 @@
     </div>
     <div class="card-body" v-if="showVault">
       <h5 class="card-title">Access</h5>
-      <div class="card-deck mb-3 text-left">
-        <div class="card mb-4 box-shadow">
+      <div class="card-deck text-left">
+        <div class="card box-shadow">
           <div class="card-header">
-            <h6 class="font-weight-normal">Allowed</h6>
+            Allowed
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
@@ -28,9 +28,9 @@
             <button type="button" @click="confirmRevoke" class="btn btn-secondary btn-success float-right">Yes</button>
           </div>
         </div>
-        <div class="card mb-4 box-shadow">
+        <div class="card box-shadow">
           <div class="card-header">
-            <h6 class="font-weight-normal">Denied</h6>
+            Denied
           </div>
           <div class="card-body">
             <ul class="list-group list-group-flush">
@@ -61,7 +61,7 @@
     },
     data () {
       return {
-        showVault: true,
+        showVault: false,
         showConfirmGrant: false,
         showConfirmRevoke: false,
         userToGrant: {},

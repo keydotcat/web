@@ -9,16 +9,15 @@
         </div>
       </div>
     </div>
-    <vault-access v-for="vault in vaults" key="id" :vault="vault"></vault-access>
+    <vault-access class="mb-3" v-for="vault in vaults" key="id" :vault="vault"></vault-access>
   </div>
 </template>
 
 <script>
-  import CreateVaultDialog from '@/components/home/manage/create_vault_dialog'
   import VaultAccess from '@/components/home/manage/vault_access'
 
   export default {
-    components: { CreateVaultDialog, VaultAccess },
+    components: { VaultAccess },
     data () {
       return {
         vaultName: ''
@@ -26,35 +25,18 @@
     },
     computed: {
       vaults () {
-        console.log(this.$store.state.team.vaults[0])
         return this.$store.state.team.vaults
       }
     },
     methods: {
       createVault () {
-        this.createVaultVisible = true
+        this.$store.dispatch('teamCreateVault', this.vaultName)
+        this.vaultName = ''
       }
     }
   }
 </script>
 
 <style>
-  .manageVaultContent {
-    margin-top: 50px;
-    display:flex;
-    flex-wrap: wrap;
-    justify-content:center;
-  }
-  .manageVaultHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .el-card {
-    margin: 10px;
-  }
-  .el-collapse {
-    min-width: 300px;
-  }
 </style>
 
