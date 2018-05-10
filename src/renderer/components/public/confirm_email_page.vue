@@ -1,14 +1,13 @@
 <template>
   <div class="expandHeight centerFlex">
-    <el-form ref="form" :model="form" label-width="200px">
-      <p style='text-align:center'>{{$t('confirm_email.title')}}</p>
-      <el-form-item :label="$t('confirm_email.token')" prop="token">
-        <el-input v-model="form.token" style="width:350px"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" :loading="working" :disabled="working">{{$t('send')}}</el-button>
-      </el-form-item>
-    </el-form>
+    <form class="form-login" @submit="onSubmit">
+      <h1 class="h3 mb-3 font-weight-normal">{{$t('confirm_email.title')}}</h1>
+      <div class="form-group">
+        <label>{{$t('confirm_email.token')}}</label>
+        <input class="form-control" v-model="form.token" autofocus>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" :disabled="working" type="submit">{{$t('send')}}</button>
+    </form>
   </div>
 </template>
 
@@ -23,12 +22,11 @@
       }
     },
     mounted () {
-      let token = this.$route.params.token
-      if(token === null || token.length === 0) {
-        return
+      let params = this.$route.params
+      if('token' in params && params.token.length > 0) {
+        this.form.token = params.token
+        this.$store.dispatch('authConfirmEmail', this.form)
       }
-      this.form.token = token
-      this.$store.dispatch('authConfirmEmail', this.form)
     },
     computed: {
       working () {
