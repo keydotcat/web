@@ -6,11 +6,8 @@ import LoginPage from '@/components/public/login_page'
 import RegisterPage from '@/components/public/register_page'
 import ConfirmEmailPage from '@/components/public/confirm_email_page'
 
-//import HomeDispatcher from '@/components/home_dispatcher'
-//import HomeLoader from '@/components/home_loader'
 import HomePage from '@/components/home_page'
 
-//import DashboardPage from '@/components/home/dashboard'
 import SecretsPage from '@/components/home/secrets_page'
 import NewTeamPage from '@/components/home/new_team_page'
 import ManageContent from '@/components/home/manage_content'
@@ -83,11 +80,9 @@ router.beforeEach((to, from, next) => {
   var isLogged = rootSvc.isLoggedIn()
   if (to.path.indexOf('/home') === 0) {
     if (!isLogged) {
-      console.log('Sending home')
       next('/')
       return
     }
-    console.log('All is ok', to.path)
   } else {
     if (isLogged) {
       next('/home')

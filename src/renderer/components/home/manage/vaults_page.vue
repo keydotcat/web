@@ -9,7 +9,7 @@
         </div>
       </div>
     </div>
-    <vault-access class="mb-3" v-for="vault in vaults" key="id" :vault="vault"></vault-access>
+    <vault-access class="mb-3" v-for="vault in vaults" key="id" :vault="vault" :tid="$route.params.tid"></vault-access>
   </div>
 </template>
 

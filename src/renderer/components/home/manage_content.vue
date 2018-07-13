@@ -7,16 +7,16 @@
               <span>User</span>
             </h6>
             <ul class="nav flex-column">
-              <li class="nav-item" :class="{'active': activePage == 'user/info'}" >
-                <a class="nav-link" href="#" @click="goto('user/info')">Information</a>
+              <li class="nav-item">
+                <a class="nav-link" :class="{'active': activePage == 'user/info'}" href="#" @click="goto('user/info')">Information</a>
               </li>
             </ul>
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>Teams</span>
             </h6>
             <ul class="nav flex-column mb-2">
-              <li class="nav-item" v-for="tid in $store.getters['user/team_ids']" :class="{'active': activePage == 'team/'+tid}" >
-                <a class="nav-link" href="#" @click="goto('team/'+tid)">
+              <li class="nav-item" v-for="tid in $store.getters['user/team_ids']">
+                <a class="nav-link" href="#" @click="setTeam(tid)" :class="{'active': activePage == 'team/'+tid}">
                 {{$store.getters[`team.${tid}/name`]}}
                 </a>
               </li>
@@ -43,12 +43,18 @@
     computed: {
       activePage () {
         var sp = this.$route.path.split('/').filter( x => x.length > 0 )
-        console.log('manage content active page', sp.slice(2, 2).join('/'))
-        return sp.slice(2, 2).join('/')
+        return sp.slice(2, 4).join('/')
       }
     },
     methods: {
-      goto( where ) {
+      setTeam (tid) {
+        if('tid' in this.$route.params){
+          this.$router.push({params: {tid: tid}})
+        } else {
+          this.goto( 'team/' + tid )
+        }
+      },
+      goto (where) {
         this.$router.push( `/home/manage/${where}` )
       }
     }
@@ -67,7 +73,7 @@
 .sidebar-sticky {
   position: relative;
   top: 0;
-  height: calc(100vh - 48px);
+  height: calc(100vh - 56px);
   /*padding-top: .5rem;*/
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */

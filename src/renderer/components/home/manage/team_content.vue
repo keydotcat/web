@@ -18,13 +18,6 @@
 <script>
   export default {
     name: 'manage-team-content',
-    watch: {
-      '$route' (to, from) {
-        if(to.params.tid !== from.params.tid){
-          this.goto('users')
-        }
-      }
-    },
     beforeMount() {
       this.goto('users')
     },
