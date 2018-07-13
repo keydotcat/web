@@ -9,8 +9,7 @@ const state = {
   fullname: '',
   id: '',
   publicKeys: '',
-  teams: [],
-  activeTeamIdx: -1
+  teams: []
 }
 
 const mutations = {
@@ -18,48 +17,34 @@ const mutations = {
     state.fullname = payload.fullname
     state.id = payload.id
     state.publicKeys = payload.public_key
-    state.teams = payload.teams
-    for (var i = 0; i < payload.teams.length; i++) {
-      var t = payload.teams[i]
-      if (t.primary) {
-        state.activeTeamIdx = i
-        break
-      }
-    }
-    if (state.activeTeamIdx === -1){
-      state.activeTeamIdx = 0
-    }
-  },
-  [mt.USER_SET_ACTIVE_TEAM] (state, tid) {
-    for(var i = 0; i < state.teams.length; i++) {
-      if( state.teams[i].id === tid ) {
-        state.activeTeamIdx = i
-        break
-      }
+    state.teams.splice(0, state.teams.length)
+    for( var i = 0; i < payload.teams.length; i++){
+      state.teams.push(payload.teams[i])
     }
   }
 }
 
 const getters = {
-  activeTeam (state) {
-    return state.teams[state.activeTeamIdx]
-  },
-  nonActiveTeams (state) {
-    return state.teams.filter((team, pos) => { return pos !== state.activeTeamIdx })
+  team_ids: state => {
+    const teams = [...state.teams].sort((a, b) => {
+      if(a.name > b.name){ return 1 }
+      if(a.name < b.name){ return -1 }
+      return 0
+    })
+    return teams.map((team) => team.id)
   }
 }
 
 const actions = {
-  userLoadInfo(context) {
+  loadInfo(context) {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
-      var tid = context.state.teams[context.state.activeTeamIdx].id
-      router.push('/home/team/' + tid)
+      router.push('/home/manage')
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   },
-  userCreateTeam(context, payload) {
+  createTeam(context, payload) {
     var req = {}
     req[context.state.id] = context.state.publicKeys
     workerMgr.generateVaultKeys(req).then((vaultKeys) => {
@@ -70,7 +55,7 @@ const actions = {
           keys: vaultKeys.keys
         }
       }).then((teamInfo) => {
-        context.dispatch('userLoadInfo')
+        context.dispatch('loadInfo')
       }).catch((err) => {
         context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
@@ -79,6 +64,7 @@ const actions = {
 }
 
 export default {
+  namespaced: true,
   state,
   mutations,
   getters,

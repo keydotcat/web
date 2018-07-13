@@ -25,12 +25,12 @@
     },
     computed: {
       vaults () {
-        return this.$store.state.team.vaults
+        return this.$store.state['team.' + this.$route.params.tid].vaults
       }
     },
     methods: {
       createVault () {
-        this.$store.dispatch('teamCreateVault', this.vaultName)
+        this.$store.dispatch(`team.${this.$route.params.tid}/createVault`, this.vaultName)
         this.vaultName = ''
       }
     }

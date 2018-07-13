@@ -3,13 +3,15 @@ import teamSvc from '@/services/team'
 import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 
-const state = {
-  id: '',
-  name: '',
-  owner: '',
-  users: [],
-  vaults: [],
-  invites: []
+const state = () => {
+  return {
+    id: '',
+    name: '',
+    owner: '',
+    users: [],
+    vaults: [],
+    invites: []
+  }
 }
 
 const mutations = {
@@ -54,7 +56,11 @@ const mutations = {
 }
 
 const getters = {
-  teamAdmins (state, getters, rootState) {
+  name (state) {
+    return state.name
+  },
+  admins (state, getters, rootState) {
+    console.log('Req  admins', state, getters)
     var me = rootState.user.id
     return state.users.filter( (u) => u.admin ).map( (u) => {
       return {
@@ -65,7 +71,7 @@ const getters = {
       }
     })
   },
-  teamUsers (state, getters, rootState) {
+  users (state, getters, rootState) {
     var me = rootState.user.id
     return state.users.map( (u) => {
       return {
@@ -91,21 +97,21 @@ function promoteUser(context, uid, pubKey, vaultKeys) {
 }
 
 const actions = {
-  teamLoadInfo (context, tid) {
+  loadInfo (context, tid) {
     teamSvc.loadInfo(tid).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   },
-  teamInvite (context, invite) {
+  invite (context, invite) {
     teamSvc.invite(context.state.id, invite).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   },
-  teamPromoteUsers (context, users) {
+  promoteUsers (context, users) {
     for (var ui = 0; ui < users.length; ui++ ) {
       var vaultKeys = {}
       for (var vi = 0; vi < context.state.vaults.length; vi++ ) {
@@ -127,7 +133,7 @@ const actions = {
       promoteUser(context, users[ui].id, users[ui].public_key, vaultKeys)
     }
   },
-  teamDemoteUsers (context, users) {
+  demoteUsers (context, users) {
     for (var i = 0; i < users.length; i++ ) {
       teamSvc.demoteUser(context.state.id, users[i].id).then((teamData) => {
         context.commit(mt.TEAM_LOAD_USERS, teamData)
@@ -136,7 +142,7 @@ const actions = {
       })
     }
   },
-  teamAddUsersToVault(context, { vaultId, users }) {
+  addUsersToVault(context, { vaultId, users }) {
     var vaultKeys = {}
     for (var vi = 0; vi < users.length; vi++ ) {
       if (context.state.vaults[vi].id === vaultId) {
@@ -172,7 +178,7 @@ const actions = {
       })
     })
   },
-  teamRemoveUsersFromVault(context, { vaultId, users }) {
+  removeUsersFromVault(context, { vaultId, users }) {
     var tid = context.state.id
     for (var i = 0; i < users.length; i++ ) {
       teamSvc.removeUserFromVault(context.state.id, vaultId, users[i].id).then((vaultData) => {
@@ -182,7 +188,7 @@ const actions = {
       })
     }
   },
-  teamCreateVault(context, name) {
+  createVault(context, name) {
     var admins = {}
     for (var ui = 0; ui < context.state.users.length; ui++ ) {
       if (context.state.users[ui].admin) {
@@ -205,6 +211,7 @@ const actions = {
 }
 
 export default {
+  namespaced: true,
   state,
   mutations,
   getters,

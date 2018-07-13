@@ -57,7 +57,8 @@
   export default {
     name: 'vault-access',
     props: {
-      vault: Object
+      vault: Object,
+      tid: String
     },
     data () {
       return {
@@ -69,12 +70,9 @@
       }
     },
     computed: {
-      userData () {
-        return this.$store.getters.usersForTransfer
-      },
       allowedUsers() {
         var vaultUsers = this.vault.users
-        return this.$store.getters.teamUsers.filter( (u) => {
+        return this.$store.getters[`team.${this.tid}/users`].filter( (u) => {
           for(var i = 0; i < vaultUsers.length; i++){
             if (vaultUsers[i] === u.id) {
               return true
@@ -85,7 +83,7 @@
       },
       deniedUsers() {
         var vaultUsers = this.vault.users
-        return this.$store.getters.teamUsers.filter( (u) => {
+        return this.$store.getters[`team.${this.tid}/users`].filter( (u) => {
           for(var i = 0; i < vaultUsers.length; i++){
             if (vaultUsers[i] === u.id) {
               return false
@@ -116,11 +114,11 @@
         this.userToGrant = {}
       },
       confirmRevoke(){
-        this.$store.dispatch( 'teamRemoveUsersFromVault', { vaultId: this.vault.id, users: [this.userToRevoke.data] } )
+        this.$store.dispatch( `team.${this.tid}/removeUsersFromVault`, { vaultId: this.vault.id, users: [this.userToRevoke.data] } )
         this.cancelRevoke()
       },
       confirmGrant(){
-        this.$store.dispatch( 'teamAddUsersToVault', { vaultId: this.vault.id, users: [this.userToGrant.data] } )
+        this.$store.dispatch( `team.${this.tid}/addUsersToVault`, { vaultId: this.vault.id, users: [this.userToGrant.data] } )
         this.cancelGrant()
       }
     }

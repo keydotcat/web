@@ -12,7 +12,6 @@ export const MSG_ERROR = 'MSG_ERROR'
 export const MSG_CLEAR = 'MSG_CLEAR'
 
 export const USER_LOAD_INFO = 'USER_LOAD_INFO'
-export const USER_SET_ACTIVE_TEAM = 'USER_SET_ACTIVE_TEAM'
 
 export const TEAM_LOAD_INFO = 'TEAM_LOAD_INFO'
 export const TEAM_LOAD_USERS = 'TEAM_LOAD_USERS'

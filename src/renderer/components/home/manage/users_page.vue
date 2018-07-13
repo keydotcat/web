@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-left">
+    <!--div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-left">
       <h3 class="display-9">Users</h3>
-    </div>
+    </div-->
 
-    <div class="container">
+    <div class="container my-3">
       <div class="card-deck mb-3 text-left">
         <div class="card mb-4 box-shadow">
           <div class="card-header">
@@ -84,6 +84,7 @@
   export default {
     data () {
       return {
+        mid: '',
         invite: '',
         showConfirmInvite: false,
         showConfirmDemote: false,
@@ -92,15 +93,23 @@
         userToPromote: {}
       }
     },
+    watch: {
+      '$route' (to, from) {
+        this.mid = `team.${this.$route.params.tid}`
+      }
+    },
+    beforeMount() {
+      this.mid = `team.${this.$route.params.tid}`
+    },
     computed: {
       invites () {
-        return this.$store.state.team.invites
+        return this.$store.state[this.mid].invites
       },
       admins() {
-        return this.$store.getters.teamAdmins
+        return this.$store.getters[`${this.mid}/admins`]
       },
       users () {
-        return this.$store.getters.teamUsers
+        return this.$store.getters[`${this.mid}/users`]
       }
     },
     methods: {
@@ -121,12 +130,12 @@
         this.userToDemote = {}
       },
       confirmPromote(){
-        this.$store.dispatch('teamPromoteUsers', [this.userToPromote.data])
+        this.$store.dispatch(`${this.mid}/promoteUsers`, [this.userToPromote.data])
         this.showConfirmPromote = false
         this.userToPromote = {}
       },
       confirmDemote(){
-        this.$store.dispatch('teamDemoteUsers', [this.userToDemote.data])
+        this.$store.dispatch( `${this.mid}/demoteUsers`, [this.userToDemote.data])
         this.showConfirmDemote = false
         this.userToDemote = {}
       },
@@ -143,7 +152,7 @@
         this.showConfirmInvite = false
       },
       confirmInvite() {
-        this.$store.dispatch('teamInvite', this.invite)
+        this.$store.dispatch(`${this.mid}/invite`, this.invite)
         this.invite = ''
         this.showConfirmInvite = false
       }

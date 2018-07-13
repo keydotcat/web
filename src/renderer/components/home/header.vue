@@ -7,10 +7,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" :class="{'active': activePage == 'team' }">
-          <a href="#" class="nav-link" @click="goto('dashboard')">
-            {{$t('team') + ' ' + $store.getters.activeTeam.name}}
-            <span class="sr-only" v-if="activePage=='team'">(current)</span>
+        <li class="nav-item" :class="{'active': activePage == 'secrets' }">
+          <a href="#" class="nav-link" @click="goto('secrets')">
+            Secrets
+            <span class="sr-only" v-if="activePage=='secrets'">(current)</span>
           </a>
         </li>
         <li class="nav-item" :class="{'active': activePage == 'manage' }">
@@ -19,14 +19,9 @@
             <span class="sr-only" v-if="activePage=='manage'">(current)</span>
           </a>
         </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{$t('select_team')}}</a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#" v-for="team in $store.getters.nonActiveTeams" :key='team.id' @click="set_team(team.id)">{{team.name}}</a>
-            <div class="dropdown-divider" v-if="$store.getters.nonActiveTeams.length > 0"></div>
-            <a class="dropdown-item" href="#" @click="goto('new_team')">{{$t('create_new_team')}}</a>
-          </div>
-        </li>
+        <!--li class="nav-item">
+          <a class="dropdown-item" href="#" @click="goto('new_team')">{{$t('create_new_team')}}</a>
+        </li-->
         <li class="nav-item">
           <a href="#" class="nav-link" @click="logout()">
             {{$t('logout')}}
@@ -44,17 +39,8 @@
       logout() {
         this.$store.dispatch('sessionLogout')
       },
-      set_team( teamId ) {
-        this.$router.push( `/home/team/${teamId}` )
-      },
       goto( where ) {
-        switch(where){
-          case 'new_team':
-            this.$router.push( `/home/${where}` )
-            break
-          default:
-            this.$router.push( `/home/team/${this.$store.getters.activeTeam.id}/${where}` )
-        }
+        this.$router.push( `/home/${where}` )
       }
     },
     computed: {

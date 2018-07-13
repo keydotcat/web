@@ -6,11 +6,15 @@ import LoginPage from '@/components/public/login_page'
 import RegisterPage from '@/components/public/register_page'
 import ConfirmEmailPage from '@/components/public/confirm_email_page'
 
-import HomeDispatcher from '@/components/home_dispatcher'
-import HomeLoader from '@/components/home_loader'
+//import HomeDispatcher from '@/components/home_dispatcher'
+//import HomeLoader from '@/components/home_loader'
+import HomePage from '@/components/home_page'
 
-import DashboardPage from '@/components/home/dashboard'
+//import DashboardPage from '@/components/home/dashboard'
+import SecretsPage from '@/components/home/secrets_page'
 import NewTeamPage from '@/components/home/new_team_page'
+import ManageContent from '@/components/home/manage_content'
+import ManageTeamContent from '@/components/home/manage/team_content'
 import ManageUsersPage from '@/components/home/manage/users_page'
 import ManageVaultsPage from '@/components/home/manage/vaults_page'
 
@@ -22,19 +26,28 @@ var router = new VueRouter({
   routes: [
     { path: '/home',
       name: 'home',
-      component: HomeLoader,
+      component: HomePage,
       children: [
         {
-          path: 'new_team',
-          component: NewTeamPage
+          path: 'secrets',
+          component: SecretsPage
         },
-        { path: 'team/:tid',
-          component: HomeDispatcher,
-          redirect: '/home/team/:tid/dashboard',
+        {
+          path: 'manage',
+          component: ManageContent,
           children: [
-            { path: 'dashboard', component: DashboardPage },
-            { path: 'users', component: ManageUsersPage },
-            { path: 'vaults', component: ManageVaultsPage }
+            {
+              path: 'new_team',
+              component: NewTeamPage
+            },
+            {
+              path: 'team/:tid',
+              component: ManageTeamContent,
+              children: [
+                { path: 'users', component: ManageUsersPage },
+                { path: 'vaults', component: ManageVaultsPage }
+              ]
+            }
           ]
         }
       ]
@@ -70,9 +83,11 @@ router.beforeEach((to, from, next) => {
   var isLogged = rootSvc.isLoggedIn()
   if (to.path.indexOf('/home') === 0) {
     if (!isLogged) {
+      console.log('Sending home')
       next('/')
       return
     }
+    console.log('All is ok', to.path)
   } else {
     if (isLogged) {
       next('/home')

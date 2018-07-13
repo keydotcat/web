@@ -1,7 +1,4 @@
 <template>
-  <div class="expandHeight">
-    <home-header></home-header>
-    <msg-display></msg-display>
     <div class="expandHeight centerFlex">
       <form class="form-login" @submit="submit">
         <h1 class="h3 mb-3 font-weight-normal">{{$t('create_new_team')}}</h1>
@@ -12,15 +9,11 @@
         <button class="btn btn-lg btn-primary" :disabled="working">{{$t('register.send')}}</button>
       </form>
     </div>
-  </div>
 </template>
 
 <script>
-  import MsgDisplay from '@/components/msg_display'
-  import HomeHeader from '@/components/home/header'
   export default {
     name: 'new_team_page',
-    components: { MsgDisplay, HomeHeader },
     props: {
       visible: Boolean
     },
@@ -32,7 +25,7 @@
     },
     methods: {
       submit () {
-        this.$store.dispatch('userCreateTeam', this.team_name)
+        this.$store.dispatch('user/createTeam', this.team_name)
       }
     }
   }
