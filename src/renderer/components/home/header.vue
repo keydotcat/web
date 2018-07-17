@@ -7,10 +7,10 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item" :class="{'active': activePage == 'secrets' }">
-          <a href="#" class="nav-link" @click="goto('secrets')">
-            Secrets
-            <span class="sr-only" v-if="activePage=='secrets'">(current)</span>
+        <li class="nav-item" :class="{'active': activePage == 'data' }">
+          <a href="#" class="nav-link" @click="goto('data')">
+            Your data
+            <span class="sr-only" v-if="activePage=='data'">(current)</span>
           </a>
         </li>
         <li class="nav-item" :class="{'active': activePage == 'manage' }">

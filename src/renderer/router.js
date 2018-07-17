@@ -8,9 +8,12 @@ import ConfirmEmailPage from '@/components/public/confirm_email_page'
 
 import HomePage from '@/components/home_page'
 
-import SecretsPage from '@/components/home/secrets_page'
+import DataContent from '@/components/home/data_content'
+import LocationsPage from '@/components/home/data/locations_page'
+import NewLocationPage from '@/components/home/data/new_location_page'
 import NewTeamPage from '@/components/home/new_team_page'
 import ManageContent from '@/components/home/manage_content'
+import UserInfoPage from '@/components/home/manage/user_info_page'
 import ManageTeamContent from '@/components/home/manage/team_content'
 import ManageUsersPage from '@/components/home/manage/users_page'
 import ManageVaultsPage from '@/components/home/manage/vaults_page'
@@ -26,8 +29,12 @@ var router = new VueRouter({
       component: HomePage,
       children: [
         {
-          path: 'secrets',
-          component: SecretsPage
+          path: 'data',
+          component: DataContent,
+          children: [
+            { path: 'new_location', component: NewLocationPage },
+            { path: 'locations', component: LocationsPage }
+          ]
         },
         {
           path: 'manage',
@@ -36,6 +43,10 @@ var router = new VueRouter({
             {
               path: 'new_team',
               component: NewTeamPage
+            },
+            {
+              path: 'user/info',
+              component: UserInfoPage
             },
             {
               path: 'team/:tid',

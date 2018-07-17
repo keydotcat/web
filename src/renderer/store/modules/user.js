@@ -39,7 +39,7 @@ const actions = {
   loadInfo(context) {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
-      router.push('/home/manage')
+      router.push('/home/data/new_location')
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
