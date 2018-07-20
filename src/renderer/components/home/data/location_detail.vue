@@ -37,8 +37,9 @@
       <h6 class="card-subtitle m-2 text-muted">Credentials</h6>
       <ul class="list-group list-group-flush">
         <li class="list-group-item url-group-item" v-for="(cred,idcred) in loc.creds">
-          <span v-if="!isCredBeingEdited(idcred)">to edit <i class="fas fa-edit float-right"></i></span>
-          <location-credential-editor v-bind:cred="cred" v-on:change="cred=$event" v-if="isCredBeingEdited(idcred)" class="w-100"></location-credential-editor>
+          <span v-if="!isCredBeingEdited(idcred)">{{cred.type}}: {{cred.username}}<i @click="editCredential(idcred)" class="fas fa-edit float-right"></i></span>
+          <location-credential-editor :idcred="idcred" :cred="cred" v-on:change="credChangedCb($event)"
+            v-on:cancel="cancelCredChangeCb($event)" v-if="isCredBeingEdited(idcred)" class="w-100"></location-credential-editor>
         </li>
         <li class="list-group-item url-group-item" @click="addNewCredential"><i class="fas fa-plus"></i> Add new credential</li>
       </ul>
@@ -76,6 +77,25 @@
       }
     },
     methods: {
+      editCredential(idcred) {
+        this.$set(this.credsInEditMode, idcred, false)
+      },
+      cancelCredChangeCb(idcred) {
+        if( this.credsInEditMode[idcred] ) {
+          //New credential so has to be deleted
+          this.loc.creds.splice(idcred, 1)
+        }
+        this.$delete(this.credsInEditMode, idcred)
+      },
+      credChangedCb(ev) {
+        for( var k in this.loc.creds[ev.idcred] ) {
+          this.$delete(this.loc.creds[ev.idcred], k)
+        }
+        for( k in ev.cred ) {
+          this.$set(this.loc.creds[ev.idcred], k, ev.cred[k])
+        }
+        this.$delete(this.credsInEditMode, ev.idcred)
+      },
       isCredBeingEdited(idc) {
         return idc in this.credsInEditMode
       },

@@ -4,7 +4,7 @@
       <form>
         <div class="form-group form-row" hidden>
           <label for="ctype" class="col-md-2 col-form-label">Type</label>
-          <select id="ctype" class="form-control col-md-8" v-model="cred.type">
+          <select id="ctype" class="form-control col-md-8" v-model="changes.type">
             <option value="login">Login</option>
             <option value="key">Key</option>
           </select>
@@ -12,7 +12,7 @@
         <div class="form-group row">
           <label for="username" class="col-md col-form-label">Username</label>
           <div class="col-md-9">
-            <input id="user" class="form-control" :class="{'is-invalid':!isOkUsername}" type="text" v-model="cred.username" placeholder="Username" aria-label="name"></input>
+            <input id="user" class="form-control" :class="{'is-invalid':!isOkUsername}" type="text" v-model="changes.username" placeholder="Username" aria-label="name"></input>
             <div v-if="!isOkUsername" class="invalid-feedback">
               Please choose a username.
             </div>
@@ -21,7 +21,7 @@
         <div class="form-group row">
           <label for="password" class="col-md col-form-label">Password</label>
           <div class="input-group col-md-9">
-            <input :type="revealPass ? 'text' : 'password'" v-model="cred.password" class="form-control"  :class="{'is-invalid':!isOkPassword}" aria-label="password"></input>
+            <input :type="revealPass ? 'text' : 'password'" v-model="changes.password" class="form-control"  :class="{'is-invalid':!isOkPassword}" aria-label="password"></input>
             <div class="input-group-append">
               <button class="btn btn-outline-secondary" type="button" @click="revealPass=!revealPass">
                 <i class="fa fa-eye" v-if="!revealPass"></i>
@@ -102,10 +102,10 @@
           </div>
         </div>
       </form>
-
-
-      <a href="#" class="card-link">Cancel</a>
-      <a href="#" class="card-link">Save</a>
+    </div>
+    <div class="card-footer d-flex justify-content-end">
+      <button type="button" :disabled="!isOkUsername || !isOkPassword" class="btn btn-success" @click="saveChanges">Save</button>
+      <button type="button" class="btn btn-danger ml-2" @click="cancelChanges">Cancel</button>
     </div>
   </div>
 </template>
@@ -150,10 +150,16 @@ function generateNormalPass(opts){
 export default {
   name: 'location-credential-editor',
   props: {
+    idcred: Number,
     cred: Object
   },
   data () {
     return {
+      changes: {
+        type: this.cred.type || 'login',
+        username: this.cred.username || '',
+        password: this.cred.password || ''
+      },
       revealPass: false,
       revealGenerated: false,
       showGenerate: false,
@@ -170,13 +176,22 @@ export default {
     }
   },
   methods: {
+    saveChanges() {
+      this.$emit('change', {
+        idcred: this.idcred,
+        cred: this.changes
+      })
+    },
+    cancelChanges() {
+      this.$emit('cancel', this.idcred)
+    },
     toggleGeneratePanel() {
       this.showGenerate = !this.showGenerate
       this.generated = ''
     },
     saveGeneratedPassword() {
       this.password_repeat = this.generated
-      this.cred.password = this.generated
+      this.changes.password = this.generated
       this.showGenerate = false
       this.generated = ''
     },
@@ -190,11 +205,11 @@ export default {
   },
   computed: {
     isOkUsername() {
-      return (this.cred.username || '').length > 0
+      return (this.changes.username || '').length > 0
     },
     isOkPassword() {
       console.log('chrst')
-      return (this.cred.password || '').length > 0 && this.cred.password === this.password_repeat
+      return (this.changes.password || '').length > 0 && this.changes.password === this.password_repeat
     }
   }
 }
