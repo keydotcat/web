@@ -6,7 +6,8 @@ var WorkerCmds = {
   GEN_VAULT_KEY: 'generate_vault_key',
   CIPHER_KEYS_FOR_USER: 'cipher_keys_for_user',
   PASS_CHANGE: 'pass_change',
-  EXPORT: 'export'
+  EXPORT: 'export',
+  SERIALIZE_AND_CIPHER: 'serialize_and_cipher'
 }
 
 export default WorkerCmds

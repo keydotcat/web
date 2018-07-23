@@ -166,7 +166,6 @@ class CryptoWorker {
     return { data: data }
   }
   cipherKeysForUser (vaultClosedKeys, userPubKeys) {
-    console.log('vk', vaultClosedKeys, 'uk', userPubKeys)
     var pubKeys = unpackPublicKeys(userPubKeys)
     var data = {}
     for (var vid in vaultClosedKeys) {
@@ -181,6 +180,14 @@ class CryptoWorker {
   passwordChange (password) {
     var bKey = keyPassword(this.keys, password)
     return { data: closeUserKeysAndPack(this.keys, bKey).secretKeys }
+  }
+  serializeAndCipher(vaultClosedKeys, obj) {
+    var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys, this.keys)
+    var serialized = JSON.stringify(obj)
+    var tmpKeys = nacl.box.keyPair()
+    var nonce = nacl.randomBytes(nacl.box.nonceLength)
+    var closed = nacl.box(serialized,nonce,vaultKeys.cipher.publicKey,tmpKeys.secretKey)
+    return util.encodeBase64(nacl.sign(merge(nonce,merge(tmpKeys.publicKey,closed)),vaultKeys.sign.secretKey)
   }
 }
 var runner = new CryptoWorker()
@@ -209,6 +216,9 @@ self.addEventListener('message', function (e) {
         break
       case cmds.PASSWORD_CHANGE:
         self.postMessage(runner.passwordChange(data.password))
+        break
+      case cmds.SERIALIZE_AND_CIPHER:
+        self.postMessage(runner.serializeAndCipher(data.vaultKeyss,data.obj))
         break
       default:
         self.postMessage({ error: 'Unknown command ' + data.cmd })

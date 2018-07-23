@@ -207,6 +207,12 @@ const actions = {
         context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
     })
+  },
+  createLocation(context, { vaultId, location }) {
+    console.log(context.state.vaults[vaultId])
+    workerMgr.serializeAndCipherObject(context.state.vaults[vaultId].keys, location).then((data) => {
+      console.log(data)
+    })
   }
 }
 

@@ -54,6 +54,9 @@ class Manager {
   cipherVaultKeysForUser(vaultKeys, pubKey) {
     return this.newTask(cmds.CIPHER_KEYS_FOR_USER, { vaultKeys: vaultKeys, userPublicKeys: pubKey })
   }
+  serializeAndCipherObject(vaultKeys, obj){
+    return this.newTask(cmds.SERIALIZE_AND_CIPHER, { vaultKeys: vaultKeys, obj: obj })
+  }
 }
 
 export default new Manager()
