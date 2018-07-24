@@ -53,7 +53,7 @@
       </ul>
       <h6 class="card-subtitle m-2">Notes</h6>
       <div class="form-group pl-2">
-        <textarea class="form-control" :rows="linesInNote" v-model="loc.notes"></textarea>
+        <textarea class="form-control" :rows="linesInNote" v-model="loc.note"></textarea>
       </div>
     </div>
     <div class="card-footer d-flex justify-content-end">
@@ -84,12 +84,14 @@ export default {
     vault: Object
   },
   data () {
-    var loc = {}
-    loc.name = this.location.name || ''
-    loc.urls = this.location.urls || []
-    loc.creds = this.location.creds || []
-    loc.labels = this.location.labels || []
-    loc.notes = this.location.notes || ''
+    var loc = {
+      type: 'location',
+      name: this.location.name || '',
+      urls: this.location.urls || [],
+      creds: this.location.creds || [],
+      labels: this.location.labels || [],
+      note: this.location.note || ''
+    }
     var v = {
       tid: this.vault.tid || '',
       vid: this.vault.vid || ''
@@ -97,7 +99,7 @@ export default {
     return {
       loc: loc,
       bEditingName: false,
-      bSelectingVault: this.id.length === 0,
+      bSelectingVault: !this.id || this.id.length === 0,
       parentVault: v,
       newUrl: '',
       showNewUrlInput: false,
@@ -121,7 +123,7 @@ export default {
       return vaults
     },
     linesInNote() {
-      var nl = this.loc.notes.split(/\r\n|\r|\n/).length
+      var nl = this.loc.note.split(/\r\n|\r|\n/).length
       return (nl < 10 ? nl : 10)
     },
     isOkName(){
