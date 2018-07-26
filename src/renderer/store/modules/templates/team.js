@@ -83,7 +83,6 @@ const getters = {
       }
     })
   }
-
 }
 
 function promoteUser(context, uid, pubKey, vaultKeys) {
@@ -100,6 +99,7 @@ const actions = {
   loadInfo (context, tid) {
     teamSvc.loadInfo(tid).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
+      context.dispatch('secrets/loadSecretsFromTeam', { teamId: teamData.id, vaults: teamData.vaults }, {root: true})
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
@@ -206,18 +206,6 @@ const actions = {
       }).catch((err) => {
         context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
-    })
-  },
-  createLocation(context, { vaultId, location }) {
-    var vKeys = {}
-    context.state.vaults.forEach((v) => {
-      if ( v.id === vaultId ) {
-        vKeys.publicKeys = v.public_key
-        vKeys.secretKeys = v.key
-      }
-    })
-    workerMgr.serializeAndCipherObject(vKeys, location).then((data) => {
-      console.log(data)
     })
   }
 }

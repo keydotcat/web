@@ -7,7 +7,8 @@ var WorkerCmds = {
   CIPHER_KEYS_FOR_USER: 'cipher_keys_for_user',
   PASS_CHANGE: 'pass_change',
   EXPORT: 'export',
-  SERIALIZE_AND_CIPHER: 'serialize_and_cipher'
+  SERIALIZE_AND_CLOSE: 'serialize_and_close',
+  OPEN_AND_DESERIALIZE: 'open_and_deserialize'
 }
 
 export default WorkerCmds

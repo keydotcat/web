@@ -181,13 +181,22 @@ class CryptoWorker {
     var bKey = keyPassword(this.keys, password)
     return { data: closeUserKeysAndPack(this.keys, bKey).secretKeys }
   }
-  serializeAndCipher(vaultClosedKeys, obj) {
+  serializeAndClose(vaultClosedKeys, obj) {
     var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys, this.keys)
     var serialized = util.decodeUTF8(JSON.stringify(obj))
     var tmpKeys = nacl.box.keyPair()
     var nonce = nacl.randomBytes(nacl.box.nonceLength)
     var closed = nacl.box(serialized, nonce, vaultKeys.cipher.publicKey, tmpKeys.secretKey)
     return {data: util.encodeBase64(nacl.sign(merge(nonce, merge(tmpKeys.publicKey, closed)), vaultKeys.sign.secretKey))}
+  }
+  openAndDeserialize(vaultClosedKeys, closedData) {
+    var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys, this.keys)
+    var data = nacl.sign.open(util.decodeBase64(closedData), vaultKeys.sign.publicKey)
+    var nonce = data.slice(0, nacl.box.nonceLength)
+    var tmpPubKey = data.slice(nacl.box.nonceLength, nacl.box.nonceLength + nacl.box.publicKeyLength)
+    data = data.slice(nacl.box.nonceLength + nacl.box.publicKeyLength)
+    var opened = nacl.box.open(data, nonce, tmpPubKey, vaultKeys.cipher.secretKey)
+    return {data: JSON.parse(util.encodeUTF8(opened))}
   }
 }
 var runner = new CryptoWorker()
@@ -217,8 +226,11 @@ self.addEventListener('message', function (e) {
       case cmds.PASSWORD_CHANGE:
         self.postMessage(runner.passwordChange(data.password))
         break
-      case cmds.SERIALIZE_AND_CIPHER:
-        self.postMessage(runner.serializeAndCipher(data.vaultKeys, data.obj))
+      case cmds.SERIALIZE_AND_CLOSE:
+        self.postMessage(runner.serializeAndClose(data.vaultKeys, data.obj))
+        break
+      case cmds.OPEN_AND_DESERIALIZE:
+        self.postMessage(runner.openAndDeserialize(data.vaultKeys, data.data))
         break
       default:
         self.postMessage({ error: 'Unknown command ' + data.cmd })

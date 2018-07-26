@@ -54,8 +54,11 @@ class Manager {
   cipherVaultKeysForUser(vaultKeys, pubKey) {
     return this.newTask(cmds.CIPHER_KEYS_FOR_USER, { vaultKeys: vaultKeys, userPublicKeys: pubKey })
   }
-  serializeAndCipherObject(vaultKeys, obj){
-    return this.newTask(cmds.SERIALIZE_AND_CIPHER, { vaultKeys: vaultKeys, obj: obj })
+  serializeAndClose(vaultKeys, obj){
+    return this.newTask(cmds.SERIALIZE_AND_CLOSE, { vaultKeys: vaultKeys, obj: obj })
+  }
+  openAndDeserialize(vaultKeys, data){
+    return this.newTask(cmds.OPEN_AND_DESERIALIZE, { vaultKeys: vaultKeys, data: data })
   }
 }
 

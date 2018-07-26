@@ -45,7 +45,12 @@ export default{
       .catch((error) => Promise.reject(error))
   },
   createSecret(tid, vid, secretData) {
-    return axios.post(`${rootSvc.urlRoot}/team/${tid}/vault/secret`, {data: secretData}, rootSvc.getHeaders())
+    return axios.post(`${rootSvc.urlRoot}/team/${tid}/vault/${vid}/secret`, {data: secretData}, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
+  },
+  loadSecrets(tid) {
+    return axios.get(`${rootSvc.urlRoot}/team/${tid}/secret`, rootSvc.getHeaders())
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   }
