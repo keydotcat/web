@@ -11,6 +11,7 @@ import HomePage from '@/components/home_page'
 import DataContent from '@/components/home/data_content'
 import LocationsPage from '@/components/home/data/locations_page'
 import NewLocationPage from '@/components/home/data/new_location_page'
+import EditLocationPage from '@/components/home/data/edit_location_page'
 import NewTeamPage from '@/components/home/new_team_page'
 import ManageContent from '@/components/home/manage_content'
 import UserInfoPage from '@/components/home/manage/user_info_page'
@@ -33,7 +34,8 @@ var router = new VueRouter({
           component: DataContent,
           children: [
             { path: 'new_location', component: NewLocationPage },
-            { path: 'locations', component: LocationsPage }
+            { path: 'locations', component: LocationsPage },
+            { path: 'location/:sid', component: EditLocationPage }
           ]
         },
         {

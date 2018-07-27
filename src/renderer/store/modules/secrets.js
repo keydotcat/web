@@ -18,6 +18,7 @@ const mutations = {
       id: secret.id,
       vaultId: secret.vault,
       teamId: teamId,
+      fullId: sid,
       data: openData,
       closed: secret.data,
       createdAt: DateTime.fromISO(secret.created_at),
@@ -52,7 +53,6 @@ function filterPass( secret, filter ) {
 const getters = {
   filteredSecrets: state => {
     return filter => {
-      console.log(filter)
       var filtered = []
       for( var sid in state.secrets ) {
         if( filterPass( state.secrets[sid], filter ) ) {
@@ -93,25 +93,19 @@ const actions = {
       //context.commit(mt.SECRET_LOAD_FROM_TEAM, {teamId: teamId, secrets: resp.secrets})
     })
   },
-  createLocation(context, { vaultId, location }) {
+  createLocation(context, { teamId, vaultId, location }) {
     var vKeys = {}
-    context.state.vaults.forEach((v) => {
+    console.log('cont', context)
+    context.rootState[`team.${teamId}`].vaults.forEach((v) => {
       if ( v.id === vaultId ) {
         vKeys.publicKeys = v.public_key
         vKeys.secretKeys = v.key
       }
     })
     workerMgr.serializeAndClose(vKeys, location).then((data) => {
-      teamSvc.createSecret(context.state.id, vaultId, data).then((secret) => {
-        workerMgr.openAndDeserialize(vKeys, secret.data).then((data) => {
-          context.commit(mt.SECRET_SET, {
-            id: secret.id,
-            data: data,
-            closedData: secret.data,
-            createdAt: secret.created_at,
-            updatedAt: secret.updated_at,
-            vaultVersion: secret.vault_version
-          })
+      teamSvc.createSecret(teamId, vaultId, data).then((secret) => {
+        workerMgr.openAndDeserialize(vKeys, secret.data).then((openData) => {
+          context.commit(mt.SECRET_SET, {teamId: teamId, secret: secret, openData: data})
         })
       }).catch((err) => {
         context.commit(mt.MSG_ERROR, rootSvc.processError(err))

@@ -6,19 +6,19 @@
         <button class="btn btn-primary" type="button" @click="createLocation">New location</button>
       </div>
     </div>
-    <div class="rounded border border-light w-90">
-      <div class="rounded bg-light w-100 d-flex justify-content-end p-1">
+    <div class="rounded border-top border-left border-right w-90">
+      <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
         <input type="text" v-model="filter.search" class="form-control mr-5" placeholder="Search">
-        <div class="dropdown mr-2">
+        <div class="dropdown mr-2 d-flex align-items-center">
           <button class="btn btn-sm dropdown-toggle"
-            :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Teams 
+                  :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Teams 
           </button>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" :class="{active: filter.teams.indexOf(team.id) > -1}" v-for="team in $store.getters['user/teams']" href="#" @click="toggleActiveTeam(team.id)">{{team.name}}</a>
           </div>
         </div>
-        <div class="dropdown mr-2">
+        <div class="dropdown mr-2 d-flex align-items-center">
           <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.vaults.length>0,'bg-transparent':filter.vaults.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Vaults 
           </button>
@@ -29,7 +29,7 @@
           </div>
         </div>
 
-        <div class="dropdown mr-2">
+        <div class="dropdown mr-2 d-flex align-items-center">
           <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.labels.length>0,'bg-transparent':filter.labels.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Labels
           </button>
@@ -40,16 +40,17 @@
           </div>
         </div>
       </div>
-      <div v-for="secret in $store.getters['secrets/filteredSecrets'](filter)">
-        {{secret.teamId}}/{{secret.vaultId}} - {{secret.data.name}}
-      </div>
+      <location class="border-bottom" v-for="secret in $store.getters['secrets/filteredSecrets'](filter)" :key="secret.fullId" :secret="secret"></location>
     </div>
   </div>
 </template>
 
 <script>
+  //Indent fix
+  import Location from '@/components/home/data/location'
   export default {
     name: 'locations-page',
+    components: {Location},
     data () {
       return {
         filter: {

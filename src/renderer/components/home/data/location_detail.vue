@@ -145,7 +145,7 @@ export default {
       })
     },
     cancelChanges() {
-      this.$router.go(-1)
+      this.$router.push('/home/data/locations')
     },
     editCredential(idcred) {
       this.$set(this.credsInEditMode, idcred, false)
