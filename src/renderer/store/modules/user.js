@@ -32,6 +32,14 @@ const getters = {
       return 0
     })
     return teams.map((team) => team.id)
+  },
+  teams: state => {
+    const teams = [...state.teams].sort((a, b) => {
+      if(a.name > b.name){ return 1 }
+      if(a.name < b.name){ return -1 }
+      return 0
+    })
+    return teams
   }
 }
 
@@ -39,7 +47,7 @@ const actions = {
   loadInfo(context) {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
-      router.push('/home/data/new_location')
+      router.push('/home/data')
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })

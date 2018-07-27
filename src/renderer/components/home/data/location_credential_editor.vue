@@ -208,7 +208,6 @@ export default {
       return (this.changes.username || '').length > 0
     },
     isOkPassword() {
-      console.log('chrst')
       return (this.changes.password || '').length > 0 && this.changes.password === this.password_repeat
     }
   }

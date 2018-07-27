@@ -133,7 +133,6 @@ export default {
       return this.loc.creds.length > 0
     },
     isOk(){
-      console.log( this.isOkName, this.isOkCreds, isObjEmpty(this.credsInEditMode), isObjEmpty(this.urlsInEditMode))
       return this.isOkName && this.isOkCreds && isObjEmpty(this.credsInEditMode) && isObjEmpty(this.urlsInEditMode)
     }
   },
@@ -146,7 +145,7 @@ export default {
       })
     },
     cancelChanges() {
-      this.$emit('cancel', this.loc)
+      this.$router.go(-1)
     },
     editCredential(idcred) {
       this.$set(this.credsInEditMode, idcred, false)

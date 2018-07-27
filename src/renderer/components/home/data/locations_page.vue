@@ -3,7 +3,45 @@
     <div class="header px-3 py-3 pt-md-5 pb-md-4 d-flex justify-content-between">
       <h3 class="display-9">Locations</h3>
       <div class="input-group w-25 text-right d-flex flex-row-reverse">
-          <button class="btn btn-primary" type="button" @click="createLocation">New location</button>
+        <button class="btn btn-primary" type="button" @click="createLocation">New location</button>
+      </div>
+    </div>
+    <div class="rounded border border-light w-90">
+      <div class="rounded bg-light w-100 d-flex justify-content-end p-1">
+        <input type="text" v-model="filter.search" class="form-control mr-5" placeholder="Search">
+        <div class="dropdown mr-2">
+          <button class="btn btn-sm dropdown-toggle"
+            :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Teams 
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" :class="{active: filter.teams.indexOf(team.id) > -1}" v-for="team in $store.getters['user/teams']" href="#" @click="toggleActiveTeam(team.id)">{{team.name}}</a>
+          </div>
+        </div>
+        <div class="dropdown mr-2">
+          <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.vaults.length>0,'bg-transparent':filter.vaults.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Vaults 
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <div v-for="team in $store.getters['user/teams']">
+              <a class="dropdown-item" :class="{active: isActiveVault(team.id,vault.id)}" v-for="vault in $store.getters[`team.${team.id}/vaults`]" href="#" @click="toggleActiveVault(team.id, vault.id)">{{team.name}}/{{vault.id}}</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="dropdown mr-2">
+          <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.labels.length>0,'bg-transparent':filter.labels.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Labels
+          </button>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Action</a>
+            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="#">Something else here</a>
+          </div>
+        </div>
+      </div>
+      <div v-for="secret in $store.getters['secrets/filteredSecrets'](filter)">
+        {{secret.teamId}}/{{secret.vaultId}} - {{secret.data.name}}
       </div>
     </div>
   </div>
@@ -13,9 +51,37 @@
   export default {
     name: 'locations-page',
     data () {
-      return {}
+      return {
+        filter: {
+          search: '',
+          labels: [],
+          teams: [],
+          vaults: []
+        }
+      }
     },
     methods: {
+      isActiveVault(tid, vid) {
+        var k = `${tid}/${vid}`
+        return this.filter.teams.indexOf(tid) > -1 || this.filter.vaults.indexOf(k) > -1
+      },
+      toggleActiveVault(tid, vid){
+        var k = `${tid}/${vid}`
+        var it = this.filter.vaults.indexOf(k)
+        if( it > -1 ) {
+          this.filter.vaults.splice(it, 1)
+        } else {
+          this.filter.vaults.push(k)
+        }
+      },
+      toggleActiveTeam(tid){
+        var it = this.filter.teams.indexOf(tid)
+        if( it > -1 ) {
+          this.filter.teams.splice(it, 1)
+        } else {
+          this.filter.teams.push(tid)
+        }
+      },
       createLocation () {
         this.$router.push( `/home/data/new_location` )
       }

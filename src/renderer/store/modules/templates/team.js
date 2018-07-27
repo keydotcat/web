@@ -60,7 +60,6 @@ const getters = {
     return state.name
   },
   admins (state, getters, rootState) {
-    console.log('Req  admins', state, getters)
     var me = rootState.user.id
     return state.users.filter( (u) => u.admin ).map( (u) => {
       return {
@@ -82,7 +81,16 @@ const getters = {
         data: u
       }
     })
+  },
+  vaults: state => {
+    const vs = [...state.vaults].sort((a, b) => {
+      if(a.id > b.id){ return 1 }
+      if(a.id < b.id){ return -1 }
+      return 0
+    })
+    return vs
   }
+
 }
 
 function promoteUser(context, uid, pubKey, vaultKeys) {
@@ -166,7 +174,6 @@ const actions = {
     }
     var tid = context.state.id
     Promise.all(promises).then((values) => {
-      console.log(values)
       var userKeys = {}
       for (var i = 0; i < values.length; i++) {
         userKeys[values[i].uid] = values[i].keys

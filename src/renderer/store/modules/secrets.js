@@ -27,7 +27,41 @@ const mutations = {
   }
 }
 
+function filterPass( secret, filter ) {
+  if( filter.labels.length > 0 ) {
+    var found = secret.data.labels.filter( label => {
+      return filter.labels.indexOf(label) > -1
+    }).length > 0
+    if( !found ) {
+      return false
+    }
+  }
+  if( filter.teams.length > 0 ) {
+    if( filter.teams.indexOf(secret.teamId) === -1 ) {
+      return false
+    }
+  }
+  if( filter.vaults.length > 0 ) {
+    if( filter.vaults.indexOf( `${secret.teamId}/${secret.vaultId}` ) === -1 ) {
+      return false
+    }
+  }
+  return ( filter.search.length === 0 || secret.data.name.toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
+}
+
 const getters = {
+  filteredSecrets: state => {
+    return filter => {
+      console.log(filter)
+      var filtered = []
+      for( var sid in state.secrets ) {
+        if( filterPass( state.secrets[sid], filter ) ) {
+          filtered.push( state.secrets[sid] )
+        }
+      }
+      return filtered
+    }
+  }
 }
 
 var gVKeys = {}
