@@ -9,8 +9,6 @@
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuIcon">
           <a class="dropdown-item" @click="editSecret" href="#">Edit</a>
           <a class="dropdown-item" @click="deleteSecret" href="#">Delete</a>
-          <!--button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
-            :data-target="'#exampleModal-'+secret.fullId">Delete</button-->
         </div>
       </div>
     </div>
@@ -18,8 +16,8 @@
       <div class="card" v-for="cred in secret.data.creds">
         <div class="card-body p-2">
           <span class="h6 mr-2"> {{cred.username}}</span>
-          <i class="fas fa-user mr-2" @click="copy(cred.username)"></i>
-          <i class="fas fa-key mr-2" @click="copy(cred.password)"></i>
+          <i class="fas fa-user mr-2" @click="copy(cred.username)" :data-toggle="'tooltip:'+vid" data-placement="top" title="Copy username to clipboard"></i>
+          <i class="fas fa-key mr-2" @click="copy(cred.password)" :data-toggle="'tooltip:'+vid" data-placement="top" title="Copy password to clipboard"></i>
           <input type="text" hidden ref="copyHelper" id="copyHelper"></input>
         </div>
       </div>
@@ -28,10 +26,23 @@
 </template>
 
 <script>
+  import $ from 'jquery'
+
   export default {
     name: 'location',
     props: {
       secret: Object
+    },
+    data () {
+      return {
+        vid: null
+      }
+    },
+    beforeMount () {
+      this.vid = this._uid
+    },
+    mounted () {
+      $(`[data-toggle="tooltip:${this.vid}"]`).tooltip()
     },
     methods: {
       editSecret() {
