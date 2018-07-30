@@ -49,6 +49,11 @@ export default{
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   },
+  deleteSecret(tid, vid, sid) {
+    return axios.delete(`${rootSvc.urlRoot}/team/${tid}/vault/${vid}/secret/${sid}`, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
+  },
   loadSecrets(tid) {
     return axios.get(`${rootSvc.urlRoot}/team/${tid}/secret`, rootSvc.getHeaders())
       .then((response) => Promise.resolve(response.data))

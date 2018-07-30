@@ -8,6 +8,9 @@
         <i class="text-muted ml-1 fas fa-bars" data-toggle="dropdown" id="dropdownMenuIcon"></i>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuIcon">
           <a class="dropdown-item" @click="editSecret" href="#">Edit</a>
+          <a class="dropdown-item" @click="deleteSecret" href="#">Delete</a>
+          <!--button type="button" class="btn btn-primary dropdown-item" data-toggle="modal"
+            :data-target="'#exampleModal-'+secret.fullId">Delete</button-->
         </div>
       </div>
     </div>
@@ -21,9 +24,6 @@
         </div>
       </div>
     </div>
-    <!--ul class="list-group mt-2 mb-2 pl-5 pr-2">
-      <li class="list-group-item p-1 pl-3" v-for="cred in secret.data.creds"><i class="fas fa-user"></i> {{cred.username}}</li>
-      </ul-->
   </div>
 </template>
 
@@ -36,6 +36,9 @@
     methods: {
       editSecret() {
         this.$router.push( `/home/data/location/${this.secret.fullId}` )
+      },
+      deleteSecret() {
+        this.$emit('delete', this.secret)
       },
       copy(text) {
         var ref = this.$refs.copyHelper[0]

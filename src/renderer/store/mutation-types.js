@@ -18,3 +18,4 @@ export const TEAM_LOAD_USERS = 'TEAM_LOAD_USERS'
 export const TEAM_LOAD_VAULT = 'TEAM_LOAD_VAULT'
 
 export const SECRET_SET = 'SECRET_SET'
+export const SECRET_UNSET = 'SECRET_UNSET'

@@ -25,6 +25,10 @@ const mutations = {
       updatedAt: DateTime.fromISO(secret.updated_at),
       vaultVersion: secret.vault_version
     })
+  },
+  [mt.SECRET_UNSET] (state, {teamId, vaultId, secretId}) {
+    var sid = `${teamId}.${vaultId}.${secretId}`
+    Vue.delete(state.secrets, sid)
   }
 }
 
@@ -93,9 +97,8 @@ const actions = {
       //context.commit(mt.SECRET_LOAD_FROM_TEAM, {teamId: teamId, secrets: resp.secrets})
     })
   },
-  createLocation(context, { teamId, vaultId, location }) {
+  save(context, { teamId, vaultId, location }) {
     var vKeys = {}
-    console.log('cont', context)
     context.rootState[`team.${teamId}`].vaults.forEach((v) => {
       if ( v.id === vaultId ) {
         vKeys.publicKeys = v.public_key
@@ -110,6 +113,11 @@ const actions = {
       }).catch((err) => {
         context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
+    })
+  },
+  delete(context, { teamId, vaultId, secretId }) {
+    teamSvc.deleteSecret(teamId, vaultId, secretId).then((resp) => {
+      context.commit(mt.SECRET_UNSET, {teamId: teamId, vaultId: vaultId, secretId: secretId})
     })
   }
 }

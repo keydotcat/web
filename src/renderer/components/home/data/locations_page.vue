@@ -40,14 +40,36 @@
           </div>
         </div>
       </div>
-      <location class="border-bottom" v-for="secret in $store.getters['secrets/filteredSecrets'](filter)" :key="secret.fullId" :secret="secret"></location>
+      <location class="border-bottom" v-for="secret in $store.getters['secrets/filteredSecrets'](filter)" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
     </div>
+<div class="modal fade" id="deleteLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Delete location {{secretToDel.name}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              Are you sure you want to delete {{secretToDel.name}} location?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">No, keep it</button>
+              <button type="button" class="btn btn-primary" @click="deleteSecret">Yes, delete it</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
   </div>
 </template>
 
 <script>
   //Indent fix
   import Location from '@/components/home/data/location'
+  import $ from 'jquery'
+
   export default {
     name: 'locations-page',
     components: {Location},
@@ -58,10 +80,31 @@
           labels: [],
           teams: [],
           vaults: []
+        },
+        secretToDel: {
+          name: '',
+          tid: '',
+          vid: '',
+          sid: ''
         }
       }
     },
     methods: {
+      requestDelete(secret) {
+        this.secretToDel.name = secret.data.name
+        this.secretToDel.tid = secret.teamId
+        this.secretToDel.vid = secret.vaultId
+        this.secretToDel.sid = secret.id
+        $('#deleteLocationModal').modal('show')
+      },
+      deleteSecret() {
+        this.$store.dispatch('secrets/delete', {
+          teamId: this.secretToDel.tid,
+          vaultId: this.secretToDel.vid,
+          secretId: this.secretToDel.sid
+        })
+        $('#deleteLocationModal').modal('hide')
+      },
       isActiveVault(tid, vid) {
         var k = `${tid}/${vid}`
         return this.filter.teams.indexOf(tid) > -1 || this.filter.vaults.indexOf(k) > -1
