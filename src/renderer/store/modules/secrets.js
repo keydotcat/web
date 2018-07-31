@@ -4,6 +4,7 @@ import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 import Vue from 'vue'
 import { DateTime } from 'luxon'
+import SecretData from '@/classes/secret-data'
 
 const state = () => {
   return {
@@ -14,6 +15,8 @@ const state = () => {
 const mutations = {
   [mt.SECRET_SET] (state, {teamId, secret, openData}) {
     var sid = `${teamId}.${secret.vault}.${secret.id}`
+    var sd = new SecretData()
+    sd.fromJson(openData)
     Vue.set(state.secrets, sid, {
       id: secret.id,
       vaultId: secret.vault,
@@ -51,7 +54,7 @@ function filterPass( secret, filter ) {
       return false
     }
   }
-  return ( filter.search.length === 0 || secret.data.name.toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
+  return ( filter.search.length === 0 || ( secret.data.name || '' ).toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
 }
 
 const getters = {
@@ -96,7 +99,7 @@ const actions = {
       })
     })
   },
-  save(context, { teamId, vaultId, secretData }) {
+  create(context, { teamId, vaultId, secretData }) {
     var vKeys = {}
     context.rootState[`team.${teamId}`].vaults.forEach((v) => {
       if ( v.id === vaultId ) {

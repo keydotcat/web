@@ -138,7 +138,7 @@ export default {
   },
   methods: {
     saveChanges() {
-      this.$store.dispatch( 'secrets/save', {
+      this.$store.dispatch( 'secrets/create', {
         teamId: this.parentVault.tid,
         vaultId: this.parentVault.vid,
         secretData: this.loc

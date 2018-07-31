@@ -133,7 +133,7 @@
           var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(this.importPass))
           kdbxweb.Kdbx.load(fContainer.getData(), credentials).then(db => {
             recurseKdbxGroups(db.groups, '').forEach( secret => {
-              this.$store.dispatch( 'secrets/save', {
+              this.$store.dispatch( 'secrets/create', {
                 teamId: this.parentVault.tid,
                 vaultId: this.parentVault.vid,
                 secretData: secret
@@ -180,7 +180,7 @@
   outline-offset: -10px;
   background: #f8f9fa;
   padding: 10px 10px;
-  min-height: 100px; /* minimum height */
+  min-height: 200px; /* minimum height */
   position: relative;
   cursor: pointer;
 }
@@ -188,7 +188,7 @@
   .dropbox > .input-file {
     opacity: 0; /* invisible but it's there! */
     width: 100%;
-    height: 100px;
+    height: 180px;
     position: absolute;
     cursor: pointer;
   }

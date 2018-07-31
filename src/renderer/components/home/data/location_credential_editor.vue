@@ -38,7 +38,7 @@
           <div class="input-group col-md-9">
             <input :type="revealPass ? 'text' : 'password'" v-model="password_repeat" class="form-control" aria-label="password"></input>
             <div class="input-group-append">
-              <button class="btn" :class="{'btn-info':showGenerate}"type="button" @click="toggleGeneratePanel">
+              <button class="btn btn-primary" :class="{'btn-info':showGenerate}"type="button" @click="toggleGeneratePanel">
                 Generate
               </button>
             </div>
@@ -187,7 +187,7 @@ export default {
     },
     toggleGeneratePanel() {
       this.showGenerate = !this.showGenerate
-      this.generated = ''
+      this.generatePassword()
     },
     saveGeneratedPassword() {
       this.password_repeat = this.generated
