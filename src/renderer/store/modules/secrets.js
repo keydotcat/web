@@ -94,10 +94,9 @@ const actions = {
           context.commit(mt.SECRET_SET, {teamId: teamId, secret: secret, openData: data})
         })
       })
-      //context.commit(mt.SECRET_LOAD_FROM_TEAM, {teamId: teamId, secrets: resp.secrets})
     })
   },
-  save(context, { teamId, vaultId, location }) {
+  save(context, { teamId, vaultId, secretData }) {
     var vKeys = {}
     context.rootState[`team.${teamId}`].vaults.forEach((v) => {
       if ( v.id === vaultId ) {
@@ -105,7 +104,7 @@ const actions = {
         vKeys.secretKeys = v.key
       }
     })
-    workerMgr.serializeAndClose(vKeys, location).then((data) => {
+    workerMgr.serializeAndClose(vKeys, secretData).then((data) => {
       teamSvc.createSecret(teamId, vaultId, data).then((secret) => {
         workerMgr.openAndDeserialize(vKeys, secret.data).then((openData) => {
           context.commit(mt.SECRET_SET, {teamId: teamId, secret: secret, openData: data})

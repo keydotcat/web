@@ -40,6 +40,19 @@ const getters = {
       return 0
     })
     return teams
+  },
+  allVaults: (state, getters, rootState, rootGetters) => {
+    var vaults = []
+    getters['team_ids'].forEach((tid) => {
+      rootState[`team.${tid}`].vaults.forEach((vault) => {
+        vaults.push({
+          tid: tid,
+          vid: vault.id,
+          teamName: rootState[`team.${tid}`].name
+        })
+      })
+    })
+    return vaults
   }
 }
 
@@ -47,7 +60,7 @@ const actions = {
   loadInfo(context) {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
-      router.push('/home/data')
+      router.push('/home/manage/user/import')
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })

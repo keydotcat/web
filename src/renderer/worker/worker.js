@@ -183,6 +183,7 @@ class CryptoWorker {
   }
   serializeAndClose(vaultClosedKeys, obj) {
     var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys, this.keys)
+    console.log('herst', obj)
     var serialized = util.decodeUTF8(JSON.stringify(obj))
     var tmpKeys = nacl.box.keyPair()
     var nonce = nacl.randomBytes(nacl.box.nonceLength)
