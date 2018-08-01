@@ -1,27 +1,34 @@
 import XoredData from '@/classes/xored_data'
 
-export class Credential {
+export default class Credential {
   constructor() {
-    this.type = ''
-    this.username = ''
-    this.password = XoredData('')
+    this._type = ''
+    this._username = ''
+    this._password = new XoredData('')
   }
   set type(v){
-    this.data.type = v
+    this._type = v
   }
   get type(){
-    return this.data.type
+    return this._type
   }
   set username(v){
-    this.username = v
+    this._username = v
   }
   get username(){
-    return this.username
+    return this._username
   }
   set password(v) {
-    this.password = XoredData(v)
+    this._password = new XoredData(v)
   }
   get password() {
-    return this.password.toString()
+    return this._password.toString()
+  }
+  cloneAsObject() {
+    return {
+      type: this._type,
+      username: this._username,
+      password: this._password.toString()
+    }
   }
 }

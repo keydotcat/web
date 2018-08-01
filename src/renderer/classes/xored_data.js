@@ -7,14 +7,15 @@ function getRandomArray(len) {
   return randomValues
 }
 
-export class XoredData {
+export default class XoredData {
   constructor(data) {
     if(typeof data === 'string'){
       this.fromString(data)
     } else if(data instanceof Uint8Array) {
       this.fromBinary(data)
+    } else {
+      throw new Error('Expected either string of Uint8Array')
     }
-    throw new Error('Expected either string of Uint8Array')
   }
   fromBinary(bytes) {
     this.__data = new Uint8Array(bytes.length)

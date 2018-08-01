@@ -12,7 +12,6 @@
           </div>
         </div>
       </h5>
-      <h6 class="card-subtitle m-2 text-muted" v-if="id">{{id}}</h6>
       <h6 class="card-subtitle m-2 text-muted" v-if="bSelectingVault">
         <div class="form-group">
           <label>Choose which vault to store the secret </label>
@@ -79,27 +78,18 @@ export default {
   name: 'location-detail',
   components: {LocationCredentialEditor},
   props: {
-    id: String,
-    location: Object,
-    vault: Object
+    secret: Object
   },
   data () {
-    var loc = {
-      type: 'location',
-      name: this.location.name || '',
-      urls: this.location.urls || [],
-      creds: this.location.creds || [],
-      labels: this.location.labels || [],
-      note: this.location.note || ''
-    }
+    var loc = this.secret.data.cloneAsObject()
     var v = {
-      tid: this.vault.tid || '',
-      vid: this.vault.vid || ''
+      tid: this.secret.teamId,
+      vid: this.secret.vaultId
     }
     return {
       loc: loc,
       bEditingName: false,
-      bSelectingVault: !this.id || this.id.length === 0,
+      bSelectingVault: this.secret.secretId.length === 0,
       parentVault: v,
       newUrl: '',
       showNewUrlInput: false,

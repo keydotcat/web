@@ -3,8 +3,7 @@ import teamSvc from '@/services/team'
 import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 import Vue from 'vue'
-import { DateTime } from 'luxon'
-import SecretData from '@/classes/secret-data'
+import Secret from '@/classes/secret'
 
 const state = () => {
   return {
@@ -14,20 +13,16 @@ const state = () => {
 
 const mutations = {
   [mt.SECRET_SET] (state, {teamId, secret, openData}) {
-    var sid = `${teamId}.${secret.vault}.${secret.id}`
-    var sd = new SecretData()
-    sd.fromJson(openData)
-    Vue.set(state.secrets, sid, {
-      id: secret.id,
+    var secretObj = new Secret({
+      secretId: secret.id,
       vaultId: secret.vault,
       teamId: teamId,
-      fullId: sid,
-      data: openData,
-      closed: secret.data,
-      createdAt: DateTime.fromISO(secret.created_at),
-      updatedAt: DateTime.fromISO(secret.updated_at),
-      vaultVersion: secret.vault_version
+      vaultVersion: secret.vault_version,
+      createdAt: secret.created_at,
+      updatedAt: secret.updated_at,
+      data: openData
     })
+    Vue.set(state.secrets, secretObj.fullId, secretObj)
   },
   [mt.SECRET_UNSET] (state, {teamId, vaultId, secretId}) {
     var sid = `${teamId}.${vaultId}.${secretId}`
