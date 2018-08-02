@@ -3,7 +3,7 @@
     <div class="header px-3 py-3 pt-md-5 pb-md-4 d-flex justify-content-between">
       <h3 class="display-9">Edit location</h3>
     </div>
-    <location-detail :location="secret.data" :vault="{tid:secret.teamId, vid:secret.vaultId}" :id="secret.id"></location-detail>  
+    <location-detail :secret="secret"></location-detail>  
   </div>
 </template>
 

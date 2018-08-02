@@ -17,7 +17,7 @@
         <div class="card-body p-2">
           <span class="h6 mr-2"> {{cred.username}}</span>
           <i class="fas fa-user mr-2" @click="copy(cred.username)" :data-toggle="'tooltip:'+vid" data-placement="top" title="Copy username to clipboard"></i>
-          <i class="fas fa-key mr-2" @click="copy(cred.password)" :data-toggle="'tooltip:'+vid" data-placement="top" title="Copy password to clipboard"></i>
+          <i class="fas fa-key mr-2" @click="copy(cred.password.toString())" :data-toggle="'tooltip:'+vid" data-placement="top" title="Copy password to clipboard"></i>
           <input type="text" hidden ref="copyHelper" id="copyHelper"></input>
         </div>
       </div>
@@ -52,6 +52,7 @@
         this.$emit('delete', this.secret)
       },
       copy(text) {
+        console.log('Copying', text)
         var ref = this.$refs.copyHelper[0]
         ref.value = text
         ref.select()

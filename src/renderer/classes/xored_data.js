@@ -21,7 +21,7 @@ export default class XoredData {
     this.__data = new Uint8Array(bytes.length)
     this.__xor = getRandomArray(bytes.length)
     for (var i = 0, len = bytes.length; i < len; i++) {
-      this.__data[i] ^= this.__xor[i]
+      this.__data[i] = bytes[i] ^ this.__xor[i]
     }
   }
   fromString(msg) {
@@ -35,6 +35,6 @@ export default class XoredData {
     return bytes
   }
   toString() {
-    return util.encodeUTF8(this.toBinary)
+    return util.encodeUTF8(this.toBinary())
   }
 }

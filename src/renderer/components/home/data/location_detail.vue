@@ -128,10 +128,18 @@ export default {
   },
   methods: {
     saveChanges() {
-      this.$store.dispatch( 'secrets/create', {
+      var args = {
         teamId: this.parentVault.tid,
         vaultId: this.parentVault.vid,
         secretData: this.loc
+      }
+      var action = 'secrets/create'
+      if( this.secret.secretId ) {
+        action = 'secrets/update'
+        args.secretId = this.secret.secretId
+      }
+      this.$store.dispatch(action, args).then((secret) => {
+        this.$router.push('/home/data/locations')
       })
     },
     cancelChanges() {

@@ -60,8 +60,7 @@ const actions = {
   loadInfo(context) {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
-      // router.push('/home/manage/user/import')
-      router.push('/home/data/new_location')
+      router.push('/home/data/locations')
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })

@@ -83,6 +83,23 @@ function getVaultKeyFromList( vaults, tid, vid ) {
   return gVKeys[key]
 }
 
+function updateOrCreate(context, ftor, tid, vid, sid, data) {
+  return new Promise((resolve, reject) => {
+    var vKeys = getVaultKeyFromList(context.rootState[`team.${tid}`].vaults, tid, vid)
+    workerMgr.serializeAndClose(vKeys, data).then((closedData) => {
+      ftor({teamId: tid, vaultId: vid, secretId: sid, payload: closedData}).then((secret) => {
+        workerMgr.openAndDeserialize(vKeys, secret.data).then((openData) => {
+          context.commit(mt.SECRET_SET, {teamId: tid, secret: secret, openData: data})
+          resolve(secret)
+        })
+      }).catch((err) => {
+        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
+        reject(err)
+      })
+    })
+  })
+}
+
 const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
     teamSvc.loadSecrets(teamId).then((resp) => {
@@ -94,23 +111,11 @@ const actions = {
       })
     })
   },
+  update(context, { teamId, vaultId, secretId, secretData }) {
+    return updateOrCreate(context, teamSvc.updateSecret, teamId, vaultId, secretId, secretData)
+  },
   create(context, { teamId, vaultId, secretData }) {
-    var vKeys = {}
-    context.rootState[`team.${teamId}`].vaults.forEach((v) => {
-      if ( v.id === vaultId ) {
-        vKeys.publicKeys = v.public_key
-        vKeys.secretKeys = v.key
-      }
-    })
-    workerMgr.serializeAndClose(vKeys, secretData).then((data) => {
-      teamSvc.createSecret(teamId, vaultId, data).then((secret) => {
-        workerMgr.openAndDeserialize(vKeys, secret.data).then((openData) => {
-          context.commit(mt.SECRET_SET, {teamId: teamId, secret: secret, openData: data})
-        })
-      }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
-      })
-    })
+    return updateOrCreate(context, teamSvc.createSecret, teamId, vaultId, '', secretData)
   },
   delete(context, { teamId, vaultId, secretId }) {
     teamSvc.deleteSecret(teamId, vaultId, secretId).then((resp) => {

@@ -19,7 +19,7 @@ export default class Credential {
     return this._username
   }
   set password(v) {
-    this._password = new XoredData(v)
+    this._password.fromString(v)
   }
   get password() {
     return this._password.toString()

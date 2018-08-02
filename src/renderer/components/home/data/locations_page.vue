@@ -94,7 +94,7 @@
         this.secretToDel.name = secret.data.name
         this.secretToDel.tid = secret.teamId
         this.secretToDel.vid = secret.vaultId
-        this.secretToDel.sid = secret.id
+        this.secretToDel.sid = secret.secretId
         $('#deleteLocationModal').modal('show')
       },
       deleteSecret() {
