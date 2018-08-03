@@ -13,6 +13,35 @@ const state = () => {
   }
 }
 
+function removeLabelsFromState(state, secret) {
+  secret.data.labels.forEach((label) => {
+    if(!(label in state.labels)) {
+      return
+    }
+    var fullId = secret.fullId
+    var fi = state.labels[label].indexOf(fullId)
+    if(fi > -1) {
+      state.labels[label].splice(fi, 1)
+    }
+    if(state.labels[label].length === 0) {
+      Vue.delete(state.labels, label)
+    }
+  })
+}
+
+function addLabelsToState(state, secret) {
+  secret.data.labels.forEach((label) => {
+    if(!(label in state.labels)) {
+      Vue.set(state.labels, label, [])
+    }
+    var fullId = secret.fullId
+    var fi = state.labels[label].indexOf(fullId)
+    if(fi === -1) {
+      state.labels[label].push(fullId)
+    }
+  })
+}
+
 const mutations = {
   [mt.SECRET_SET] (state, {teamId, secret, openData}) {
     var secretObj = new Secret({
@@ -24,10 +53,16 @@ const mutations = {
       updatedAt: secret.updated_at,
       data: openData
     })
+    if(secretObj.fullId in state.secrets) {
+      removeLabelsFromState(state, secretObj)
+    }
     Vue.set(state.secrets, secretObj.fullId, secretObj)
+    addLabelsToState(state, secretObj)
   },
   [mt.SECRET_UNSET] (state, {teamId, vaultId, secretId}) {
     var sid = `${teamId}.${vaultId}.${secretId}`
+    var secret = Vue.secrets[sid]
+    removeLabelsFromState(state, secret)
     Vue.delete(state.secrets, sid)
   }
 }
@@ -65,6 +100,9 @@ const getters = {
       }
       return filtered
     }
+  },
+  allLabels: state => {
+    return Object.keys(state.labels).sort()
   }
 }
 

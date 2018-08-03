@@ -34,9 +34,7 @@
             Labels
           </button>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" v-for="label in $store.getters['secrets/allLabels']" @click="toggleLabel(label)" :class="{active:isActiveLabel(label)}" href="#">{{label}}</a>
           </div>
         </div>
       </div>
@@ -137,6 +135,17 @@
           secretId: this.secretToDel.sid
         })
         $('#deleteLocationModal').modal('hide')
+      },
+      isActiveLabel(label) {
+        return this.filter.labels.indexOf(label) > -1
+      },
+      toggleLabel(label) {
+        var it = this.filter.labels.indexOf(label)
+        if( it > -1 ) {
+          this.filter.labels.splice(it, 1)
+        } else {
+          this.filter.labels.push(label)
+        }
       },
       isActiveVault(tid, vid) {
         var k = `${tid}/${vid}`
