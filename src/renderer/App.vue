@@ -1,5 +1,10 @@
 <template>
-  <router-view></router-view>
+  <div>
+    <div v-if="$store.state.session.loading" class="jumbotron">
+      <h1 class="display-4">We're loading!</h1>
+    </div>
+    <router-view v-if="!$store.state.session.loading"></router-view>
+  </div>
 </template>
 
 <script>
@@ -8,7 +13,7 @@
   export default {
     name: 'keycat',
     beforeCreate () {
-      this.$store.commit(mt.SESSION_LOAD_STATE_FROM_STORAGE)
+      this.$store.commit(mt.SESSION_SET_LOADING, true)
       this.$store.dispatch('sessionLoadFromLocalStorage')
     }
   }
