@@ -24,9 +24,8 @@
               <small class="text-muted">{{cred.type}}</small>
             </div>
             <div class="flex-grow-1 d-flex justify-content-end">
-              <button class="btn btn-sm btn-outline-secondary align-self-center" @click="copy(cred.username)"><i class="fas fa-user"></i> Copy username</button>
-              <button class="btn btn-sm btn-outline-secondary align-self-center ml-2" @click="copy(cred.password.toString())"><i class="fas fa-key"></i> Copy password</button>
-              <input type="text" hidden ref="copyHelper" id="copyHelper"></input>
+              <copy-button class="btn btn-sm btn-outline-secondary align-self-center" :copy="cred.username"><i class="fas fa-user"></i> Copy username</copy-button>
+              <copy-button class="btn btn-sm btn-outline-secondary align-self-center ml-2" :copy="cred.password.toString()"><i class="fas fa-key"></i> Copy password</copy-button>
             </div>
           </div>
         </div>
@@ -52,24 +51,18 @@
 </template>
 
 <script>
-import $ from 'jquery'
+import CopyButton from '@/components/home/data/copy-button'
 
 export default {
   name: 'location',
+  components: { CopyButton },
   props: {
     secret: Object
   },
   data () {
     return {
-      vid: null,
       displayCreds: false
     }
-  },
-  beforeMount () {
-    this.vid = this._uid
-  },
-  mounted () {
-    $(`[data-toggle="tooltip:${this.vid}"]`).tooltip()
   },
   methods: {
     toggleCreds() {
@@ -82,12 +75,11 @@ export default {
       this.$emit('delete', this.secret)
     },
     copy(text) {
-      console.log('Copying', text)
       var ref = this.$refs.copyHelper[0]
       ref.value = text
       ref.select()
       document.execCommand('copy')
-      ref.value = ''
+      //ref.value = ''
     }
   }
 }
@@ -95,4 +87,5 @@ export default {
 
 <style>
 div > .border-bottom:last-child { border-bottom: none!important;  }
+.hide-input { width: 0px; }
 </style>
