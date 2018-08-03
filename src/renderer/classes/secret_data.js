@@ -2,7 +2,7 @@ import Credential from '@/classes/credential'
 import $ from 'jquery'
 
 export default class SecretData {
-  constructor() {
+  constructor(obj) {
     this._data = {
       type: '',
       name: '',
@@ -10,6 +10,9 @@ export default class SecretData {
       creds: [],
       note: '',
       labels: []
+    }
+    if(obj){
+      this.fromJson(obj)
     }
   }
   set type(v){
@@ -36,7 +39,13 @@ export default class SecretData {
   get creds() {
     return this._data.creds
   }
+  get labels() {
+    return this._data.labels
+  }
   fromJson(obj) {
+    if(typeof obj === 'string'){
+      obj = JSON.parse(obj)
+    }
     this._data.type = obj.type || 'location'
     this._data.name = obj.name || []
     this._data.urls = obj.urls || []

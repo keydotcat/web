@@ -64,6 +64,7 @@
 
 <script>
 import LocationCredentialEditor from '@/components/home/data/location_credential_editor'
+import SecretData from '@/classes/secret_data'
 
 function isObjEmpty(obj) {
   for(var key in obj) {
@@ -131,7 +132,7 @@ export default {
       var args = {
         teamId: this.parentVault.tid,
         vaultId: this.parentVault.vid,
-        secretData: this.loc
+        secretData: new SecretData(this.loc)
       }
       var action = 'secrets/create'
       if( this.secret.secretId ) {

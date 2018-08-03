@@ -6,7 +6,7 @@
         <button class="btn btn-primary" type="button" @click="createLocation">New location</button>
       </div>
     </div>
-    <div class="rounded border-top border-left border-right w-90">
+    <div class="rounded border-top border-left border-right w-90 mb-2">
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
         <input type="text" v-model="filter.search" class="form-control mr-5" placeholder="Search">
         <div class="dropdown mr-2 d-flex align-items-center">
@@ -40,27 +40,36 @@
           </div>
         </div>
       </div>
-      <location class="border-bottom" v-for="secret in $store.getters['secrets/filteredSecrets'](filter)" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
+      <location class="border-bottom" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
+      <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
+        <nav aria-label="Page navigation">
+          <ul class="pagination m-0">
+            <li class="page-item" :class="{disabled:pageIdx==0}"><a class="page-link" @click="pageIdx-=1" href="#">Previous</a></li>
+            <li class="page-item" v-for="pid in pagesToFastJump" :class="{active:pageIdx==pid}"><a class="page-link" @click="pageIdx=pid" href="#">{{pid}}</a></li>
+            <li class="page-item" :class="{disabled:pageIdx==numPages-1}"><a class="page-link" @click="pageIdx+=1" href="#">Next</a></li>
+          </ul>
+        </nav>
+      </div>
     </div>
-<div class="modal fade" id="deleteLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Delete location {{secretToDel.name}}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              Are you sure you want to delete {{secretToDel.name}} location?
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No, keep it</button>
-              <button type="button" class="btn btn-primary" @click="deleteSecret">Yes, delete it</button>
-            </div>
+    <div class="modal fade" id="deleteLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Delete location {{secretToDel.name}}</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Are you sure you want to delete {{secretToDel.name}} location?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">No, keep it</button>
+            <button type="button" class="btn btn-primary" @click="deleteSecret">Yes, delete it</button>
           </div>
         </div>
       </div>
+    </div>
 
   </div>
 </template>
@@ -86,7 +95,31 @@
           tid: '',
           vid: '',
           sid: ''
-        }
+        },
+        pageIdx: 0,
+        numLocs: 20
+      }
+    },
+    computed: {
+      allLocations() {
+        return this.$store.getters['secrets/filteredSecrets'](this.filter)
+      },
+      pageLocations() {
+        return this.allLocations.slice(this.pageIdx, this.pageIdx + this.numLocs)
+      },
+      numPages() {
+        return Math.ceil( this.allLocations.length / this.numLocs )
+      },
+      pagesToFastJump() {
+        var pages = []
+        var jumps = [-10, -5, -2, -1, 0, 1, 2, 5, 10]
+        jumps.forEach((jump) => {
+          var t = this.pageIdx + jump
+          if( t >= 0 && t < this.numPages ) {
+            pages.push(t)
+          }
+        })
+        return pages
       }
     },
     methods: {

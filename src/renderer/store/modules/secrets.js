@@ -4,10 +4,12 @@ import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 import Vue from 'vue'
 import Secret from '@/classes/secret'
+import SecretData from '@/classes/secret_data'
 
 const state = () => {
   return {
-    secrets: {}
+    secrets: {},
+    labels: {}
   }
 }
 
@@ -85,8 +87,11 @@ function getVaultKeyFromList( vaults, tid, vid ) {
 
 function updateOrCreate(context, ftor, tid, vid, sid, data) {
   return new Promise((resolve, reject) => {
+    if(!(data instanceof SecretData)) {
+      throw new Error('Expected SecretData object')
+    }
     var vKeys = getVaultKeyFromList(context.rootState[`team.${tid}`].vaults, tid, vid)
-    workerMgr.serializeAndClose(vKeys, data).then((closedData) => {
+    workerMgr.serializeAndClose(vKeys, data.cloneAsObject()).then((closedData) => {
       ftor({teamId: tid, vaultId: vid, secretId: sid, payload: closedData}).then((secret) => {
         workerMgr.openAndDeserialize(vKeys, secret.data).then((openData) => {
           context.commit(mt.SECRET_SET, {teamId: tid, secret: secret, openData: data})

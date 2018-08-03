@@ -44,6 +44,7 @@
 <script>
   import * as mt from '@/store/mutation-types'
   import kdbxweb from 'kdbxweb'
+  import SecretData from '@/classes/secret_data'
 
   const STATUS_INITIAL = 0
   const STATUS_SAVING = 1
@@ -77,16 +78,16 @@
         } else {
           pass = entry.fields.Password.getText()
         }
-        secrets.push({
+        secrets.push(new SecretData({
           type: 'location',
-          name: entry.fields.Title || entry.fields.URL || 'Unnamed',
+          name: entry.fields.Title || (entry.fields.URL ? entry.fields.URL.substring(0, 25) : false ) || 'Unnamed',
           urls: (entry.fields.URL.length > 0 ? [entry.fields.URL] : []),
           creds: [{username: entry.fields.UserName || '', password: pass, type: 'login'}],
           note: entry.fields.Notes,
           labels: ['imported:kdbx', [path, group.name].join('/').replace(/^\//g, '')].concat(entry.tags)
-        })
+        }))
       })
-      secrets = secrets.concat(recurseKdbxGroups(group.groups), `${path}/${group.name}`)
+      secrets = secrets.concat(recurseKdbxGroups(group.groups, `${path}/${group.name}`))
     })
     return secrets
   }
