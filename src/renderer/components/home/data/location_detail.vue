@@ -24,26 +24,7 @@
           </h6>
           <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{$store.getters[`team.${parentVault.tid}/name`]}} / {{parentVault.vid}}</h6>
           <h6 class="card-subtitle m-2">URLs </h6>
-          <ul class="list-group list-group-flush">
-            <li class="list-group-item url-group-item" v-for="(url,idurl) in loc.urls">
-              <span v-if="!isUrlBeingEdited(idurl)">{{url}} <i class="fas fa-edit float-right" @click='editUrl(idurl)'></i></span>
-              <div v-if="isUrlBeingEdited(idurl)" class="input-group w-100">
-                <input type="text" v-model="urlsInEditMode[idurl]" class="form-control" placeholder="Url" aria-label="name">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" @click="saveUrl(idurl)">Save</button>
-                </div>
-              </div>
-            </li>
-            <li class="list-group-item url-group-item" v-if="showNewUrlInput">
-              <div class="input-group w-100">
-                <input type="text" v-model="newUrl" class="form-control" placeholder="Url" aria-label="name">
-                <div class="input-group-append">
-                  <button class="btn btn-outline-secondary" type="button" @click="addUrl">Add</button>
-                </div>
-              </div>
-            </li>
-            <li class="list-group-item url-group-item" @click="showNewUrl"><i class="fas fa-plus"></i> Add new url</li>
-          </ul>
+          <text-list-editor v-model="loc.urls"></text-list-editor>
           <h6 class="card-subtitle m-2" :class="{'text-danger':!isOkCreds}">Credentials</h6>
           <ul class="list-group list-group-flush">
             <li class="list-group-item url-group-item" v-for="(cred,idcred) in loc.creds">
