@@ -20,6 +20,7 @@
           </select>
         </div>
       </h6>
+      <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{$store.getters[`team.${parentVault.tid}/name`]}} / {{parentVault.vid}}</h6>
       <h6 class="card-subtitle m-2">URLs </h6>
       <ul class="list-group list-group-flush">
         <li class="list-group-item url-group-item" v-for="(url,idurl) in loc.urls">

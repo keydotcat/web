@@ -61,14 +61,14 @@ const mutations = {
   },
   [mt.SECRET_UNSET] (state, {teamId, vaultId, secretId}) {
     var sid = `${teamId}.${vaultId}.${secretId}`
-    var secret = Vue.secrets[sid]
+    var secret = state.secrets[sid]
     removeLabelsFromState(state, secret)
     Vue.delete(state.secrets, sid)
   }
 }
 
 function filterPass( secret, filter ) {
-  if( filter.labels.length > 0 ) {
+  if( filter.labels && filter.labels.length > 0 ) {
     var found = secret.data.labels.filter( label => {
       return filter.labels.indexOf(label) > -1
     }).length > 0
@@ -76,17 +76,17 @@ function filterPass( secret, filter ) {
       return false
     }
   }
-  if( filter.teams.length > 0 ) {
+  if( filter.teams && filter.teams.length > 0 ) {
     if( filter.teams.indexOf(secret.teamId) === -1 ) {
       return false
     }
   }
-  if( filter.vaults.length > 0 ) {
+  if( filter.vaults && filter.vaults.length > 0 ) {
     if( filter.vaults.indexOf( `${secret.teamId}/${secret.vaultId}` ) === -1 ) {
       return false
     }
   }
-  return ( filter.search.length === 0 || ( secret.data.name || '' ).toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
+  return ( (!filter.seach || filter.search.length === 0) || ( secret.data.name || '' ).toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
 }
 
 const getters = {

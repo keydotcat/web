@@ -10,6 +10,7 @@
               <li class="nav-item">
                 <a class="nav-link" :class="{'active': activePage == 'user/info'}" href="#" @click="goto('user/info')">Information</a>
                 <a class="nav-link" :class="{'active': activePage == 'user/import'}" href="#" @click="goto('user/import')">Import</a>
+                <a class="nav-link" :class="{'active': activePage == 'user/export'}" href="#" @click="goto('user/export')">Export</a>
               </li>
             </ul>
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
@@ -29,6 +30,7 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+          <msg-display></msg-display>
           <router-view></router-view>
         </main>
       </div>
@@ -36,8 +38,10 @@
 </template>
 
 <script>
+  import MsgDisplay from '@/components/msg_display'
   export default {
     name: 'manage-content',
+    components: { MsgDisplay },
     data () {
       return {}
     },
