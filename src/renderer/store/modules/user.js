@@ -9,6 +9,7 @@ const state = {
   fullname: '',
   id: '',
   publicKeys: '',
+  email: '',
   teams: []
 }
 
@@ -17,6 +18,7 @@ const mutations = {
     state.fullname = payload.fullname
     state.id = payload.id
     state.publicKeys = payload.public_key
+    state.email = payload.email
     state.teams.splice(0, state.teams.length)
     for( var i = 0; i < payload.teams.length; i++){
       state.teams.push(payload.teams[i])
@@ -78,8 +80,15 @@ const actions = {
       }).then((teamInfo) => {
         context.dispatch('loadInfo')
       }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
+        context.commit(mt.MSG_INFO, rootSvc.processError(err), {root: true})
       })
+    })
+  },
+  changeEmail(context, email) {
+    userSvc.changeEmail(email).then((info) => {
+      context.commit(mt.MSG_INFO, 'Email change requested', {root: true})
+    }).catch((err) => {
+      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
   }
 }

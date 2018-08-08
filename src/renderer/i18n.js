@@ -14,7 +14,8 @@ const messages = {
       'invalid_fullname': 'Full name missing',
       'invalid_password': 'Invalid password',
       'invalid_password_repeat': 'Both passwords don\'t match',
-      'not_fount': 'This resource does not seem to exist'
+      'not_fount': 'This resource does not seem to exist',
+      'invalid_attributes': 'Invalid value'
     },
     fields: {
       team_name: 'Team name',

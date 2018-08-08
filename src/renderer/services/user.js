@@ -11,5 +11,10 @@ export default{
     return axios.post(rootSvc.urlRoot + '/team', request, rootSvc.getHeaders())
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
+  },
+  changeEmail (email) {
+    return axios.put(rootSvc.urlRoot + '/user', {email: email}, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
   }
 }
