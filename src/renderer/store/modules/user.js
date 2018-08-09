@@ -90,6 +90,20 @@ const actions = {
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
+  },
+  changePassword(context, password) {
+    return new Promise((resolve, reject) => {
+      workerMgr.closeKeysWithPassword(context.state.id, password).then((data) => {
+        userSvc.changePassword(data.password, data.keys).then((info) => {
+          context.commit(mt.MSG_INFO, 'Password changed', {root: true})
+        }).catch((err) => {
+          context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
+        })
+        resolve(data)
+      }).catch((err) => {
+        context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
+      })
+    })
   }
 }
 

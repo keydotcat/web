@@ -121,6 +121,15 @@ class CryptoWorker {
     ret.password = loginPassword(username, password)
     return { data: ret }
   }
+  closeKeysWithPassword(username, password) {
+    var bKey = keyPassword(this.keys, password)
+    return {
+      data: {
+        keys: closeUserKeysAndPack(this.keys, bKey).keys,
+        password: loginPassword(username, password)
+      }
+    }
+  }
   hashLoginPassword (username, password) {
     return { data: loginPassword(username, password) }
   }
@@ -232,6 +241,9 @@ self.addEventListener('message', function (e) {
         break
       case cmds.OPEN_AND_DESERIALIZE:
         self.postMessage(runner.openAndDeserialize(data.vaultKeys, data.data))
+        break
+      case cmds.CLOSE_KEYS_WITH_PASSWORD:
+        self.postMessage(runner.closeKeysWithPassword(data.username, data.password))
         break
       default:
         self.postMessage({ error: 'Unknown command ' + data.cmd })

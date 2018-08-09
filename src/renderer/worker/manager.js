@@ -60,6 +60,9 @@ class Manager {
   openAndDeserialize(vaultKeys, data){
     return this.newTask(cmds.OPEN_AND_DESERIALIZE, { vaultKeys: vaultKeys, data: data })
   }
+  closeKeysWithPassword(username, password){
+    return this.newTask(cmds.CLOSE_KEYS_WITH_PASSWORD, { username: username, password: password })
+  }
 }
 
 export default new Manager()

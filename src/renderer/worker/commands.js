@@ -8,7 +8,8 @@ var WorkerCmds = {
   PASS_CHANGE: 'pass_change',
   EXPORT: 'export',
   SERIALIZE_AND_CLOSE: 'serialize_and_close',
-  OPEN_AND_DESERIALIZE: 'open_and_deserialize'
+  OPEN_AND_DESERIALIZE: 'open_and_deserialize',
+  CLOSE_KEYS_WITH_PASSWORD: 'close_keys_with_password'
 }
 
 export default WorkerCmds
