@@ -9,7 +9,8 @@ import SecretData from '@/classes/secret_data'
 const state = () => {
   return {
     secrets: {},
-    labels: {}
+    labels: {},
+    loading: 0
   }
 }
 
@@ -43,6 +44,9 @@ function addLabelsToState(state, secret) {
 }
 
 const mutations = {
+  [mt.SECRET_SET_LOADING] (state, loading) {
+    state.loading += loading
+  },
   [mt.SECRET_SET] (state, {teamId, secret, openData}) {
     var secretObj = new Secret({
       secretId: secret.id,
@@ -86,7 +90,7 @@ function filterPass( secret, filter ) {
       return false
     }
   }
-  return ( (!filter.seach || filter.search.length === 0) || ( secret.data.name || '' ).toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
+  return ( ((filter.search || '').length === 0) || ( secret.data.name || '' ).toLowerCase().indexOf( filter.search.toLowerCase() ) > -1 )
 }
 
 const getters = {
@@ -145,13 +149,17 @@ function updateOrCreate(context, ftor, tid, vid, sid, data) {
 
 const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
+    context.commit(mt.SECRET_SET_LOADING, 1)
     teamSvc.loadSecrets(teamId).then((resp) => {
       resp.secrets.forEach((secret) => {
         var vKeys = getVaultKeyFromList( vaults, teamId, secret.vault )
+        context.commit(mt.SECRET_SET_LOADING, 1)
         workerMgr.openAndDeserialize(vKeys, secret.data).then((data) => {
           context.commit(mt.SECRET_SET, {teamId: teamId, secret: secret, openData: data})
+          context.commit(mt.SECRET_SET_LOADING, -1)
         })
       })
+      context.commit(mt.SECRET_SET_LOADING, -1)
     })
   },
   update(context, { teamId, vaultId, secretId, secretData }) {
