@@ -3,7 +3,7 @@
     <li class="list-group-item url-group-item" :class="{'px-0':isEditing(idlabel)}"v-for="(label,idlabel) in inner">
       <span v-if="!isEditing(idlabel)" @click="edit(idlabel)">{{label}} <i class="fas fa-edit float-right text-muted" @click='edit(idlabel)'></i></span>
       <div v-if="isEditing(idlabel)" class="input-group w-100 m-0">
-        <input type="text" v-model="editing[idlabel]" v-on:keyup.enter="save(idlabel)" v-on:keyup.escape="cancel(idlabel)" class="form-control" placeholder="Label" aria-label="name">
+        <input type="text" v-model="editing[idlabel]" v-on:keyup.enter="save(idlabel)" v-on:keyup.escape="cancel(idlabel)" class="form-control" :placeholder="name" aria-label="name">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button" @click="remove(idlabel)"><i class="fa fa-trash" aria-hidden="true"></i></button>
         </div>
@@ -11,14 +11,14 @@
     </li>
     <li class="list-group-item url-group-item" v-if="showNew">
       <div class="input-group w-100">
-        <input type="text" v-model="newEntry" class="form-control" placeholder="Label" aria-label="name">
+        <input type="text" v-model="newEntry" class="form-control" :placeholder="name" aria-label="name">
         <div class="input-group-append">
           <button class="btn btn-outline-secondary" type="button" @click="cancelAdd">Cancel</button>
           <button class="btn btn-outline-secondary" type="button" @click="addEntry">Add</button>
         </div>
       </div>
     </li>
-    <li class="list-group-item url-group-item" @click="showNew=true"><i class="fas fa-plus"></i> Add new label</li>
+    <li class="list-group-item url-group-item" @click="showNew=true"><i class="fas fa-plus"></i> Add new {{name}}</li>
   </ul>
 </template>
 
@@ -30,7 +30,8 @@
       event: 'change'
     },
     props: {
-      list: Array
+      list: Array,
+      name: String
     },
     data() {
       //Make an editable copy of the text list

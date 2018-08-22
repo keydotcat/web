@@ -1,6 +1,7 @@
 import cmds from './commands'
 import nacl from 'tweetnacl'
 import util from 'tweetnacl-util'
+import argon2 from 'argon2-browser'
 
 function merge (a, b) {
   var c = new Uint8Array(a.length + b.length)
@@ -9,16 +10,49 @@ function merge (a, b) {
   return c
 }
 
-function keyPassword (keys, password) {
-  var bPass = util.decodeUTF8(password)
+async function keyPassword (keys, password) {
+  /*var bPass = util.decodeUTF8(password)
   var hHash = nacl.hash(merge(keys.sign.publicKey, bPass))
   return hHash.subarray(0, nacl.secretbox.keyLength)
+  */
+  console.log(keys)
+  var res = await argon2.hash({
+    // required
+    pass: util.decodeUTF8(password),
+    salt: keys.sign.publicKey,
+    // optional
+    time: 2, // the number of iterations
+    mem: 1024, // used memory, in KiB
+    hashLen: nacl.secretbox.keyLength, // desired hash length
+    parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
+    type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
+    distPath: '.'
+  })
+  return res.hash
 }
 
-function loginPassword (username, password) {
-  var bUser = util.decodeUTF8(username)
+async function loginPassword (username, password) {
+  /*var bUser = util.decodeUTF8(username)
   var bPass = util.decodeUTF8(password)
   return util.encodeBase64(nacl.hash(merge(bUser, bPass)))
+  */
+  var salt = username
+  while(salt.length < 128) {
+    salt = salt + username
+  }
+  var res = await argon2.hash({
+    // required
+    pass: util.decodeUTF8(password),
+    salt: util.decodeUTF8(salt),
+    // optional
+    time: 2, // the number of iterations
+    mem: 1024, // used memory, in KiB
+    hashLen: 32, // desired hash length
+    parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
+    type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
+    distPath: '.'
+  })
+  return util.encodeBase64(res.hash)
 }
 
 // signPub + sign( cipherPub ) + sign( nonce + secretbox( signPriv + cipherPriv ) )
@@ -38,7 +72,7 @@ function packPublicKeys (keys) {
 
 // publickKeys is signPub + sign( cipherPub )
 // secretKeys is sign( nonce + secretbox( signPriv + cipherPriv ) )
-function unpackAndOpenKeys (srvKeys, password) {
+async function unpackAndOpenKeys (srvKeys, password) {
   var pubKeys = util.decodeBase64(srvKeys.publicKeys)
   var keys = {
     sign: {
@@ -55,7 +89,7 @@ function unpackAndOpenKeys (srvKeys, password) {
     return null
   }
   keys.cipher.publicKey = verified.slice(0, nacl.box.publicKeyLength)
-  var bKey = keyPassword(keys, password)
+  var bKey = await keyPassword(keys, password)
   var nonce = verified.slice(0, nacl.secretbox.nonceLength)
   var opened = nacl.secretbox.open(verified.slice(nacl.secretbox.nonceLength), nonce, bKey)
   if (opened == null) {
@@ -112,37 +146,39 @@ class CryptoWorker {
   constructor () {
     this.keys = { sign: {}, cipher: {} }
   }
-  generateUserKeys (username, password) {
+  async generateUserKeys (username, password) {
     this.keys.sign = nacl.sign.keyPair()
     this.keys.cipher = nacl.box.keyPair()
-    var bKey = keyPassword(this.keys, password)
+    var bKey = await keyPassword(this.keys, password)
     var ret = closeUserKeysAndPack(this.keys, bKey)
     ret.publicKeys = packPublicKeys(this.keys)
-    ret.password = loginPassword(username, password)
+    ret.password = await loginPassword(username, password)
     return { data: ret }
   }
-  closeKeysWithPassword(username, password) {
-    var bKey = keyPassword(this.keys, password)
+  async closeKeysWithPassword(username, password) {
+    var bKey = await keyPassword(this.keys, password)
+    var hPass = await loginPassword(username, password)
     return {
       data: {
         keys: closeUserKeysAndPack(this.keys, bKey).keys,
-        password: loginPassword(username, password)
+        password: hPass
       }
     }
   }
-  hashLoginPassword (username, password) {
-    return { data: loginPassword(username, password) }
+  async hashLoginPassword (username, password) {
+    var hPass = await loginPassword(username, password)
+    return { data: hPass }
   }
-  setKeysFromServer (password, storeToken, srvKeys) {
+  async setKeysFromServer (password, storeToken, srvKeys) {
     this.keys = { sign: {}, cipher: {} }
-    this.keys = unpackAndOpenKeys(srvKeys, password)
+    this.keys = await unpackAndOpenKeys(srvKeys, password)
     if (this.keys == null) {
       return { error: 'cannot_open_keys' }
     }
-    var bToken = keyPassword(this.keys, storeToken)
+    var bToken = await keyPassword(this.keys, storeToken)
     return { data: closeUserKeysAndPack(this.keys, bToken).keys }
   }
-  setKeysFromStore (storedKeys, storeToken) {
+  async setKeysFromStore (storedKeys, storeToken) {
     this.keys = { sign: {}, cipher: {} }
     var bKeys = util.decodeBase64(storedKeys)
     var sep = nacl.sign.publicKeyLength + nacl.sign.signatureLength + nacl.box.publicKeyLength
@@ -150,7 +186,7 @@ class CryptoWorker {
       publicKeys: util.encodeBase64(bKeys.slice(0, sep)),
       secretKeys: util.encodeBase64(bKeys.slice(sep))
     }
-    this.keys = unpackAndOpenKeys(keys, storeToken)
+    this.keys = await unpackAndOpenKeys(keys, storeToken)
     if (this.keys == null) {
       return { error: 'cannot_open_keys' }
     }
@@ -186,13 +222,12 @@ class CryptoWorker {
     }
     return {data: data}
   }
-  passwordChange (password) {
-    var bKey = keyPassword(this.keys, password)
+  async passwordChange (password) {
+    var bKey = await keyPassword(this.keys, password)
     return { data: closeUserKeysAndPack(this.keys, bKey).secretKeys }
   }
   serializeAndClose(vaultClosedKeys, obj) {
     var vaultKeys = unpackAndOpenVaultKeys(vaultClosedKeys, this.keys)
-    console.log('herst', obj)
     var serialized = util.decodeUTF8(JSON.stringify(obj))
     var tmpKeys = nacl.box.keyPair()
     var nonce = nacl.randomBytes(nacl.box.nonceLength)
@@ -211,21 +246,21 @@ class CryptoWorker {
 }
 var runner = new CryptoWorker()
 
-self.addEventListener('message', function (e) {
+self.addEventListener('message', async function (e) {
   try {
     var data = e.data
     switch (data.cmd) {
       case cmds.GEN_KEY:
-        self.postMessage(runner.generateUserKeys(data.username, data.password))
+        self.postMessage(await runner.generateUserKeys(data.username, data.password))
         break
       case cmds.HASH_PASS:
-        self.postMessage(runner.hashLoginPassword(data.username, data.password))
+        self.postMessage(await runner.hashLoginPassword(data.username, data.password))
         break
       case cmds.LOAD_KEY_FROM_SERVER:
-        self.postMessage(runner.setKeysFromServer(data.password, data.storeToken, data.srvKeys))
+        self.postMessage(await runner.setKeysFromServer(data.password, data.storeToken, data.srvKeys))
         break
       case cmds.LOAD_KEY_FROM_STORE:
-        self.postMessage(runner.setKeysFromStore(data.storedKeys, data.storeToken))
+        self.postMessage(await runner.setKeysFromStore(data.storedKeys, data.storeToken))
         break
       case cmds.GEN_VAULT_KEY:
         self.postMessage(runner.generateVaultKeys(data.admins))
@@ -243,7 +278,7 @@ self.addEventListener('message', function (e) {
         self.postMessage(runner.openAndDeserialize(data.vaultKeys, data.data))
         break
       case cmds.CLOSE_KEYS_WITH_PASSWORD:
-        self.postMessage(runner.closeKeysWithPassword(data.username, data.password))
+        self.postMessage(await runner.closeKeysWithPassword(data.username, data.password))
         break
       default:
         self.postMessage({ error: 'Unknown command ' + data.cmd })

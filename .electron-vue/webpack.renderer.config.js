@@ -124,6 +124,7 @@ let rendererConfig = {
     }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
+    new CopyWebpackPlugin([{from: 'node_modules/argon2-browser/dist/argon2-asm.min.js'}])
   ],
   output: {
     filename: '[name].js',

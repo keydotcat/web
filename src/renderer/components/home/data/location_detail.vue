@@ -24,7 +24,7 @@
           </h6>
           <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{$store.getters[`team.${parentVault.tid}/name`]}} / {{parentVault.vid}}</h6>
           <h6 class="card-subtitle m-2">URLs </h6>
-          <text-list-editor v-model="loc.urls"></text-list-editor>
+          <text-list-editor :name='URL' v-model="loc.urls"></text-list-editor>
           <h6 class="card-subtitle m-2" :class="{'text-danger':!isOkCreds}">Credentials</h6>
           <ul class="list-group list-group-flush">
             <li class="list-group-item url-group-item" v-for="(cred,idcred) in loc.creds">
@@ -41,7 +41,7 @@
         </div>
         <div class="col col-sm-3 border-left">
           <h6 class="card-subtitle m-2">Labels</h6>
-          <text-list-editor v-model="loc.labels"></text-list-editor>
+          <text-list-editor :name="label" v-model="loc.labels"></text-list-editor>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@
         <button class="btn btn-primary" type="button" @click="createLocation">New location</button>
       </div>
     </div>
-    <div class="rounded border-top border-left border-right w-90 mb-2">
+    <div class="rounded border w-90 mb-2">
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-center justify-content-end p-1">
         <input type="text" v-model="filter.search" class="form-control mr-5" placeholder="Search">
         <i v-if="$store.state.secrets.loading > 0" class="fas fa-spinner spinner"></i>
