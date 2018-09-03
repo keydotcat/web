@@ -95,6 +95,7 @@ let webConfig = {
     new webpack.DefinePlugin({
       'process.env.IS_WEB': 'true'
     }),
+    new CopyWebpackPlugin([{from: 'node_modules/argon2-browser/dist/argon2-asm.min.js'}])
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin()
   ],

@@ -64,7 +64,7 @@ const actions = {
       context.commit(mt.USER_LOAD_INFO, info)
       router.push('/home/data/locations')
     }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err))
+      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
   },
   createTeam(context, payload) {

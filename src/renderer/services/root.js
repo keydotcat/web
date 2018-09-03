@@ -19,6 +19,9 @@ class RootSvc {
   setToken (tok) {
     this.sessionToken = tok
   }
+  setCsrf (c) {
+    this.csrf = c
+  }
   getHeaders() {
     var headers = { 'X-Locale': i18n.locale }
     if (this.sessionToken) {

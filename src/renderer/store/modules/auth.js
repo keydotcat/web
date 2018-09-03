@@ -72,7 +72,7 @@ const actions = {
     workerMgr.hashPassword(payload.username, payload.password).then((hPass) => {
       authSvc.login({ id: payload.username, password: hPass, want_csrf: true })
         .then((response) => {
-          context.dispatch('sessionStoreServerSession', { sessionData: response, password: payload.password })
+          context.dispatch('sessionStoreServerSession', { sessionData: response, password: payload.password, csrf: response.csrf })
           context.commit(mt.AUTH_STOP_WORK)
           router.push('/home')
         }).catch((err) => {

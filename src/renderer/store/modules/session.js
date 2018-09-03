@@ -1,6 +1,7 @@
 import workerMgr from '@/worker/manager'
 import rootSvc from '@/services/root'
 import sessionSvc from '@/services/session'
+import authSvc from '@/services/auth'
 import * as mt from '@/store/mutation-types'
 import router from '@/router'
 
@@ -35,6 +36,10 @@ const mutations = {
   [mt.SESSION_LOGIN] (state, payload) {
     state.sessionToken = payload.token
     rootSvc.setToken(state.sessionToken)
+    console.log('Hrast', payload.csrf)
+    if( payload.csrf ) {
+      rootSvc.setCsrf(payload.csrf)
+    }
   },
   [mt.SESSION_SET_LOADING] (state, loading) {
     state.loading = loading
@@ -47,7 +52,7 @@ const actions = {
     workerMgr.setKeysFromServer( payload.password, payload.sessionData.store_token, srvKeys ).then((storedKeys) => {
       var sData = { keys: storedKeys, uid: payload.sessionData.user_id, token: payload.sessionData.session_token }
       localStorage.setItem(LS_KEYCAT_SESSION_DATA, JSON.stringify(sData))
-      context.commit(mt.SESSION_LOGIN, {token: payload.sessionData.session_token})
+      context.commit(mt.SESSION_LOGIN, {token: payload.sessionData.session_token, csrf: payload.csrf})
       router.push('/home')
     })
   },
@@ -60,11 +65,12 @@ const actions = {
     }
     var data = JSON.parse( stub )
     context.commit(mt.SESSION_LOGIN, data)
-    console.log('ssessss log')
-    sessionSvc.getSessionData(data).then((sessionData) => {
+    authSvc.getSession().then((sessionData) => {
+      if( sessionData.csrf ) {
+        rootSvc.setCsrf(sessionData.csrf)
+      }
       workerMgr.setKeysFromStore( sessionData.store_token, data.keys ).then((ok) => {
         router.push('/home')
-        console.log('ssessss log done')
         context.commit(mt.SESSION_SET_LOADING, false)
       })
     }).catch(() => {
@@ -77,7 +83,7 @@ const actions = {
       context.commit(mt.SESSION_LOGOUT)
       router.push('/')
     }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err))
+      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
   }
 }
