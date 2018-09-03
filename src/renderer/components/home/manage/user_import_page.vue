@@ -43,8 +43,8 @@
 
 <script>
   import * as mt from '@/store/mutation-types'
-  import kdbxweb from 'kdbxweb'
   import SecretData from '@/classes/secret_data'
+  import kdbxweb from 'kdbxweb'
 
   const STATUS_INITIAL = 0
   const STATUS_SAVING = 1
@@ -128,9 +128,7 @@
     methods: {
       importDatabase() {
         this.currentStatus = STATUS_PROCESSING
-        console.log('tstatss')
         setTimeout(() => {
-          console.log('tstatss')
           var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(this.importPass))
           kdbxweb.Kdbx.load(fContainer.getData(), credentials).then(db => {
             recurseKdbxGroups(db.groups, '').forEach( secret => {

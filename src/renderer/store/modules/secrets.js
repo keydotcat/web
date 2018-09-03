@@ -151,6 +151,20 @@ const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
     context.commit(mt.SECRET_SET_LOADING, 1)
     teamSvc.loadSecrets(teamId).then((resp) => {
+      var vsa = resp.secrets.map((secret) => {
+        return {
+          v: getVaultKeyFromList( vaults, teamId, secret.vault ),
+          s: secret.data
+        }
+      })
+      context.commit(mt.SECRET_SET_LOADING, 1)
+      workerMgr.openAndDeserializeBulk(vsa).then((dataList) => {
+        dataList.forEach((data, ip) => {
+          context.commit(mt.SECRET_SET, {teamId: teamId, secret: resp.secrets[ip], openData: data})
+        })
+      })
+      context.commit(mt.SECRET_SET_LOADING, -1)
+      /*
       resp.secrets.forEach((secret) => {
         var vKeys = getVaultKeyFromList( vaults, teamId, secret.vault )
         context.commit(mt.SECRET_SET_LOADING, 1)
@@ -160,6 +174,7 @@ const actions = {
         })
       })
       context.commit(mt.SECRET_SET_LOADING, -1)
+      */
     })
   },
   update(context, { teamId, vaultId, secretId, secretData }) {

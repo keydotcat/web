@@ -19,7 +19,8 @@
           <input type="checkbox" v-model='form.remember'> Remember me
         </label>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" :disabled="working" type="submit">{{$t('login.send')}}</button>
+      <button class="btn btn-lg btn-primary btn-block" v-if="!working" type="submit">{{$t('login.send')}}</button>
+      <button class="btn btn-lg btn-primary btn-block" disabled v-if="working" type="submit"><i class="fas fa-spinner spinner"></i></button>
     </form>
   </div>
 </template>
@@ -78,39 +79,47 @@
 </script>
 
 <style>
-  .centerFlex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+.centerFlex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
   .form-signin {
-  width: 100%;
-  max-width: 330px;
-  padding: 15px;
-  margin: auto;
-}
-.form-signin .checkbox {
-  font-weight: 400;
-}
-.form-signin .form-control {
-  position: relative;
-  box-sizing: border-box;
-  height: auto;
-  padding: 10px;
-  font-size: 16px;
-}
-.form-signin .form-control:focus {
-  z-index: 2;
-}
-.form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
-}
-.form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-}
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+  }
+  .form-signin .checkbox {
+    font-weight: 400;
+  }
+  .form-signin .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+  }
+  .form-signin .form-control:focus {
+    z-index: 2;
+  }
+  .form-signin input[type="email"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  .form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 
+  .spinner {
+    animation: spin 1.5s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
 </style>

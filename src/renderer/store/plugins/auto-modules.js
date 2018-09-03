@@ -18,6 +18,13 @@ class ModuleLoader {
       this.store.dispatch(`${mid}/loadInfo`, tid)
     }
   }
+  logout(){
+    for(var tid in this.teams) {
+      var mid = 'team.' + tid
+      this.store.unregisterModule(mid)
+    }
+    this.team = {}
+  }
 }
 
 export default store => {
@@ -25,6 +32,9 @@ export default store => {
   store.subscribe((mutation, state) => {
     if (mutation.type === 'user/' + mt.USER_LOAD_INFO) {
       ml.syncTeams(state.user.teams)
+    }
+    if (mutation.type === mt.SESSION_LOGOUT) {
+      ml.logout()
     }
   })
 }

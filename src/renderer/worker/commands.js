@@ -9,6 +9,7 @@ var WorkerCmds = {
   EXPORT: 'export',
   SERIALIZE_AND_CLOSE: 'serialize_and_close',
   OPEN_AND_DESERIALIZE: 'open_and_deserialize',
+  OPEN_AND_DESERIALIZE_BULK: 'open_and_deserialize_bulk',
   CLOSE_KEYS_WITH_PASSWORD: 'close_keys_with_password'
 }
 

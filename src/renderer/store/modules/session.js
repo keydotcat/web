@@ -55,7 +55,6 @@ const actions = {
     context.commit(mt.SESSION_LOAD_STATE_FROM_STORAGE)
     var stub = localStorage.getItem(LS_KEYCAT_SESSION_DATA)
     if( !stub || stub.length === 0 ) {
-      console.log('HNasrts')
       context.commit(mt.SESSION_SET_LOADING, false)
       return
     }

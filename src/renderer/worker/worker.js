@@ -15,14 +15,13 @@ async function keyPassword (keys, password) {
   var hHash = nacl.hash(merge(keys.sign.publicKey, bPass))
   return hHash.subarray(0, nacl.secretbox.keyLength)
   */
-  console.log(keys)
   var res = await argon2.hash({
     // required
     pass: util.decodeUTF8(password),
     salt: keys.sign.publicKey,
     // optional
-    time: 2, // the number of iterations
-    mem: 1024, // used memory, in KiB
+    time: 3, // the number of iterations
+    mem: 2 * 1024, // used memory, in KiB
     hashLen: nacl.secretbox.keyLength, // desired hash length
     parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
     type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
@@ -45,9 +44,9 @@ async function loginPassword (username, password) {
     pass: util.decodeUTF8(password),
     salt: util.decodeUTF8(salt),
     // optional
-    time: 2, // the number of iterations
-    mem: 1024, // used memory, in KiB
-    hashLen: 32, // desired hash length
+    time: 3, // the number of iterations
+    mem: 2 * 1024, // used memory, in KiB
+    hashLen: 18, // desired hash length
     parallelism: 1, // desired parallelism (will be computed in parallel only for PNaCl)
     type: argon2.ArgonType.Argon2i, // or argon2.ArgonType.Argon2d
     distPath: '.'
@@ -243,6 +242,13 @@ class CryptoWorker {
     var opened = nacl.box.open(data, nonce, tmpPubKey, vaultKeys.cipher.secretKey)
     return {data: JSON.parse(util.encodeUTF8(opened))}
   }
+  openAndDeserializeBulk(vsa) {
+    return {
+      data: vsa.map((data) => {
+        return this.openAndDeserialize(data.v, data.s).data
+      })
+    }
+  }
 }
 var runner = new CryptoWorker()
 
@@ -276,6 +282,9 @@ self.addEventListener('message', async function (e) {
         break
       case cmds.OPEN_AND_DESERIALIZE:
         self.postMessage(runner.openAndDeserialize(data.vaultKeys, data.data))
+        break
+      case cmds.OPEN_AND_DESERIALIZE_BULK:
+        self.postMessage(runner.openAndDeserializeBulk(data.vsa))
         break
       case cmds.CLOSE_KEYS_WITH_PASSWORD:
         self.postMessage(await runner.closeKeysWithPassword(data.username, data.password))
