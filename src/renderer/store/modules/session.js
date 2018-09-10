@@ -40,7 +40,6 @@ const mutations = {
   [mt.SESSION_LOGIN] (state, payload) {
     state.sessionToken = payload.token
     rootSvc.setToken(state.sessionToken)
-    console.log('Hrast', payload.csrf)
     if( payload.csrf ) {
       rootSvc.setCsrf(payload.csrf)
     }

@@ -149,7 +149,6 @@ function updateOrCreate(context, ftor, tid, vid, sid, data) {
 
 const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
-    context.commit(mt.SECRET_SET_LOADING, 1)
     teamSvc.loadSecrets(teamId).then((resp) => {
       var vsa = resp.secrets.map((secret) => {
         return {

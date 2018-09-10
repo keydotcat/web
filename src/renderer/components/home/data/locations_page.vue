@@ -11,8 +11,7 @@
         <input type="text" v-model="filter.search" class="form-control mr-5" placeholder="Search">
         <i v-if="$store.state.secrets.loading > 0" class="fas fa-spinner spinner"></i>
         <div class="dropdown mr-2 d-flex align-items-center">
-          <button class="btn btn-sm dropdown-toggle"
-                  :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Teams 
           </button>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
