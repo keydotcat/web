@@ -22,11 +22,6 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 rootSvc.setHTTP(Vue.http)
-if (process.env.IS_WEB) {
-  rootSvc.setUrlRoot('/api')
-} else {
-  rootSvc.setUrlRoot('http://pen.key.cat/api')
-}
 
 axios.defaults.withCredentials = 'include'
 
