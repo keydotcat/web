@@ -94,7 +94,8 @@ let webConfig = {
     }),
     new webpack.DefinePlugin({
       'process.env.IS_WEB': 'true',
-      'process.env.VERSION': require('child_process').execSync('git describe --abbrev=8 --dirty --always --tags').toString().trim()
+      'process.env.VERSION': require('child_process').execSync('git describe --abbrev=8 --dirty --always --tags').toString().trim(),
+      'process.env.NODE_ENV': `"${process.env.NODE_ENV}"` || '"production"'
     }),
     new CopyWebpackPlugin([{from: 'node_modules/argon2-browser/dist/argon2-asm.min.js'}]),
     new webpack.HotModuleReplacementPlugin(),

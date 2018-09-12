@@ -18,10 +18,12 @@ const mutations = {
   [mt.SESSION_LOAD_STATE_FROM_STORAGE] (state) {
     var urlRoot = localStorage.getItem(LS_KEYCAT_URL_ROOT)
     if( urlRoot === null ) {
-      if (process.env.IS_WEB) {
+      if (process.env.NODE_ENV === 'development') {
+        urlRoot = 'http://localhost:23764/api'
+      } else if (process.env.IS_WEB) {
         urlRoot = window.location.origin + window.location.pathname + 'api'
       } else {
-        urlRoot = process.env.NODE_ENV === 'development' ? 'http://localhost:23764/api' : 'https://pen.key.cat/api'
+        urlRoot = 'https://pen.key.cat/api'
       }
     }
     state.urlRoot = urlRoot
