@@ -53,12 +53,16 @@ const mutations = {
 
 const actions = {
   sessionStoreServerSession (context, payload) {
-    var srvKeys = { publicKeys: payload.sessionData.public_key, secretKeys: payload.sessionData.secret_key }
-    workerMgr.setKeysFromServer( payload.password, payload.sessionData.store_token, srvKeys ).then((storedKeys) => {
-      var sData = { keys: storedKeys, uid: payload.sessionData.user_id, token: payload.sessionData.session_token }
-      localStorage.setItem(LS_KEYCAT_SESSION_DATA, JSON.stringify(sData))
-      context.commit(mt.SESSION_LOGIN, {token: payload.sessionData.session_token, csrf: payload.csrf})
-      router.push('/home')
+    return new Promise((resolve, reject) => {
+      var srvKeys = { publicKeys: payload.sessionData.public_key, secretKeys: payload.sessionData.secret_key }
+      workerMgr.setKeysFromServer( payload.password, payload.sessionData.store_token, srvKeys ).then((storedKeys) => {
+        var sData = { keys: storedKeys, uid: payload.sessionData.user_id, token: payload.sessionData.session_token }
+        localStorage.setItem(LS_KEYCAT_SESSION_DATA, JSON.stringify(sData))
+        context.commit(mt.SESSION_LOGIN, {token: payload.sessionData.session_token, csrf: payload.csrf})
+        resolve()
+      }).catch((err) => {
+        reject(err)
+      })
     })
   },
   sessionLoadFromLocalStorage (context) {
@@ -86,6 +90,8 @@ const actions = {
   sessionLogout (context) {
     sessionSvc.deleteSession({token: context.state.sessionToken}).then(() => {
       context.commit(mt.SESSION_LOGOUT)
+      context.commit('secrets/' + mt.SECRET_CLEAR_ALL)
+      context.commit('user/' + mt.USER_CLEAR)
       router.push('/')
     }).catch((err) => {
       context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})

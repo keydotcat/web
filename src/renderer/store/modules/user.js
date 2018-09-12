@@ -23,6 +23,13 @@ const mutations = {
     for( var i = 0; i < payload.teams.length; i++){
       state.teams.push(payload.teams[i])
     }
+  },
+  [mt.USER_CLEAR] (state) {
+    state.fullname = ''
+    state.id = ''
+    state.publicKeys = ''
+    state.email = ''
+    state.teams.splice(0, state.teams.length)
   }
 }
 

@@ -13,6 +13,7 @@ export const MSG_ERROR = 'MSG_ERROR'
 export const MSG_CLEAR = 'MSG_CLEAR'
 
 export const USER_LOAD_INFO = 'USER_LOAD_INFO'
+export const USER_CLEAR = 'USER_CLEAR'
 
 export const TEAM_LOAD_INFO = 'TEAM_LOAD_INFO'
 export const TEAM_LOAD_USERS = 'TEAM_LOAD_USERS'
@@ -20,4 +21,5 @@ export const TEAM_LOAD_VAULT = 'TEAM_LOAD_VAULT'
 
 export const SECRET_SET = 'SECRET_SET'
 export const SECRET_UNSET = 'SECRET_UNSET'
+export const SECRET_CLEAR_ALL = 'SECRET_CLEAR_ALL'
 export const SECRET_SET_LOADING = 'SECRET_SET_LOADING'

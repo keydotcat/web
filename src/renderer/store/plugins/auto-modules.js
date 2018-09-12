@@ -23,7 +23,7 @@ class ModuleLoader {
       var mid = 'team.' + tid
       this.store.unregisterModule(mid)
     }
-    this.team = {}
+    this.teams = {}
   }
 }
 

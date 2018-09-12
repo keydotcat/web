@@ -47,6 +47,10 @@ const mutations = {
   [mt.SECRET_SET_LOADING] (state, loading) {
     state.loading += loading
   },
+  [mt.SECRET_CLEAR_ALL] () {
+    state.secrets = {}
+    state.labels = {}
+  },
   [mt.SECRET_SET] (state, {teamId, secret, openData}) {
     var secretObj = new Secret({
       secretId: secret.id,
