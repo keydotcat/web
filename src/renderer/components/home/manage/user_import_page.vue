@@ -23,7 +23,7 @@
               Drag your file(s) here to begin<br> or click to browse
             </p>
             <p v-if="isSaving">
-              Uploading {{ fileName }}...
+              Uploading {{ fileName }}... (this may take a while)
             </p>
             <p v-if="isLoaded">
               Uploaded {{ fileName }}
@@ -129,18 +129,24 @@
       importDatabase() {
         this.currentStatus = STATUS_PROCESSING
         setTimeout(() => {
+          var secrets = []
           var credentials = new kdbxweb.Credentials(kdbxweb.ProtectedValue.fromString(this.importPass))
           kdbxweb.Kdbx.load(fContainer.getData(), credentials).then(db => {
             recurseKdbxGroups(db.groups, '').forEach( secret => {
-              this.$store.dispatch( 'secrets/create', {
-                teamId: this.parentVault.tid,
-                vaultId: this.parentVault.vid,
-                secretData: secret
-              })
+              secrets.push(secret)
+            })
+            console.log('Starting cipher and save')
+            this.currentStatus = STATUS_SAVING
+            this.$store.dispatch( 'secrets/createList', {
+              teamId: this.parentVault.tid,
+              vaultId: this.parentVault.vid,
+              secretList: secrets
+            }).then( () => {
+              this.currentStatus = STATUS_LOADED
             })
           }, err => {
             this.currentStatus = STATUS_LOADED
-            this.$store.commit(mt.MSG_ERROR, err.message)
+            this.$store.commit(mt.MSG_ERROR, err.message, {root: true})
           })
         }, 1000)
       },

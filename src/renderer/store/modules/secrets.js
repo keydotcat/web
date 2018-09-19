@@ -151,6 +151,23 @@ function updateOrCreate(context, ftor, tid, vid, sid, data) {
   })
 }
 
+function unpackTeamSecrets( context, teamId, vaults, resp ) {
+  var vsa = resp.secrets.map((secret) => {
+    return {
+      v: getVaultKeyFromList( vaults, teamId, secret.vault ),
+      s: secret.data
+    }
+  })
+  context.commit(mt.SECRET_SET_LOADING, 1)
+  return workerMgr.openAndDeserializeBulk(vsa).then((dataList) => {
+    dataList.forEach((data, ip) => {
+      context.commit(mt.SECRET_SET, {teamId: teamId, secret: resp.secrets[ip], openData: data})
+    })
+    context.commit(mt.MSG_INFO, 'Import successful', {root: true})
+    context.commit(mt.SECRET_SET_LOADING, -1)
+  })
+}
+
 const actions = {
   loadSecretsFromTeam(context, { teamId, vaults }) {
     teamSvc.loadSecrets(teamId).then((resp) => {
@@ -185,6 +202,20 @@ const actions = {
   },
   create(context, { teamId, vaultId, secretData }) {
     return updateOrCreate(context, teamSvc.createSecret, teamId, vaultId, '', secretData)
+  },
+  createList(context, { teamId, vaultId, secretList }) {
+    var vKeys = getVaultKeyFromList(context.rootState[`team.${teamId}`].vaults, teamId, vaultId)
+    var proms = secretList.map( data => {
+      return workerMgr.serializeAndClose(vKeys, data.cloneAsObject())
+    })
+    return Promise.all( proms ).then( closedList => {
+      var payload = closedList.map(c => { return {data: c} })
+      return teamSvc.createSecretList({teamId: teamId, vaultId: vaultId, payload: payload}).then(resp => {
+        return unpackTeamSecrets(context, teamId, context.rootState[`team.${teamId}`].vaults, resp)
+      })
+    }).catch( err => {
+      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
+    })
   },
   delete(context, { teamId, vaultId, secretId }) {
     teamSvc.deleteSecret(teamId, vaultId, secretId).then((resp) => {

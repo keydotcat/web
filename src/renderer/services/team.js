@@ -49,6 +49,11 @@ export default{
       .then((response) => Promise.resolve(response.data))
       .catch((error) => Promise.reject(error))
   },
+  createSecretList({teamId, vaultId, payload}) {
+    return axios.post(`${rootSvc.urlRoot}/team/${teamId}/vault/${vaultId}/secrets`, {secrets: payload}, rootSvc.getHeaders())
+      .then((response) => Promise.resolve(response.data))
+      .catch((error) => Promise.reject(error))
+  },
   updateSecret({teamId, vaultId, secretId, payload}) {
     return axios.put(`${rootSvc.urlRoot}/team/${teamId}/vault/${vaultId}/secret/${secretId}`, {data: payload}, rootSvc.getHeaders())
       .then((response) => Promise.resolve(response.data))
