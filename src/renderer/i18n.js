@@ -66,6 +66,7 @@ const messages = {
 }
 
 Vue.use(VueI18n)
+
 export default new VueI18n({
   locale: 'en', // set locale
   fallbackLocale: 'en',

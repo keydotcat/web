@@ -1,6 +1,7 @@
 import workerMgr from '@/worker/manager'
 import authSvc from '@/services/auth'
 import rootSvc from '@/services/root'
+import toastSvc from '@/services/toast'
 
 import router from '@/router'
 import * as mt from '@/store/mutation-types'
@@ -21,6 +22,9 @@ const mutations = {
   },
   [mt.AUTH_REGISTER_FAILURE] (state, payload) {
     state.working = false
+    if(payload === undefined){
+      return
+    }
     if(payload.data.error){
       state.error = payload.data.error
     }
@@ -60,7 +64,7 @@ const actions = {
         authSvc.register(registerPayload)
           .then((response) => {
             context.commit(mt.AUTH_STOP_WORK)
-            context.commit(mt.MSG_INFO, 'register.done')
+            toastSvc.success('register.done')
             router.push('/login')
           })
           .catch((err) => context.commit(mt.AUTH_REGISTER_FAILURE, err.response))
@@ -94,11 +98,10 @@ const actions = {
     authSvc.confirmEmail({token: payload.token})
       .then((response) => {
         context.commit(mt.AUTH_STOP_WORK)
-        context.commit(mt.MSG_INFO, 'confirm_email.done')
+        toastSvc.success('confirm_email.done')
         router.push('/login')
       }).catch((err) => {
         context.commit(mt.AUTH_STOP_WORK)
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
   }
 }

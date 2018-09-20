@@ -93,8 +93,6 @@ const actions = {
       context.commit('secrets/' + mt.SECRET_CLEAR_ALL)
       context.commit('user/' + mt.USER_CLEAR)
       router.push('/')
-    }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
   }
 }

@@ -14,8 +14,7 @@ import store from './store'
 
 import rootSvc from './services/root'
 
-//global.jQuery = jquery
-//window.$ = jquery
+import utilSvc from './services/util'
 
 if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
 Vue.http = Vue.prototype.$http = axios
@@ -24,8 +23,16 @@ Vue.config.productionTip = false
 rootSvc.setHTTP(Vue.http)
 
 axios.defaults.withCredentials = 'include'
-
-//Vue.use(VueMaterial)
+axios.interceptors.response.use(
+  function(response) {
+    console.log('Got ok response', response)
+    return response
+  },
+  function(err) {
+    utilSvc.toastAxiosError(err)
+    return Promise.reject(err)
+  }
+)
 
 /* eslint-disable no-new */
 new Vue({

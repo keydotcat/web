@@ -32,7 +32,7 @@ class RootSvc {
     }
     return { headers: headers }
   }
-  processError(httpError, prefix ){
+  processError(httpError, prefix){
     if( !httpError.response ) {
       return 'errors.network'
     }

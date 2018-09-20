@@ -15,9 +15,9 @@
         </div>
       </div>
       <div class="checkbox mb-3">
-        <label>
+        <!--label>
           <input type="checkbox" v-model='form.remember'> Remember me
-        </label>
+        </label-->
       </div>
       <button class="btn btn-lg btn-primary btn-block" v-if="!working" type="submit">{{$t('login.send')}}</button>
       <button class="btn btn-lg btn-primary btn-block" disabled v-if="working" type="submit"><i class="fas fa-spinner spinner"></i></button>
