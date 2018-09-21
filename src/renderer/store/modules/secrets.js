@@ -43,6 +43,23 @@ function addLabelsToState(state, secret) {
   })
 }
 
+function addSecret(state, teamId, secret, openData) {
+  var secretObj = new Secret({
+    secretId: secret.id,
+    vaultId: secret.vault,
+    teamId: teamId,
+    vaultVersion: secret.vault_version,
+    createdAt: secret.created_at,
+    updatedAt: secret.updated_at,
+    data: openData
+  })
+  if(secretObj.fullId in state.secrets) {
+    removeLabelsFromState(state, secretObj)
+  }
+  Vue.set(state.secrets, secretObj.fullId, secretObj)
+  addLabelsToState(state, secretObj)
+}
+
 const mutations = {
   [mt.SECRET_SET_LOADING] (state, loading) {
     state.loading += loading
@@ -52,20 +69,12 @@ const mutations = {
     state.labels = {}
   },
   [mt.SECRET_SET] (state, {teamId, secret, openData}) {
-    var secretObj = new Secret({
-      secretId: secret.id,
-      vaultId: secret.vault,
-      teamId: teamId,
-      vaultVersion: secret.vault_version,
-      createdAt: secret.created_at,
-      updatedAt: secret.updated_at,
-      data: openData
+    addSecret(state, teamId, secret, openData)
+  },
+  [mt.SECRET_SET_BULK] (state, secretList) {
+    secretList.forEach((data) => {
+      addSecret(state, data.teamId, data.secret, data.openData)
     })
-    if(secretObj.fullId in state.secrets) {
-      removeLabelsFromState(state, secretObj)
-    }
-    Vue.set(state.secrets, secretObj.fullId, secretObj)
-    addLabelsToState(state, secretObj)
   },
   [mt.SECRET_UNSET] (state, {teamId, vaultId, secretId}) {
     var sid = `${teamId}.${vaultId}.${secretId}`
@@ -178,10 +187,11 @@ const actions = {
       })
       context.commit(mt.SECRET_SET_LOADING, vsa.length)
       workerMgr.openAndDeserializeBulk(vsa).then((dataList) => {
-        dataList.forEach((data, ip) => {
-          context.commit(mt.SECRET_SET, {teamId: teamId, secret: resp.secrets[ip], openData: data})
-          context.commit(mt.SECRET_SET_LOADING, -1)
-        })
+        console.log('ABOUT')
+        context.commit(mt.SECRET_SET_BULK, dataList.map((data, ip) => {
+          return {teamId: teamId, secret: resp.secrets[ip], openData: data}
+        }))
+        context.commit(mt.SECRET_SET_LOADING, -vsa.length)
       })
       /*
       resp.secrets.forEach((secret) => {
@@ -192,7 +202,6 @@ const actions = {
           context.commit(mt.SECRET_SET_LOADING, -1)
         })
       })
-      context.commit(mt.SECRET_SET_LOADING, -1)
       */
     })
   },

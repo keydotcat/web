@@ -15,6 +15,7 @@ class Manager {
       var p = self.promise_queue.shift()
       var payload = e.data
       if (payload.data != null) {
+        console.log('Drast')
         p.resolve(payload.data)
       } else {
         toastSvc.error('Worker error ' + (e.error || e))

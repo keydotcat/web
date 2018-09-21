@@ -38,8 +38,8 @@
           </div>
         </div>
       </div>
-      <location class="border-bottom" v-if="!loading" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
-      <div class="border-bottom p-3 text-center" v-if="loading">
+      <location class="border-bottom" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
+      <div class="border-bottom p-3 text-center" v-if="loading && pageLocations.length == 0">
         Decrypting {{$store.state.secrets.loading}} secrets...
       </div>
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
