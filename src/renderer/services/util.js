@@ -21,7 +21,7 @@ function extractErrorMsg(httpError, prefix) {
 
 const utilSvc = {
   toastAxiosError: (err) => {
-    var idx = extractErrorMsg(err)
+    var idx = extractErrorMsg(err, err.config['errorPrefix'])
     toastSvc.error(idx)
     return err
   },

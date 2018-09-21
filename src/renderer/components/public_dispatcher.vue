@@ -9,18 +9,14 @@
       <a class="btn btn-outline-primary" href="#" @click="goto('register')">Sign up</a>
     </div>
     <div class='expandHeight'>
-      <msg-display></msg-display>
       <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
-  import MsgDisplay from '@/components/msg_display'
-
   export default {
     name: 'public-dispatcher',
-    components: { MsgDisplay },
     methods: {
       goto( where ) {
         this.$router.push( `/${where}` )

@@ -1,8 +1,6 @@
 import workerMgr from '@/worker/manager'
 import authSvc from '@/services/auth'
-import rootSvc from '@/services/root'
 import toastSvc from '@/services/toast'
-
 import router from '@/router'
 import * as mt from '@/store/mutation-types'
 
@@ -83,12 +81,10 @@ const actions = {
           }).then(() => {
             context.commit(mt.AUTH_STOP_WORK)
             router.push('/home')
-          }).catch((err) => {
-            context.commit(mt.MSG_ERROR, rootSvc.processError(err, 'login.error.'), {root: true})
+          }).catch(() => {
             context.commit(mt.AUTH_STOP_WORK)
           })
-        }).catch((err) => {
-          context.commit(mt.MSG_ERROR, rootSvc.processError(err, 'login.error.'), {root: true})
+        }).catch(() => {
           context.commit(mt.AUTH_STOP_WORK)
         })
     })
@@ -100,10 +96,22 @@ const actions = {
         context.commit(mt.AUTH_STOP_WORK)
         toastSvc.success('confirm_email.done')
         router.push('/login')
-      }).catch((err) => {
+      }).catch(() => {
+        context.commit(mt.AUTH_STOP_WORK)
+      })
+  },
+  authResendConfirmEmail(context, payload) {
+    context.commit(mt.AUTH_START_WORK)
+    authSvc.resendConfirmEmail({email: payload.email})
+      .then((response) => {
+        context.commit(mt.AUTH_STOP_WORK)
+        toastSvc.success('resend_email.done')
+        router.push('/login')
+      }).catch(() => {
         context.commit(mt.AUTH_STOP_WORK)
       })
   }
+
 }
 
 export default {

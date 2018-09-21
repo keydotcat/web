@@ -25,7 +25,6 @@ rootSvc.setHTTP(Vue.http)
 axios.defaults.withCredentials = 'include'
 axios.interceptors.response.use(
   function(response) {
-    console.log('Got ok response', response)
     return response
   },
   function(err) {

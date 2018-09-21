@@ -1,10 +1,10 @@
-import rootSvc from '@/services/root'
 import teamSvc from '@/services/team'
 import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 import Vue from 'vue'
 import Secret from '@/classes/secret'
 import SecretData from '@/classes/secret_data'
+import toastSvc from '@/services/toast'
 
 const state = () => {
   return {
@@ -144,7 +144,6 @@ function updateOrCreate(context, ftor, tid, vid, sid, data) {
           resolve(secret)
         })
       }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
         reject(err)
       })
     })
@@ -163,7 +162,7 @@ function unpackTeamSecrets( context, teamId, vaults, resp ) {
     dataList.forEach((data, ip) => {
       context.commit(mt.SECRET_SET, {teamId: teamId, secret: resp.secrets[ip], openData: data})
     })
-    context.commit(mt.MSG_INFO, 'Import successful', {root: true})
+    toastSvc.success('Import successful')
     context.commit(mt.SECRET_SET_LOADING, -1)
   })
 }
@@ -182,8 +181,8 @@ const actions = {
         dataList.forEach((data, ip) => {
           context.commit(mt.SECRET_SET, {teamId: teamId, secret: resp.secrets[ip], openData: data})
         })
+        context.commit(mt.SECRET_SET_LOADING, -1)
       })
-      context.commit(mt.SECRET_SET_LOADING, -1)
       /*
       resp.secrets.forEach((secret) => {
         var vKeys = getVaultKeyFromList( vaults, teamId, secret.vault )
@@ -213,8 +212,6 @@ const actions = {
       return teamSvc.createSecretList({teamId: teamId, vaultId: vaultId, payload: payload}).then(resp => {
         return unpackTeamSecrets(context, teamId, context.rootState[`team.${teamId}`].vaults, resp)
       })
-    }).catch( err => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
   },
   delete(context, { teamId, vaultId, secretId }) {

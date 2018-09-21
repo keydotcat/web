@@ -95,7 +95,7 @@
           sid: ''
         },
         pageIdx: 0,
-        numLocs: 20
+        numLocs: 50
       }
     },
     computed: {

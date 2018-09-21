@@ -12,7 +12,6 @@
         </nav>
 
         <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
-          <msg-display></msg-display>
           <router-view></router-view>
         </main>
       </div>
@@ -20,10 +19,8 @@
 </template>
 
 <script>
-  import MsgDisplay from '@/components/msg_display'
   export default {
     name: 'data-content',
-    components: { MsgDisplay },
     data () {
       return {}
     },

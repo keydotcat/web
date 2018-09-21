@@ -14,10 +14,13 @@
           {{errors.password}}
         </div>
       </div>
-      <div class="checkbox mb-3">
-        <!--label>
+      <!--div class="checkbox mb-3">
+        <label>
           <input type="checkbox" v-model='form.remember'> Remember me
-        </label-->
+        </label>
+      </div-->
+      <div class="mb-3 resend-email">
+        <a href="#" @click="goto('resend_email')">Haven't you reveived the confirmation email?</a>
       </div>
       <button class="btn btn-lg btn-primary btn-block" v-if="!working" type="submit">{{$t('login.send')}}</button>
       <button class="btn btn-lg btn-primary btn-block" disabled v-if="working" type="submit"><i class="fas fa-spinner spinner"></i></button>
@@ -51,6 +54,9 @@
       }
     },
     methods: {
+      goto(where) {
+        this.$router.push( `/${where}` )
+      },
       submit() {
         const form = this.form
         for( var k in this.form ) {
@@ -112,6 +118,11 @@
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
+  }
+
+  .resend-email {
+    font-size: x-small;
+    text-align: right;
   }
 
   .spinner {

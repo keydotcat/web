@@ -1,6 +1,7 @@
 import cmds from './commands'
 /* eslint import/no-webpack-loader-syntax: off */
 import Worker from 'worker-loader!./worker.js'
+import toastSvc from '@/services/toast'
 
 class Manager {
   constructor () {
@@ -16,6 +17,7 @@ class Manager {
       if (payload.data != null) {
         p.resolve(payload.data)
       } else {
+        toastSvc.error('Worker error ' + (e.error || e))
         p.reject(payload)
       }
     }
@@ -33,6 +35,7 @@ class Manager {
         self.worker.postMessage(task)
       } catch (e) {
         console.log('ERROR', e)
+        toastSvc.error('Worker error ' + e)
       }
     })
   }

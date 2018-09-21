@@ -1,6 +1,6 @@
-import rootSvc from '@/services/root'
 import workerMgr from '@/worker/manager'
 import userSvc from '@/services/user'
+import toastSvc from '@/services/toast'
 
 import router from '@/router'
 import * as mt from '@/store/mutation-types'
@@ -70,8 +70,6 @@ const actions = {
     userSvc.loadInfo().then((info) => {
       context.commit(mt.USER_LOAD_INFO, info)
       router.push('/home/data/locations')
-    }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
     })
   },
   createTeam(context, payload) {
@@ -85,30 +83,23 @@ const actions = {
           keys: vaultKeys.keys
         }
       }).then((teamInfo) => {
+        toastSvc.success('Team created')
         context.dispatch('loadInfo')
-      }).catch((err) => {
-        context.commit(mt.MSG_INFO, rootSvc.processError(err), {root: true})
       })
     })
   },
   changeEmail(context, email) {
     userSvc.changeEmail(email).then((info) => {
-      context.commit(mt.MSG_INFO, 'Email change requested', {root: true})
-    }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
+      toastSvc.success('Email change requested')
     })
   },
   changePassword(context, password) {
     return new Promise((resolve, reject) => {
       workerMgr.closeKeysWithPassword(context.state.id, password).then((data) => {
         userSvc.changePassword(data.password, data.keys).then((info) => {
-          context.commit(mt.MSG_INFO, 'Password changed', {root: true})
-        }).catch((err) => {
-          context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
+          toastSvc.success('Password changed')
         })
         resolve(data)
-      }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err), {root: true})
       })
     })
   }

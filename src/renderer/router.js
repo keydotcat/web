@@ -5,6 +5,7 @@ import PublicDispatcher from '@/components/public_dispatcher'
 import LoginPage from '@/components/public/login_page'
 import RegisterPage from '@/components/public/register_page'
 import ConfirmEmailPage from '@/components/public/confirm_email_page'
+import ResendEmailPage from '@/components/public/resend_email_page'
 
 import HomePage from '@/components/home_page'
 
@@ -92,6 +93,10 @@ var router = new VueRouter({
         {
           path: 'confirm_email/:token',
           component: ConfirmEmailPage
+        },
+        {
+          path: 'resend_email',
+          component: ResendEmailPage
         }
       ],
       redirect: '/login'

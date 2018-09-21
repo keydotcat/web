@@ -40,6 +40,10 @@ const messages = {
       token: 'Confirmation token',
       done: 'You have confirmed your email'
     },
+    resend_email: {
+      title: 'Resend confirmation email',
+      done: 'Confirmation mail has been sent if the email exists'
+    },
     login: {
       welcome: 'Please login',
       send: 'Login',

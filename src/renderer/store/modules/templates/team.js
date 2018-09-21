@@ -1,4 +1,3 @@
-import rootSvc from '@/services/root'
 import teamSvc from '@/services/team'
 import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
@@ -97,8 +96,6 @@ function promoteUser(context, uid, pubKey, vaultKeys) {
   workerMgr.cipherVaultKeysForUser(vaultKeys, pubKey).then((userVaultKeys) => {
     teamSvc.promoteUser(context.state.id, uid, userVaultKeys).then((teamData) => {
       context.commit(mt.TEAM_LOAD_USERS, teamData)
-    }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   })
 }
@@ -108,15 +105,11 @@ const actions = {
     teamSvc.loadInfo(tid).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
       context.dispatch('secrets/loadSecretsFromTeam', { teamId: teamData.id, vaults: teamData.vaults }, {root: true})
-    }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   },
   invite (context, invite) {
     teamSvc.invite(context.state.id, invite).then((teamData) => {
       context.commit(mt.TEAM_LOAD_INFO, teamData)
-    }).catch((err) => {
-      context.commit(mt.MSG_ERROR, rootSvc.processError(err))
     })
   },
   promoteUsers (context, users) {
@@ -145,8 +138,6 @@ const actions = {
     for (var i = 0; i < users.length; i++ ) {
       teamSvc.demoteUser(context.state.id, users[i].id).then((teamData) => {
         context.commit(mt.TEAM_LOAD_USERS, teamData)
-      }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
     }
   },
@@ -181,8 +172,6 @@ const actions = {
       }
       teamSvc.addUserToVault(tid, vaultId, userKeys).then((vaultData) => {
         context.commit(mt.TEAM_LOAD_VAULT, {team: tid, vault: vaultData})
-      }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
     })
   },
@@ -191,8 +180,6 @@ const actions = {
     for (var i = 0; i < users.length; i++ ) {
       teamSvc.removeUserFromVault(context.state.id, vaultId, users[i].id).then((vaultData) => {
         context.commit(mt.TEAM_LOAD_VAULT, {team: tid, vault: vaultData})
-      }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
     }
   },
@@ -211,8 +198,6 @@ const actions = {
       }
       teamSvc.createVault(context.state.id, name, vaultKeys).then((vaultData) => {
         context.commit(mt.TEAM_LOAD_VAULT, {team: tid, vault: vaultData})
-      }).catch((err) => {
-        context.commit(mt.MSG_ERROR, rootSvc.processError(err))
       })
     })
   }

@@ -42,7 +42,7 @@
 </template>
 
 <script>
-  import * as mt from '@/store/mutation-types'
+  import toastSvc from '@/services/toast'
   import SecretData from '@/classes/secret_data'
   import kdbxweb from 'kdbxweb'
 
@@ -143,10 +143,10 @@
               secretList: secrets
             }).then( () => {
               this.currentStatus = STATUS_LOADED
+              toastSvc.success('Imported entries')
             })
-          }, err => {
+          }, () => {
             this.currentStatus = STATUS_LOADED
-            this.$store.commit(mt.MSG_ERROR, err.message, {root: true})
           })
         }, 1000)
       },

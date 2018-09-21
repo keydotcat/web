@@ -55,9 +55,6 @@
           case 'duplicate':
             return this.$t('register.error.duplicate')
         }
-        if(authState.error) {
-          return this.$t('errors.' + authState.error.toLowerCase().replace(' ', '_'))
-        }
         return this.static_errors.username
       },
       fullnameError () {
