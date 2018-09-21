@@ -1,9 +1,9 @@
 <template>
-  <div>
-    <div v-if="$store.state.session.loading" class="jumbotron">
+  <div class="expandHeight">
+    <div v-if="loading" class="expandHeight d-flex justify-content-center align-items-center">
       <h1 class="display-4">We're loading!</h1>
     </div>
-    <router-view v-if="!$store.state.session.loading"></router-view>
+    <router-view v-if="!loading"></router-view>
   </div>
 </template>
 
@@ -15,6 +15,11 @@
     beforeCreate () {
       this.$store.commit(mt.SESSION_SET_LOADING, true)
       this.$store.dispatch('sessionLoadFromLocalStorage')
+    },
+    computed: {
+      loading() {
+        return this.$store.state.session.loading
+      }
     }
   }
 </script>
@@ -29,7 +34,7 @@
     /*font-family: 'Open Sans',serif;*/
     height: 100%;
   }
-  
+
   .expandHeight{
     height: 100%;
   }

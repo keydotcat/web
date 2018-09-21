@@ -176,12 +176,12 @@ const actions = {
           s: secret.data
         }
       })
-      context.commit(mt.SECRET_SET_LOADING, 1)
+      context.commit(mt.SECRET_SET_LOADING, vsa.length)
       workerMgr.openAndDeserializeBulk(vsa).then((dataList) => {
         dataList.forEach((data, ip) => {
           context.commit(mt.SECRET_SET, {teamId: teamId, secret: resp.secrets[ip], openData: data})
+          context.commit(mt.SECRET_SET_LOADING, -1)
         })
-        context.commit(mt.SECRET_SET_LOADING, -1)
       })
       /*
       resp.secrets.forEach((secret) => {

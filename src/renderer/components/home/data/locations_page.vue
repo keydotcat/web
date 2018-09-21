@@ -9,7 +9,7 @@
     <div class="rounded border w-90 mb-2">
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-center justify-content-end p-1">
         <input type="text" v-model="filter.search" class="form-control mr-5" placeholder="Search">
-        <i v-if="$store.state.secrets.loading > 0" class="fas fa-spinner spinner"></i>
+        <i v-if="loading" class="fas fa-spinner spinner"></i>
         <div class="dropdown mr-2 d-flex align-items-center">
           <button class="btn btn-sm dropdown-toggle" :class="{'bg-success':filter.teams.length>0,'bg-transparent':filter.teams.length===0}" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Teams 
@@ -38,7 +38,10 @@
           </div>
         </div>
       </div>
-      <location class="border-bottom" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
+      <location class="border-bottom" v-if="!loading" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
+      <div class="border-bottom p-3 text-center" v-if="loading">
+        Decrypting {{$store.state.secrets.loading}} secrets...
+      </div>
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
         <nav aria-label="Page navigation">
           <ul class="pagination m-0">
@@ -99,6 +102,9 @@
       }
     },
     computed: {
+      loading() {
+        return this.$store.state.secrets.loading > 0
+      },
       allLocations() {
         return this.$store.getters['secrets/filteredSecrets'](this.filter)
       },
