@@ -114,7 +114,25 @@ function unpackPublicKeys (publicStub) {
   return keys
 }
 
+var openedVaultKeys = {}
+
+function hashString(s) {
+  var hash = 0
+  if (s.length === 0) {
+    return hash
+  }
+  for (var i = 0; i < s.length; i++) {
+    hash = ((hash << 5) - hash) + s.charCodeAt(i)
+    hash = hash & hash // Convert to 32bit integer
+  }
+  return hash
+}
+
 function unpackAndOpenVaultKeys (vCKeys, userKeys) {
+  var vH = hashString(vCKeys)
+  if( vH in openedVaultKeys ) {
+    return openedVaultKeys[vH]
+  }
   var pubKeys = util.decodeBase64(vCKeys.publicKeys)
   var vKeys = {
     sign: { publicKey: pubKeys.slice(0, nacl.sign.publicKeyLength) },
@@ -138,6 +156,7 @@ function unpackAndOpenVaultKeys (vCKeys, userKeys) {
   if (vKeys.cipher.secretKey.length !== nacl.box.secretKeyLength) {
     return null
   }
+  openedVaultKeys[vH] = vKeys
   return vKeys
 }
 
