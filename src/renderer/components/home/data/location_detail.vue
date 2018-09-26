@@ -6,7 +6,7 @@
       </h5>
       <h5 class="card-title" v-if='bEditingName'>
         <div class="input-group w-100">
-          <input type="text" v-model="loc.name" class="form-control" placeholder="Location name" aria-label="name">
+          <input type="text" v-model="loc.name" v-on:keyup.enter="bEditingName=false" class="form-control" placeholder="Location name" aria-label="name">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button" @click="bEditingName=false">Set name</button>
           </div>
