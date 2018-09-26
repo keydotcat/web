@@ -1,17 +1,27 @@
 <template>
   <div class='expandHeight'>
-    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
-      <h5 class="my-0 mr-md-auto font-weight-normal">Key cat</h5>
-      <nav class="my-2 my-md-0 mr-md-3">
-        <a class="p-2 text-dark" href="#">Info</a>
-        <a class="p-2 text-dark" href="#" @click="goto('login')">Login</a>
-      </nav>
-      <a class="btn btn-outline-primary" href="#" @click="goto('register')">Sign up</a>
-    </div>
+    <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom clearfix mb-4">
+        <a class="navbar-brand" href="#">Key cat</a>
+        <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item mr-2">
+              <a href="#" class="nav-link text-dark" @click="goto('login')">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="btn btn-outline-primary" href="#" @click="goto('register')">Sign up</a>
+            </li>
+          </ul>
+        </div>
+    </nav>
+
     <div class='expandHeight'>
       <router-view></router-view>
     </div>
-  </div>
+    </div>
 </template>
 
 <script>
@@ -31,7 +41,7 @@
 </script>
 
 <style>
-  .el-menu > .goright {
-    float: right !important;
-  }
+.el-menu > .goright {
+  float: right !important;
+}
 </style>
