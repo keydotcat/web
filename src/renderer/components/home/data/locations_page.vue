@@ -109,7 +109,8 @@
         return this.$store.getters['secrets/filteredSecrets'](this.filter)
       },
       pageLocations() {
-        return this.allLocations.slice(this.pageIdx, this.pageIdx + this.numLocs)
+        var start = this.pageIdx * this.numLocs
+        return this.allLocations.slice(start, start + this.numLocs)
       },
       numPages() {
         return Math.ceil( this.allLocations.length / this.numLocs )
