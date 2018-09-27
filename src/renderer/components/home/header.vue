@@ -7,6 +7,12 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <span class="switch switch-sm nav-link">
+            <input type="checkbox" v-model="enableAutoLogout" class="switch" id="switch-id">
+            <label class="m-0"for="switch-id">Auto-logout</label>
+          </span>
+        </li>
         <li class="nav-item" :class="{'active': activePage == 'data' }">
           <a href="#" class="nav-link" @click="goto('data')">
             Your data
@@ -33,8 +39,16 @@
 </template>
 
 <script>
+  //import toggle from 'bootstrap-toggle'
+
   export default {
     name: 'home-header',
+    data() {
+      return {
+        idleMinutes: 1,
+        enableAutoLogout: true
+      }
+    },
     methods: {
       logout() {
         this.$store.dispatch('sessionLogout')
@@ -42,6 +56,28 @@
       goto( where ) {
         this.$router.push( `/home/${where}` )
       }
+    },
+    mounted() {
+      var timer
+      var self = this
+
+      function autoLogout() {
+        console.log('Autolog')
+        if( self.enableAutoLogout ) {
+          console.log('LOGOUT')
+          self.logout()
+        }
+      }
+
+      function resetTimer() {
+        clearTimeout(timer)
+        console.log('jsrt', Math.ceil(self.idleMinutes * 60000))
+        timer = setTimeout(autoLogout, Math.ceil(self.idleMinutes * 60000))
+      }
+
+      document.onmousemove = resetTimer
+      document.onkeypress = resetTimer
+      resetTimer()
     },
     computed: {
       activePage () {
