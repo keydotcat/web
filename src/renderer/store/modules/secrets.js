@@ -187,7 +187,6 @@ const actions = {
       })
       context.commit(mt.SECRET_SET_LOADING, vsa.length)
       workerMgr.openAndDeserializeBulk(vsa).then((dataList) => {
-        console.log('ABOUT')
         context.commit(mt.SECRET_SET_BULK, dataList.map((data, ip) => {
           return {teamId: teamId, secret: resp.secrets[ip], openData: data}
         }))
