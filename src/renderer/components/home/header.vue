@@ -62,16 +62,13 @@
       var self = this
 
       function autoLogout() {
-        console.log('Autolog')
         if( self.enableAutoLogout ) {
-          console.log('LOGOUT')
           self.logout()
         }
       }
 
       function resetTimer() {
         clearTimeout(timer)
-        console.log('jsrt', Math.ceil(self.idleMinutes * 60000))
         timer = setTimeout(autoLogout, Math.ceil(self.idleMinutes * 60000))
       }
 
