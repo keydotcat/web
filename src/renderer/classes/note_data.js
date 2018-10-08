@@ -1,8 +1,12 @@
+import $ from 'jquery'
+
 export default class NoteData {
   constructor(obj) {
     this._data = {
       type: 'note',
-      data: ''
+      name: '',
+      data: '',
+      labels: []
     }
     if(obj){
       this.fromJson(obj)
@@ -24,12 +28,11 @@ export default class NoteData {
     if(obj.type !== 'location'){
       throw new Error('Invalid object type ' + obj.type)
     }
+    this._data.name = obj.name || ''
     this._data.data = obj.data || ''
+    this._data.labels = obj.labels || []
   }
   cloneAsObject() {
-    return {
-      type: 'note',
-      data: this._data.data
-    }
+    return $.extend(true, {}, this._data)
   }
 }

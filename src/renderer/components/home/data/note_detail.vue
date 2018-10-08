@@ -57,6 +57,7 @@ export default {
       tid: this.secret.teamId,
       vid: this.secret.vaultId
     }
+    console.log('nononon', note)
     return {
       note: note,
       bEditingName: false,
@@ -79,7 +80,7 @@ export default {
       return vaults
     },
     linesInNote() {
-      var nl = this.note.note.split(/\r\n|\r|\n/).length
+      var nl = this.note.data.split(/\r\n|\r|\n/).length
       return (nl < 10 ? nl : 10)
     },
     isOkName(){
