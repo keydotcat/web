@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid">
       <div class="row">
-        <nav class="col-lg-2 col-xl-1 d-none d-md-block sidebar">
+        <nav class="col-2 col-xl-1 d-none d-md-block sidebar">
           <div class="sidebar-sticky">
             <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
               <span>
@@ -16,7 +16,7 @@
           </div>
         </nav>
 
-        <main role="main" class="col-lg-10 ml-sm-auto col-xl-11 px-4">
+        <main role="main" class="col-10 col-xl-11 ml-sm-auto px-4">
           <router-view></router-view>
         </main>
       </div>

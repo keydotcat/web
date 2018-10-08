@@ -19,7 +19,7 @@
     },
     methods: {
       newSecret() {
-        return new Secret()
+        return Secret.createLocation()
       }
     }
   }

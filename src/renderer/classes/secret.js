@@ -41,4 +41,12 @@ export default class Secret {
       data: this.data.cloneAsObject()
     }
   }
+
+  static createLocation(){
+    return new Secret({data: new LocationData()})
+  }
+
+  static createNote(){
+    return new Secret({data: new NoteData()})
+  }
 }
