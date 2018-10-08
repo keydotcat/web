@@ -44,7 +44,7 @@
     <div v-if="displayCreds && secret.data.note.length > 0" class="w-100 container border-top">
       <div class="row">
         <div class="col-sm-2 p-1 mr-2 text-right">Notes</div>
-        <div class="col-sm border-left p-1">{{secret.data.note}}</div>
+        <pre class="col-sm border-left p-1 m-0 secret-note">{{secret.data.note}}</pre>
       </div>
     </div>
   </div>
@@ -88,4 +88,5 @@ export default {
 <style>
 div > .border-bottom:last-child { border-bottom: none!important;  }
 .hide-input { width: 0px; }
+.secret-note { font-family: 'Lato'; }
 </style>
