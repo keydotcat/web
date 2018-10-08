@@ -22,17 +22,17 @@
         </nav>
       </div>
     </div>
-    <div class="modal fade" id="deleteLocationModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="deleteNoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Delete location {{secretToDel.name}}</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Delete note {{secretToDel.name}}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
           <div class="modal-body">
-            Are you sure you want to delete {{secretToDel.name}} location?
+            Are you sure you want to delete {{secretToDel.name}} note?
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">No, keep it</button>
@@ -99,7 +99,7 @@
         this.secretToDel.tid = secret.teamId
         this.secretToDel.vid = secret.vaultId
         this.secretToDel.sid = secret.secretId
-        $('#deleteLocationModal').modal('show')
+        $('#deleteNoteModal').modal('show')
       },
       deleteSecret() {
         this.$store.dispatch('secrets/delete', {
@@ -107,7 +107,7 @@
           vaultId: this.secretToDel.vid,
           secretId: this.secretToDel.sid
         })
-        $('#deleteLocationModal').modal('hide')
+        $('#deleteNoteModal').modal('hide')
       },
       createNote () {
         this.$router.push( `/home/data/new_note` )

@@ -21,6 +21,9 @@ export default class NoteData {
   get data(){
     return this._data.name
   }
+  get name(){
+    return this._data.name
+  }
   get labels() {
     return this._data.labels
   }

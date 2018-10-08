@@ -15,6 +15,7 @@ import NotesPage from '@/components/home/data/notes_page'
 import NewLocationPage from '@/components/home/data/new_location_page'
 import NewNotePage from '@/components/home/data/new_note_page'
 import EditLocationPage from '@/components/home/data/edit_location_page'
+import EditNotePage from '@/components/home/data/edit_note_page'
 import NewTeamPage from '@/components/home/new_team_page'
 import ManageContent from '@/components/home/manage_content'
 import UserInfoPage from '@/components/home/manage/user_info_page'
@@ -42,7 +43,8 @@ var router = new VueRouter({
             { path: 'locations', component: LocationsPage },
             { path: 'location/:sid', component: EditLocationPage },
             { path: 'new_note', component: NewNotePage },
-            { path: 'notes', component: NotesPage }
+            { path: 'notes', component: NotesPage },
+            { path: 'notes/:sid', component: EditNotePage }
           ]
         },
         {
