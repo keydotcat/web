@@ -40,6 +40,7 @@
 
 <script>
   //import toggle from 'bootstrap-toggle'
+  const LS_KEYCAT_AUTO_LOGOUT = 'kcAutoLogout'
 
   export default {
     name: 'home-header',
@@ -50,7 +51,7 @@
       }
     },
     beforeMount() {
-      switch (localStorage.getItem('kcAL')) {
+      switch (localStorage.getItem(LS_KEYCAT_AUTO_LOGOUT)) {
         case '1':
           this.enableAutoLogout = true
           break
@@ -67,7 +68,7 @@
         this.$router.push( `/home/${where}` )
       },
       saveAutoLogout(){
-        localStorage.setItem('kcAL', this.enableAutoLogout ? '1' : '0')
+        localStorage.setItem(LS_KEYCAT_AUTO_LOGOUT, this.enableAutoLogout ? '1' : '0')
       }
     },
     mounted() {

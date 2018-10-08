@@ -5,8 +5,8 @@ import authSvc from '@/services/auth'
 import * as mt from '@/store/mutation-types'
 import router from '@/router'
 
-const LS_KEYCAT_URL_ROOT = 'lsKeyCatUrlRoot'
-const LS_KEYCAT_SESSION_DATA = 'lsKeyCatSessionData'
+const LS_KEYCAT_URL_ROOT = 'kcRoot'
+const LS_KEYCAT_SESSION_DATA = 'kcSessionData'
 
 const state = {
   loading: false,
