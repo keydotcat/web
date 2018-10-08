@@ -116,20 +116,23 @@ function unpackPublicKeys (publicStub) {
 
 var openedVaultKeys = {}
 
-function hashString(s) {
+function hashObject(obj) {
   var hash = 0
-  if (s.length === 0) {
-    return hash
-  }
-  for (var i = 0; i < s.length; i++) {
-    hash = ((hash << 5) - hash) + s.charCodeAt(i)
-    hash = hash & hash // Convert to 32bit integer
+  for(var k in obj) {
+    var s = obj[k]
+    if (s.length === 0) {
+      return hash
+    }
+    for (var i = 0; i < s.length; i++) {
+      hash = ((hash << 5) - hash) + s.charCodeAt(i)
+      hash = hash & hash // Convert to 32bit integer
+    }
   }
   return hash
 }
 
 function unpackAndOpenVaultKeys (vCKeys, userKeys) {
-  var vH = hashString(vCKeys)
+  var vH = hashObject(vCKeys)
   if( vH in openedVaultKeys ) {
     return openedVaultKeys[vH]
   }
