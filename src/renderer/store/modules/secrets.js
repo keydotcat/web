@@ -108,11 +108,12 @@ function filterPass( secret, filter ) {
 
 const getters = {
   filteredSecrets: state => {
-    return filter => {
+    return (type, filter) => {
       var filtered = []
       for( var sid in state.secrets ) {
-        if( filterPass( state.secrets[sid], filter ) ) {
-          filtered.push( state.secrets[sid] )
+        var sec = state.secrets[sid]
+        if( sec.data.type === type && filterPass( sec, filter ) ) {
+          filtered.push(sec)
         }
       }
       return filtered

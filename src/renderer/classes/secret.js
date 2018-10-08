@@ -1,4 +1,6 @@
 import SecretData from '@/classes/secret_data'
+import LocationData from '@/classes/location_data'
+import NoteData from '@/classes/note_data'
 import { DateTime } from 'luxon'
 
 export default class Secret {
@@ -9,13 +11,14 @@ export default class Secret {
     this.vaultVersion = vaultVersion
     this._createdAt = createdAt
     this._updatedAt = updatedAt
-    this.data = new SecretData()
     if(data) {
-      if(data instanceof SecretData) {
+      if(data instanceof LocationData || data instanceof NoteData) {
         this.data = data
       } else {
-        this.data.fromJson( data )
+        this.data = new SecretData( data )
       }
+    } else {
+      throw new Error('Empty data')
     }
   }
   get fullId() {

@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="header px-3 py-3 pt-md-5 pb-md-4 d-flex justify-content-between">
-      <h3 class="display-9">Locations</h3>
+      <h3 class="display-9">Notes</h3>
       <div class="input-group w-25 text-right d-flex flex-row-reverse">
-        <button class="btn btn-primary" type="button" @click="createLocation">New location</button>
+        <button class="btn btn-primary" type="button" @click="createNote">New note</button>
       </div>
     </div>
     <div class="rounded border w-90 mb-2">
       <secret-filter v-on:update:filter="filter = $event"></secret-filter>
-      <location class="border-bottom" v-for="secret in pageLocations" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></location>
-      <div class="border-bottom p-3 text-center" v-if="loading && pageLocations.length == 0">
+      <note class="border-bottom" v-for="secret in pageNotes" :key="secret.fullId" :secret="secret" v-on:delete="requestDelete"></note>
+      <div class="border-bottom p-3 text-center" v-if="loading && pageNotes.length == 0">
         Decrypting {{$store.state.secrets.loading}} secrets...
       </div>
       <div class="rounded bg-light border-bottom w-100 d-flex align-items-cender justify-content-end p-1">
@@ -47,13 +47,13 @@
 
 <script>
   //Indent fix
-  import Location from '@/components/home/data/location'
+  import Note from '@/components/home/data/note'
   import SecretFilter from '@/components/home/data/secret_filter'
   import $ from 'jquery'
 
   export default {
-    name: 'locations-page',
-    components: {Location, SecretFilter},
+    name: 'notes-page',
+    components: {Note, SecretFilter},
     data () {
       return {
         filter: {},
@@ -71,15 +71,15 @@
       loading() {
         return this.$store.state.secrets.loading > 0
       },
-      allLocations() {
-        return this.$store.getters['secrets/filteredSecrets']('location', this.filter)
+      allNotes() {
+        return this.$store.getters['secrets/filteredSecrets']('note', this.filter)
       },
-      pageLocations() {
+      pageNotes() {
         var start = this.pageIdx * this.numLocs
-        return this.allLocations.slice(start, start + this.numLocs)
+        return this.allNotes.slice(start, start + this.numLocs)
       },
       numPages() {
-        return Math.ceil( this.allLocations.length / this.numLocs )
+        return Math.ceil( this.allNotes.length / this.numLocs )
       },
       pagesToFastJump() {
         var pages = []
@@ -109,20 +109,12 @@
         })
         $('#deleteLocationModal').modal('hide')
       },
-      createLocation () {
-        this.$router.push( `/home/data/new_location` )
+      createNote () {
+        this.$router.push( `/home/data/new_note` )
       }
     }
   }
 </script>
 
 <style>
-.spinner {
-  animation: spin 1.5s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 </style>
