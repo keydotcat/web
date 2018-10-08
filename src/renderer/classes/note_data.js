@@ -21,11 +21,14 @@ export default class NoteData {
   get data(){
     return this._data.name
   }
+  get labels() {
+    return this._data.labels
+  }
   fromJson(obj) {
     if(typeof obj === 'string'){
       obj = JSON.parse(obj)
     }
-    if(obj.type !== 'location'){
+    if(obj.type !== 'note'){
       throw new Error('Invalid object type ' + obj.type)
     }
     this._data.name = obj.name || ''

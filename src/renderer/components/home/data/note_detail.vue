@@ -1,12 +1,12 @@
 <template>
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title" @click="bEditingName=true" :class="{'text-danger':!isOkName}" v-if='!bEditingName'>{{ note.name || 'Location name' }}
+     <h5 class="card-title" @click="bEditingName=true" :class="{'text-danger':!isOkName}" v-if='!bEditingName'>{{ note.name || 'Note name' }}
         <i class="fas fa-edit float-right" @click='bEditingName=true'></i>
       </h5>
       <h5 class="card-title" v-if='bEditingName'>
         <div class="input-group w-100">
-          <input type="text" v-model="note.name" v-on:keyup.enter="bEditingName=false" class="form-control" placeholder="Location name" aria-label="name">
+          <input type="text" v-model="note.name" v-on:keyup.enter="bEditingName=false" class="form-control" placeholder="Note name" aria-label="name">
           <div class="input-group-append">
             <button class="btn btn-outline-secondary" type="button" @click="bEditingName=false">Set name</button>
           </div>
@@ -57,7 +57,6 @@ export default {
       tid: this.secret.teamId,
       vid: this.secret.vaultId
     }
-    console.log('nononon', note)
     return {
       note: note,
       bEditingName: false,

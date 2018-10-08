@@ -3,7 +3,7 @@ import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 import Vue from 'vue'
 import Secret from '@/classes/secret'
-import SecretData from '@/classes/secret_data'
+//import SecretData from '@/classes/secret_data'
 import toastSvc from '@/services/toast'
 
 const state = () => {
@@ -143,7 +143,7 @@ function getVaultKeyFromList( vaults, tid, vid ) {
 
 function updateOrCreate(context, ftor, tid, vid, sid, data) {
   return new Promise((resolve, reject) => {
-    if(!(data instanceof SecretData)) {
+    if(typeof data.cloneAsObject !== 'function') {
       throw new Error('Expected SecretData object')
     }
     var vKeys = getVaultKeyFromList(context.rootState[`team.${tid}`].vaults, tid, vid)
