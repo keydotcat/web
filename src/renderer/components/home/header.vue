@@ -9,7 +9,7 @@
       <ul class="navbar-nav ml-auto">
         <li class="nav-item">
           <span class="switch switch-sm nav-link">
-            <input type="checkbox" v-model="enableAutoLogout" class="switch" id="switch-id">
+            <input type="checkbox" @change="saveAutoLogout" v-model="enableAutoLogout" class="switch" id="switch-id">
             <label class="m-0"for="switch-id">Auto-logout</label>
           </span>
         </li>
@@ -49,12 +49,25 @@
         enableAutoLogout: true
       }
     },
+    beforeMount() {
+      switch (localStorage.getItem('kcAL')) {
+        case '1':
+          this.enableAutoLogout = true
+          break
+        case '0':
+          this.enableAutoLogout = false
+          break
+      }
+    },
     methods: {
       logout() {
         this.$store.dispatch('sessionLogout')
       },
       goto( where ) {
         this.$router.push( `/home/${where}` )
+      },
+      saveAutoLogout(){
+        localStorage.setItem('kcAL', this.enableAutoLogout ? '1' : '0')
       }
     },
     mounted() {
