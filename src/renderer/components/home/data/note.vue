@@ -1,9 +1,9 @@
 <template>
   <div class="w-100">
     <div class="w-100 p-2 d-flex align-items-center">
-      <i @click="toggleCreds" v-if="!expanded" class="fas fa-caret-right"></i>
-      <i @click="toggleCreds" v-if="expanded" class="fas fa-caret-down"></i>
-      <span @click="toggleCreds" class="h5 m-0 ml-1">{{secret.data.name}}</span>
+      <i @click="toggle" v-if="!expanded" class="fas fa-caret-right"></i>
+      <i @click="toggle" v-if="expanded" class="fas fa-caret-down"></i>
+      <span @click="toggle" class="h5 m-0 ml-1">{{secret.data.name}}</span>
       <span class="badge badge-dark ml-1" v-for="label in secret.data.labels">{{label}}</span>
       <small class="text-muted ml-auto">{{$store.getters[`team.${secret.teamId}/name`]}}/{{secret.vaultId}}</small>
       <div class="dropdown ml-1">
@@ -36,7 +36,7 @@ export default {
     }
   },
   methods: {
-    toggleCreds() {
+    toggle() {
       this.expanded = !this.expanded
     },
     editSecret() {

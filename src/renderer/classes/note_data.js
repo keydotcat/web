@@ -16,10 +16,10 @@ export default class NoteData {
     return this._data.type
   }
   set data(v){
-    this._data.name = v
+    this._data.data = v
   }
   get data(){
-    return this._data.name
+    return this._data.data
   }
   get name(){
     return this._data.name

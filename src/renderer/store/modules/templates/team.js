@@ -143,7 +143,6 @@ const actions = {
   },
   addUsersToVault(context, { vaultId, users }) {
     var vaultKeys = {}
-    console.log('vaults rst', vaultId, users)
     for (var vi in context.state.vaults) {
       if (context.state.vaults[vi].id === vaultId) {
         vaultKeys[vaultId] = {
