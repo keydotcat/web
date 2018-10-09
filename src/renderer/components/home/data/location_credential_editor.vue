@@ -2,12 +2,23 @@
   <div class="card">
     <div class="card-body">
       <form>
-        <div class="form-group form-row" hidden>
-          <label for="ctype" class="col-md-2 col-form-label">Type</label>
-          <select id="ctype" class="form-control col-md-8" v-model="changes.type">
-            <option value="login">Login</option>
-            <option value="key">Key</option>
-          </select>
+        <div class="form-group row" hidden>
+          <label for="ctype" class="col-md col-form-label">Type</label>
+          <div class="col-md-9">
+            <select id="ctype" class="form-control" v-model="changes.type">
+              <option value="login">Login</option>
+              <option value="key">Key</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="name" class="col-md col-form-label">Name</label>
+          <div class="col-md-9">
+            <input id="user" class="form-control" :class="{'is-invalid':!isOkName}" type="text" v-model="changes.name" placeholder="Name" aria-label="name"></input>
+            <div v-if="!isOkName" class="invalid-feedback">
+              Please choose credential name.
+            </div>
+          </div>
         </div>
         <div class="form-group row">
           <label for="username" class="col-md col-form-label">Username</label>
@@ -104,7 +115,7 @@
       </form>
     </div>
     <div class="card-footer d-flex justify-content-end">
-      <button type="button" :disabled="!isOkUsername || !isOkPassword" class="btn btn-success" @click="saveChanges">Save</button>
+      <button type="button" :disabled="!isOkName || !isOkUsername || !isOkPassword" class="btn btn-success" @click="saveChanges">Save</button>
       <button type="button" class="btn btn-danger ml-2" @click="cancelChanges">Cancel</button>
     </div>
   </div>
@@ -156,7 +167,8 @@ export default {
   data () {
     return {
       changes: {
-        type: this.cred.type || 'login',
+        type: this.cred.type || 'password',
+        name: this.cred.name || 'login',
         username: this.cred.username || '',
         password: this.cred.password || ''
       },
@@ -204,6 +216,9 @@ export default {
     }
   },
   computed: {
+    isOkName() {
+      return (this.changes.name || '').length > 0
+    },
     isOkUsername() {
       return (this.changes.username || '').length > 0
     },

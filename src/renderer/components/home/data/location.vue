@@ -21,7 +21,7 @@
           <div v-for="cred in secret.data.creds" class="border-bottom p-1 d-flex justify-content-left lh-condensed">
             <div>
               <h6 class="my-0">{{cred.username}}</h6>
-              <small class="text-muted">{{cred.type}}</small>
+              <small class="text-muted">{{cred.name}}</small>
             </div>
             <div class="flex-grow-1 d-flex justify-content-end">
               <copy-button class="btn btn-sm btn-outline-secondary align-self-center" :copy="cred.username"><i class="fas fa-user"></i> Copy username</copy-button>
@@ -36,7 +36,7 @@
         <div class="col-sm-2 p-1 mr-2 text-right">Urls</div>
         <div class="col-sm border-left p-0">
           <div v-for="url in secret.data.urls" class="border-bottom p-1 d-flex justify-content-left lh-condensed">
-            {{url}}
+            {{url}} <a class="ml-2 text-muted" :href="url"><i class="fa fa-external-link" aria-hidden="true"></i></a>
           </div>
         </div>
       </div>

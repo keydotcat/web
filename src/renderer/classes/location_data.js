@@ -53,11 +53,7 @@ export default class LocationData {
     this._data.creds = []
     var sourceCreds = obj.creds || []
     sourceCreds.forEach( cred => {
-      var c = new Credential()
-      c.type = cred.type || 'login'
-      c.username = cred.username
-      c.password = cred.password
-      this._data.creds.push(c)
+      this._data.creds.push(new Credential(cred))
     })
   }
   cloneAsObject() {
