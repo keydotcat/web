@@ -36,7 +36,7 @@
         <div class="col-sm-2 p-1 mr-2 text-right">Urls</div>
         <div class="col-sm border-left p-0">
           <div v-for="url in secret.data.urls" class="border-bottom p-1 d-flex justify-content-left lh-condensed">
-            {{url}} <a class="ml-2 text-muted" :href="url"><i class="fa fa-external-link" aria-hidden="true"></i></a>
+            {{url}} <a class="ml-2 text-muted" :href="url" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i></a>
           </div>
         </div>
       </div>
