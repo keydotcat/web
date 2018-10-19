@@ -2,8 +2,8 @@ import teamSvc from '@/services/team'
 import workerMgr from '@/worker/manager'
 import * as mt from '@/store/mutation-types'
 import Vue from 'vue'
-import Secret from '@/classes/secret'
-//import SecretData from '@/classes/secret_data'
+import Secret from '@/commonjs/secrets/secret'
+//import SecretData from '@/commonjs/secrets/secret_data'
 import toastSvc from '@/services/toast'
 
 const state = () => {

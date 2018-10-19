@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import Secret from '@/classes/secret'
+  import Secret from '@/commonjs/secrets/secret'
   import NoteDetail from '@/components/home/data/note_detail'
 
   export default {

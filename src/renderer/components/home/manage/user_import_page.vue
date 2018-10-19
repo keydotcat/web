@@ -43,7 +43,7 @@
 
 <script>
   import toastSvc from '@/services/toast'
-  import SecretData from '@/classes/secret_data'
+  import SecretData from '@/commonjs/secrets/secret_data'
   import kdbxweb from 'kdbxweb'
 
   const STATUS_INITIAL = 0

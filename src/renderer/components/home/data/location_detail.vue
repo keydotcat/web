@@ -55,7 +55,7 @@
 <script>
 import LocationCredentialEditor from '@/components/home/data/location_credential_editor'
 import TextListEditor from '@/components/home/data/secret/text_list_editor'
-import SecretData from '@/classes/secret_data'
+import SecretData from '@/commonjs/secrets/secret_data'
 
 function isObjEmpty(obj) {
   for(var key in obj) {

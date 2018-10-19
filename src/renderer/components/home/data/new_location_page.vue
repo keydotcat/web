@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import Secret from '@/classes/secret'
+  import Secret from '@/commonjs/secrets/secret'
   import LocationDetail from '@/components/home/data/location_detail'
 
   export default {

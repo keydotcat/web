@@ -43,7 +43,7 @@
 
 <script>
 import TextListEditor from '@/components/home/data/secret/text_list_editor'
-import NoteData from '@/classes/note_data'
+import NoteData from '@/commonjs/secrets/note_data'
 
 export default {
   name: 'note-detail',
