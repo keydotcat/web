@@ -1,8 +1,8 @@
 {
-  "name": "keycat",
+  "name": "KeyCat",
   "version": "0.0.0",
   "author": "Adrià Casajús <acasajus@key.cat>",
-  "description": "key.cat web application",
+  "description": "KeyCat web application",
   "license": null,
   "main": "./dist/electron/main.js",
   "scripts": {
@@ -23,7 +23,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "keycat",
+    "productName": "KeyCat",
     "appId": "org.simulatedgreg.electron-vue",
     "directories": {
       "output": "build"

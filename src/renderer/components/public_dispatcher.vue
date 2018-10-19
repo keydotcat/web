@@ -1,7 +1,7 @@
 <template>
   <div class='expandHeight'>
     <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom clearfix mb-4">
-        <a class="navbar-brand" href="#">Key cat</a>
+        <a class="navbar-brand" href="#">KeyCat</a>
         <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

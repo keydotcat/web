@@ -26,7 +26,7 @@ const messages = {
       password_repeat: 'Your password again'
     },
     register: {
-      welcome: 'Welcome to key.cat. Please register',
+      welcome: 'Welcome to KeyCat. Please register',
       done: 'Congratulations! You have properly registered',
       send: 'Register',
       error: {
