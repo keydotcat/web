@@ -43,9 +43,12 @@
       return {}
     },
     beforeMount() {
-      if( this.activePage.length === 0 ) {
-        this.goto('user/info')
-      }
+      this.defaultPage()
+    },
+    updated() {
+      this.$nextTick(() => {
+        this.defaultPage()
+      })
     },
     computed: {
       activePage () {
@@ -54,6 +57,11 @@
       }
     },
     methods: {
+      defaultPage() {
+        if( this.activePage.length === 0 ) {
+          this.goto('user/info')
+        }
+      },
       isAdmin(tid) {
         var uid = this.$store.state.user.id
         return this.$store.getters[`team.${tid}/admins`].filter((admin) => admin.id === uid).length > 0

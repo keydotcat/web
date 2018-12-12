@@ -30,9 +30,12 @@
       return {}
     },
     beforeMount() {
-      if( this.activePage.length === 0 ) {
-        this.goto('locations')
-      }
+      this.defaultPage()
+    },
+    updated() {
+      this.$nextTick(() => {
+        this.defaultPage()
+      })
     },
     computed: {
       activePage () {
@@ -41,6 +44,11 @@
       }
     },
     methods: {
+      defaultPage() {
+        if( this.activePage.length === 0 ) {
+          this.goto('locations')
+        }
+      },
       goto (where) {
         this.$router.push( `/home/data/${where}` )
       }
