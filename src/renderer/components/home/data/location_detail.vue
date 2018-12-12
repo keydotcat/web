@@ -29,7 +29,7 @@
           <ul class="list-group list-group-flush">
             <li class="list-group-item url-group-item" v-for="(cred,idcred) in loc.creds">
               <span v-if="!isCredBeingEdited(idcred)">{{cred.type}}: {{cred.username}}<i @click="editCredential(idcred)" class="fas fa-edit float-right"></i></span>
-              <location-credential-editor :idcred="idcred" :cred="cred" v-on:change="credChangedCb($event)"
+              <location-credential-editor :idcred="idcred" :cred="cred" v-on:delete="credDeletedCb($event)" v-on:change="credChangedCb($event)"
                 v-on:cancel="cancelCredChangeCb($event)" v-if="isCredBeingEdited(idcred)" class="w-100"></location-credential-editor>
             </li>
             <li class="list-group-item url-group-item" @click="addNewCredential"><i class="fas fa-plus"></i> Add new credential</li>
@@ -155,6 +155,10 @@ export default {
         this.$set(this.loc.creds[ev.idcred], k, ev.cred[k])
       }
       this.$delete(this.credsInEditMode, ev.idcred)
+    },
+    credDeletedCb(ev) {
+      this.$delete(this.credsInEditMode, ev.idcred)
+      this.$delete(this.loc.creds, ev.idcred)
     },
     isCredBeingEdited(idc) {
       return idc in this.credsInEditMode

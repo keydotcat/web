@@ -67,7 +67,7 @@
           }
         }
         if( this.errors.username.length > 0 || this.errors.password.length > 0 ) {
-          return 
+          return
         }
         this.$store.dispatch('authLogin', this.form)
       },

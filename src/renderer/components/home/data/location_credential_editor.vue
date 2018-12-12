@@ -23,7 +23,7 @@
         <div class="form-group row">
           <label for="username" class="col-md col-form-label">Username</label>
           <div class="col-md-9">
-            <input id="user" class="form-control" :class="{'is-invalid':!isOkUsername}" type="text" v-model="changes.username" placeholder="Username" aria-label="name"></input>
+            <input id="username" class="form-control" :class="{'is-invalid':!isOkUsername}" type="text" v-model="changes.username" placeholder="Username" aria-label="username"></input>
             <div v-if="!isOkUsername" class="invalid-feedback">
               Please choose a username.
             </div>
@@ -115,6 +115,7 @@
       </form>
     </div>
     <div class="card-footer d-flex justify-content-end">
+      <button type="button" class="btn btn-warning mr-auto" @click="deleteCredential">Delete</button>
       <button type="button" :disabled="!isOkName || !isOkUsername || !isOkPassword" class="btn btn-success" @click="saveChanges">Save</button>
       <button type="button" class="btn btn-danger ml-2" @click="cancelChanges">Cancel</button>
     </div>
@@ -188,6 +189,11 @@ export default {
     }
   },
   methods: {
+    deleteCredential() {
+      this.$emit('delete', {
+        idcred: this.idcred
+      })
+    },
     saveChanges() {
       this.$emit('change', {
         idcred: this.idcred,
