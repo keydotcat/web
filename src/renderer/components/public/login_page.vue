@@ -57,7 +57,8 @@
       goto(where) {
         this.$router.push( `/${where}` )
       },
-      submit() {
+      submit(ev) {
+        ev.preventDefault()
         const form = this.form
         for( var k in this.form ) {
           this.errors[k] = ''
@@ -66,7 +67,7 @@
           }
         }
         if( this.errors.username.length > 0 || this.errors.password.length > 0 ) {
-          return false
+          return 
         }
         this.$store.dispatch('authLogin', this.form)
       },
