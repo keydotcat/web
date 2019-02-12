@@ -1,68 +1,68 @@
 <template>
   <div class="container-fluid">
-      <div class="row">
-        <nav class="col-2 col-xl-1 d-none d-md-block sidebar">
-          <div class="sidebar-sticky">
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>
-                <a :class="{'active': activePage == 'locations'}" href="#" @click="goto('locations')">Locations</a>
-              </span>
-            </h6>
-            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-              <span>
-                <a :class="{'active': activePage == 'notes'}" href="#" @click="goto('notes')">Notes</a>
-              </span>
-            </h6>
-          </div>
-        </nav>
+    <div class="row">
+      <nav class="col-2 col-xl-1 d-none d-md-block sidebar">
+        <div class="sidebar-sticky">
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>
+              <a :class="{ active: activePage == 'locations' }" href="#" @click="goto('locations')">Locations</a>
+            </span>
+          </h6>
+          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+            <span>
+              <a :class="{ active: activePage == 'notes' }" href="#" @click="goto('notes')">Notes</a>
+            </span>
+          </h6>
+        </div>
+      </nav>
 
-        <main role="main" class="col-10 col-xl-11 ml-sm-auto px-4">
-          <router-view></router-view>
-        </main>
-      </div>
+      <main role="main" class="col-10 col-xl-11 ml-sm-auto px-4">
+        <router-view></router-view>
+      </main>
     </div>
+  </div>
 </template>
 
 <script>
-  export default {
-    name: 'data-content',
-    data () {
-      return {}
-    },
-    beforeMount() {
+export default {
+  name: 'data-content',
+  data() {
+    return {}
+  },
+  beforeMount() {
+    this.defaultPage()
+  },
+  updated() {
+    this.$nextTick(() => {
       this.defaultPage()
-    },
-    updated() {
-      this.$nextTick(() => {
-        this.defaultPage()
-      })
-    },
-    computed: {
-      activePage () {
-        var sp = this.$route.path.split('/').filter( x => x.length > 0 )
-        return sp.length > 2 ? sp[2] : ''
+    })
+  },
+  computed: {
+    activePage() {
+      var sp = this.$route.path.split('/').filter(x => x.length > 0)
+      return sp.length > 2 ? sp[2] : ''
+    }
+  },
+  methods: {
+    defaultPage() {
+      if (this.activePage.length === 0) {
+        this.goto('locations')
       }
     },
-    methods: {
-      defaultPage() {
-        if( this.activePage.length === 0 ) {
-          this.goto('locations')
-        }
-      },
-      goto (where) {
-        this.$router.push( `/home/data/${where}` )
-      }
+    goto(where) {
+      this.$router.push(`/home/data/${where}`)
     }
   }
+}
 </script>
 
 <style>
-  /*
+/*
  * Sidebar
  */
 
 .sidebar {
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.1);
 }
 
 .sidebar-sticky {
@@ -101,8 +101,7 @@
 }
 
 .sidebar-heading {
-  font-size: .75rem;
+  font-size: 0.75rem;
   text-transform: uppercase;
 }
-
 </style>

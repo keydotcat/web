@@ -3,9 +3,9 @@
     <div class="w-100 p-2 d-flex align-items-center">
       <i @click="toggle" v-if="!expanded" class="fas fa-caret-right"></i>
       <i @click="toggle" v-if="expanded" class="fas fa-caret-down"></i>
-      <span @click="toggle" class="h5 m-0 ml-1">{{secret.data.name}}</span>
-      <span class="badge badge-dark ml-1" v-for="label in secret.data.labels">{{label}}</span>
-      <small class="text-muted ml-auto">{{$store.getters[`team.${secret.teamId}/name`]}}/{{secret.vaultId}}</small>
+      <span @click="toggle" class="h5 m-0 ml-1">{{ secret.data.name }}</span>
+      <span class="badge badge-dark ml-1" v-for="label in secret.data.labels">{{ label }}</span>
+      <small class="text-muted ml-auto">{{ $store.getters[`team.${secret.teamId}/name`] }}/{{ secret.vaultId }}</small>
       <div class="dropdown ml-1">
         <i class="text-muted ml-1 fas fa-bars" data-toggle="dropdown" id="dropdownMenuIcon"></i>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuIcon">
@@ -17,20 +17,19 @@
     <div v-if="expanded" class="w-100 container border-top">
       <div class="row">
         <div class="col-sm-2 p-1 mr-2 text-right">Data</div>
-        <pre class="col-sm border-left p-1 m-0 secret-note">{{secret.data.data}}</pre>
+        <pre class="col-sm border-left p-1 m-0 secret-note">{{ secret.data.data }}</pre>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 export default {
   name: 'note',
   props: {
     secret: Object
   },
-  data () {
+  data() {
     return {
       expanded: false
     }
@@ -40,7 +39,7 @@ export default {
       this.expanded = !this.expanded
     },
     editSecret() {
-      this.$router.push( `/home/data/notes/${this.secret.fullId}` )
+      this.$router.push(`/home/data/notes/${this.secret.fullId}`)
     },
     deleteSecret() {
       this.$emit('delete', this.secret)
@@ -50,7 +49,13 @@ export default {
 </script>
 
 <style>
-div > .border-bottom:last-child { border-bottom: none!important;  }
-.hide-input { width: 0px; }
-.secret-note { font-family: 'Lato'; }
+div > .border-bottom:last-child {
+  border-bottom: none !important;
+}
+.hide-input {
+  width: 0px;
+}
+.secret-note {
+  font-family: 'Lato';
+}
 </style>

@@ -3,7 +3,7 @@ import KeyMgr from '@/commonjs/crypto/key_mgr'
 
 var runner = new KeyMgr()
 
-self.addEventListener('message', async function (e) {
+self.addEventListener('message', async function(e) {
   try {
     var data = e.data
     switch (data.cmd) {

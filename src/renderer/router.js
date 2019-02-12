@@ -31,7 +31,8 @@ Vue.use(VueRouter)
 
 var router = new VueRouter({
   routes: [
-    { path: '/home',
+    {
+      path: '/home',
       name: 'home',
       component: HomePage,
       children: [
@@ -70,16 +71,14 @@ var router = new VueRouter({
             {
               path: 'team/:tid',
               component: ManageTeamContent,
-              children: [
-                { path: 'users', component: ManageUsersPage },
-                { path: 'vaults', component: ManageVaultsPage }
-              ]
+              children: [{ path: 'users', component: ManageUsersPage }, { path: 'vaults', component: ManageVaultsPage }]
             }
           ]
         }
       ]
     },
-    { path: '/',
+    {
+      path: '/',
       component: PublicDispatcher,
       children: [
         {

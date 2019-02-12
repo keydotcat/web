@@ -1,14 +1,15 @@
 <template>
   <div class="card">
     <div class="card-body">
-     <h5 class="card-title" @click="bEditingName=true" :class="{'text-danger':!isOkName}" v-if='!bEditingName'>{{ note.name || 'Note name' }}
-        <i class="fas fa-edit float-right" @click='bEditingName=true'></i>
+      <h5 class="card-title" @click="bEditingName = true" :class="{ 'text-danger': !isOkName }" v-if="!bEditingName">
+        {{ note.name || 'Note name' }}
+        <i class="fas fa-edit float-right" @click="bEditingName = true"></i>
       </h5>
-      <h5 class="card-title" v-if='bEditingName'>
+      <h5 class="card-title" v-if="bEditingName">
         <div class="input-group w-100">
-          <input type="text" v-model="note.name" v-on:keyup.enter="bEditingName=false" class="form-control" placeholder="Note name" aria-label="name">
+          <input type="text" v-model="note.name" v-on:keyup.enter="bEditingName = false" class="form-control" placeholder="Note name" aria-label="name" />
           <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" @click="bEditingName=false">Set name</button>
+            <button class="btn btn-outline-secondary" type="button" @click="bEditingName = false">Set name</button>
           </div>
         </div>
       </h5>
@@ -18,11 +19,11 @@
             <div class="form-group">
               <label>Choose which vault to store the secret </label>
               <select class="form-control form-control-sm" v-model="parentVault">
-                <option :value="{tid: vt.tid, vid: vt.vid}" v-for="vt in allVaults">{{vt.teamName}} / {{vt.vid}}</option>
+                <option :value="{ tid: vt.tid, vid: vt.vid }" v-for="vt in allVaults">{{ vt.teamName }} / {{ vt.vid }}</option>
               </select>
             </div>
           </h6>
-          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{$store.getters[`team.${parentVault.tid}/name`]}} / {{parentVault.vid}}</h6>
+          <h6 class="card-subtitle m-2 text-muted" v-if="!bSelectingVault">Vault {{ $store.getters[`team.${parentVault.tid}/name`] }} / {{ parentVault.vid }}</h6>
           <h6 class="card-subtitle m-2">Contents</h6>
           <div class="form-group pl-2">
             <textarea class="form-control" :rows="linesInNote" v-model="note.data"></textarea>
@@ -30,7 +31,7 @@
         </div>
         <div class="col col-sm-3 border-left">
           <h6 class="card-subtitle m-2">Labels</h6>
-          <text-list-editor :name='"label"' v-model="note.labels"></text-list-editor>
+          <text-list-editor :name="'label'" v-model="note.labels"></text-list-editor>
         </div>
       </div>
     </div>
@@ -47,11 +48,11 @@ import NoteData from '@/commonjs/secrets/note_data'
 
 export default {
   name: 'note-detail',
-  components: {TextListEditor},
+  components: { TextListEditor },
   props: {
     secret: Object
   },
-  data () {
+  data() {
     var note = this.secret.data.cloneAsObject()
     var v = {
       tid: this.secret.teamId,
@@ -67,8 +68,8 @@ export default {
   computed: {
     allVaults() {
       var vaults = []
-      this.$store.getters['user/team_ids'].forEach((tid) => {
-        this.$store.state[`team.${tid}`].vaults.forEach((vault) => {
+      this.$store.getters['user/team_ids'].forEach(tid => {
+        this.$store.state[`team.${tid}`].vaults.forEach(vault => {
           vaults.push({
             tid: tid,
             vid: vault.id,
@@ -80,12 +81,12 @@ export default {
     },
     linesInNote() {
       var nl = this.note.data.split(/\r\n|\r|\n/).length
-      return (nl < 10 ? nl : 10)
+      return nl < 10 ? nl : 10
     },
-    isOkName(){
+    isOkName() {
       return this.note.name.length > 0
     },
-    isOk(){
+    isOk() {
       return this.isOkName
     }
   },
@@ -97,11 +98,11 @@ export default {
         secretData: new NoteData(this.note)
       }
       var action = 'secrets/create'
-      if( this.secret.secretId ) {
+      if (this.secret.secretId) {
         action = 'secrets/update'
         args.secretId = this.secret.secretId
       }
-      this.$store.dispatch(action, args).then((secret) => {
+      this.$store.dispatch(action, args).then(secret => {
         this.$router.push('/home/data/notes')
       })
     },
@@ -117,7 +118,7 @@ export default {
   border-top: 0px;
 }
 
-  .url-group-item:last-child {
-    border-bottom: 0px;
-  }
+.url-group-item:last-child {
+  border-bottom: 0px;
+}
 </style>

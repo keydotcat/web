@@ -6,15 +6,15 @@
 </template>
 
 <script>
-  import HomeHeader from '@/components/home/header'
+import HomeHeader from '@/components/home/header'
 
-  export default {
-    name: 'home-page',
-    components: { HomeHeader },
-    beforeMount() {
-      if (this.$store.state.user.id.length === 0) {
-        this.$store.dispatch('user/loadInfo')
-      }
+export default {
+  name: 'home-page',
+  components: { HomeHeader },
+  beforeMount() {
+    if (this.$store.state.user.id.length === 0) {
+      this.$store.dispatch('user/loadInfo')
     }
   }
+}
 </script>

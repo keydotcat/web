@@ -1,25 +1,25 @@
 import i18n from '@/i18n'
 
 class RootSvc {
-  constructor () {
+  constructor() {
     this.http = null
     this.urlRoot = ''
     this.sessionToken = ''
     this.csrf = ''
   }
-  isLoggedIn () {
+  isLoggedIn() {
     return this.sessionToken.length > 0
   }
-  setHTTP (http) {
+  setHTTP(http) {
     this.http = http
   }
-  setUrlRoot (ur) {
+  setUrlRoot(ur) {
     this.urlRoot = ur
   }
-  setToken (tok) {
+  setToken(tok) {
     this.sessionToken = tok
   }
-  setCsrf (c) {
+  setCsrf(c) {
     this.csrf = c
   }
   getHeaders() {
@@ -32,13 +32,13 @@ class RootSvc {
     }
     return { headers: headers }
   }
-  processError(httpError, prefix){
-    if( !httpError.response ) {
+  processError(httpError, prefix) {
+    if (!httpError.response) {
       return 'errors.network'
     }
     var data = httpError.response.data
-    if( data === null || !data.error ) {
-      switch( httpError.code ) {
+    if (data === null || !data.error) {
+      switch (httpError.code) {
         case '401':
           return 'errors.unauthorized'
         case '400':

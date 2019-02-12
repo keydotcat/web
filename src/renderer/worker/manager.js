@@ -4,11 +4,11 @@ import Worker from 'worker-loader!./worker.js'
 import toastSvc from '@/services/toast'
 
 class Manager {
-  constructor () {
+  constructor() {
     this.worker = new Worker()
     this.promise_queue = []
     var self = this
-    this.worker.onmessage = function (e) {
+    this.worker.onmessage = function(e) {
       if (self.promise_queue < 1) {
         return
       }
@@ -22,9 +22,9 @@ class Manager {
       }
     }
   }
-  newTask (cmd, data) {
+  newTask(cmd, data) {
     var self = this
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       try {
         self.promise_queue.push({ cmd: cmd, resolve: resolve, reject: reject })
         var task = {}
@@ -39,13 +39,13 @@ class Manager {
       }
     })
   }
-  generateUserKey (username, password) {
+  generateUserKey(username, password) {
     return this.newTask(cmds.GEN_KEY, { username: username, password: password })
   }
-  generateVaultKeys (adminKeys) {
+  generateVaultKeys(adminKeys) {
     return this.newTask(cmds.GEN_VAULT_KEY, { admins: adminKeys })
   }
-  hashPassword (username, password) {
+  hashPassword(username, password) {
     return this.newTask(cmds.HASH_PASS, { username: username, password: password })
   }
   setKeysFromServer(password, storeToken, srvKeys) {
@@ -57,16 +57,16 @@ class Manager {
   cipherVaultKeysForUser(vaultKeys, pubKey) {
     return this.newTask(cmds.CIPHER_KEYS_FOR_USER, { vaultKeys: vaultKeys, userPublicKeys: pubKey })
   }
-  serializeAndClose(vaultKeys, obj){
+  serializeAndClose(vaultKeys, obj) {
     return this.newTask(cmds.SERIALIZE_AND_CLOSE, { vaultKeys: vaultKeys, obj: obj })
   }
-  openAndDeserialize(vaultKeys, data){
+  openAndDeserialize(vaultKeys, data) {
     return this.newTask(cmds.OPEN_AND_DESERIALIZE, { vaultKeys: vaultKeys, data: data })
   }
-  openAndDeserializeBulk(vsa){
+  openAndDeserializeBulk(vsa) {
     return this.newTask(cmds.OPEN_AND_DESERIALIZE_BULK, { vsa: vsa })
   }
-  closeKeysWithPassword(username, password){
+  closeKeysWithPassword(username, password) {
     return this.newTask(cmds.CLOSE_KEYS_WITH_PASSWORD, { username: username, password: password })
   }
 }
