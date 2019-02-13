@@ -83,7 +83,13 @@ export default {
       if (this.errors.username.length > 0 || this.errors.password.length > 0) {
         return
       }
-      this.$store.dispatch('authLogin', this.form)
+      var url = ''
+      if (process.env.NODE_ENV === 'development') {
+        url = 'http://localhost:23764/api'
+      } else if (process.env.IS_WEB) {
+        url = window.location.origin + window.location.pathname + 'api'
+      }
+      this.$store.dispatch('session/login', { url: url, user: this.form.username, pass: this.form.password })
     },
     setDirty(fieldName) {
       this.dirty[fieldName] = true

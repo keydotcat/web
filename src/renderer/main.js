@@ -1,26 +1,21 @@
-import Vue from 'vue'
-import axios from 'axios'
-
-import 'font-awesome/css/font-awesome.css'
+//JS Libs used for bootstrap
 import 'jquery/dist/jquery.min.js'
 import 'popper.js/dist/umd/popper.min.js'
 import 'bootstrap/dist/js/bootstrap.min.js'
 
-import i18n from './i18n'
+//Auto toast errors
+import axios from 'axios'
+import AutoToastSvc from '@/commonjs/wui/services/autotoast'
+
+import KeyMgr from '@/commonjs/store/helpers/keymgrwrap'
+import WorkerMgr from './worker/manager'
+
+import store from '@/commonjs/store'
+
+import Vue from 'vue'
 import router from './router'
-
 import App from './App'
-import store from './store'
-
-import rootSvc from './services/root'
-
-import utilSvc from './services/util'
-
-if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
-Vue.http = Vue.prototype.$http = axios
-Vue.config.productionTip = false
-
-rootSvc.setHTTP(Vue.http)
+import i18n from '@/commonjs/wui/i18n'
 
 axios.defaults.withCredentials = 'include'
 axios.interceptors.response.use(
@@ -28,11 +23,22 @@ axios.interceptors.response.use(
     return response
   },
   function(err) {
-    utilSvc.toastAxiosError(err)
+    AutoToastSvc.toastAxiosError(err)
     return Promise.reject(err)
   }
 )
 
+//Use local keymanager
+//TODO: Use webworkers here
+KeyMgr.setInner(WorkerMgr)
+
+//Load from storage if any
+store.dispatch('session/loadFromLocalStorage')
+
+//Require electron?
+if (!process.env.IS_WEB) Vue.use(require('vue-electron'))
+
+//Run the wui
 /* eslint-disable no-new */
 new Vue({
   components: { App },

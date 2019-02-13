@@ -8,14 +8,8 @@
 </template>
 
 <script>
-import * as mt from '@/store/mutation-types'
-
 export default {
   name: 'keycat',
-  beforeCreate() {
-    this.$store.commit(mt.SESSION_SET_LOADING, true)
-    this.$store.dispatch('sessionLoadFromLocalStorage')
-  },
   computed: {
     loading() {
       return this.$store.state.session.loading
@@ -27,7 +21,6 @@ export default {
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css?family=Lato');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-/*@import '~bootstrap/dist/css/bootstrap.min.css';*/
 @import '~bootstrap/scss/bootstrap.scss';
 @import '~izitoast/dist/css/iziToast.min.css';
 
@@ -40,11 +33,6 @@ body {
 
 .expandHeight {
   height: 100%;
-}
-
-.fas {
-  font-family: 'FontAwesome';
-  font-style: normal;
 }
 
 /* switch */
