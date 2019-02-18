@@ -5,20 +5,17 @@
     </div>
     <router-view v-if="!loading && !$store.getters['session/loggedIn']" class="flex-shrink-0"></router-view>
     <home-page v-if="!loading && $store.getters['session/loggedIn']" class="flex-shrink-0"></home-page>
-    <footer class="footer mt-auto py-2 bg-light">
-      <div class="d-flex mx-1">
-        <span class="text-muted ml-auto mr-3">{{ `${$store.state.public.serverVersion}` }}@<a href="https://key.cat" class="text-info">KeyCat</a></span>
-      </div>
-    </footer>
+    <info-footer></info-footer>
   </div>
 </template>
 
 <script>
 import HomePage from '@/commonjs/wui/components/home-page'
+import InfoFooter from '@/commonjs/wui/components/info-footer'
 
 export default {
   name: 'keycat',
-  components: { HomePage },
+  components: { HomePage, InfoFooter },
   mounted() {
     this.$store.dispatch('public/loadServerVersion')
   },
