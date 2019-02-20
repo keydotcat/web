@@ -27,8 +27,11 @@ export default {
     let params = this.$route.params
     if ('token' in params && params.token.length > 0) {
       this.form.token = params.token
-      this.$store.dispatch('public/confirmEmail', this.form).then(() => {
-        toast.success('confirm_email.done')
+      this.$store.dispatch('public/confirmEmail', this.form).then(res => {
+        if (res) {
+          toast.success('confirm_email.done')
+          this.$router.push({ path: '/login' })
+        }
       })
     }
   },
@@ -39,8 +42,11 @@ export default {
   },
   methods: {
     onSubmit(e, v) {
-      this.$store.dispatch('public/confirmEmail', this.form).then(() => {
-        toast.success('confirm_email.done')
+      this.$store.dispatch('public/confirmEmail', this.form).then(res => {
+        if (res) {
+          toast.success('confirm_email.done')
+          this.$router.push({ path: '/login' })
+        }
       })
     }
   }
