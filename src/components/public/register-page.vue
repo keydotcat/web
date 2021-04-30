@@ -112,7 +112,7 @@ export default {
       if (errFound) {
         return errFound
       }
-      this.$store.dispatch('public/register', this.form).then(res => {
+      this.$store.dispatch('public/register', this.form).then((res) => {
         if (res) {
           toast.success('register.done')
           this.$router.push({ path: '/login' })

@@ -84,7 +84,7 @@ export default {
         pass: this.form.password,
         wantCsrf: true
       }
-      this.$store.dispatch('session/login', req).then(res => {
+      this.$store.dispatch('session/login', req).then((res) => {
         console.log('UAH', res)
       })
     },

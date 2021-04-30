@@ -19,10 +19,10 @@ import i18n from '@/commonjs/wui/i18n'
 
 axios.defaults.withCredentials = 'include'
 axios.interceptors.response.use(
-  function(response) {
+  function (response) {
     return response
   },
-  function(err) {
+  function (err) {
     AutoToastSvc.toastAxiosError(err)
     return Promise.reject(err)
   }

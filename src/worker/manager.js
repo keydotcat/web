@@ -1,14 +1,13 @@
 import cmds from './commands'
 /* eslint import/no-webpack-loader-syntax: off */
-import Worker from 'worker-loader!./worker.js'
 import toastMgr from '@/commonjs/store/helpers/toast'
 
 class Manager {
   constructor() {
-    this.worker = new Worker()
+    this.worker = new Worker('./worker.js', { type: 'module' })
     this.promise_queue = []
     var self = this
-    this.worker.onmessage = function(e) {
+    this.worker.onmessage = function (e) {
       if (self.promise_queue < 1) {
         return
       }
@@ -17,14 +16,14 @@ class Manager {
       if (payload.data != null) {
         p.resolve(payload.data)
       } else {
-        toastMgr.error('Worker error ' + (e.error || e))
+        toastMgr.error('CryptoWorker error ' + (e.error || e))
         p.reject(payload)
       }
     }
   }
   newTask(cmd, data) {
     var self = this
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       try {
         self.promise_queue.push({ cmd: cmd, resolve: resolve, reject: reject })
         var task = {}
@@ -35,7 +34,7 @@ class Manager {
         self.worker.postMessage(task)
       } catch (e) {
         console.log('ERROR', e)
-        toastMgr.error('Worker error ' + e)
+        toastMgr.error('CryptoWorker error ' + e)
       }
     })
   }

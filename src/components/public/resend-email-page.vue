@@ -31,7 +31,7 @@ export default {
   methods: {
     onSubmit(e, v) {
       e.preventDefault()
-      this.$store.dispatch('public/resendConfirmEmail', this.form).then(res => {
+      this.$store.dispatch('public/resendConfirmEmail', this.form).then((res) => {
         if (res) {
           toast.success('resend_email.done')
           this.$router.push({ path: '/login' })
